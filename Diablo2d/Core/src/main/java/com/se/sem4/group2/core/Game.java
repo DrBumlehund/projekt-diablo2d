@@ -5,43 +5,44 @@
  */
 package com.se.sem4.group2.core;
 
-import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
+import com.badlogic.gdx.ApplicationListener;
 
 
 
-public class Game extends SimpleApplication{
+public class Game implements ApplicationListener{
     
-    private RenderManager rm;
-
     public Game() {
         
     }
-    
-    @Override
-    public void simpleInitApp() {
-        Box b = new Box(1, 2, 1);
-        Geometry geom = new Geometry("Box", b);
 
-        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geom.setMaterial(mat);
+    @Override
+    public void create() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
-        rootNode.attachChild(geom);
-    }
-    
     @Override
-    public void simpleUpdate(float tpf){
-        
+    public void resize(int i, int i1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
-    public void simpleRender(RenderManager rm){
-        
+    public void render() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void pause() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void resume() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void dispose() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
