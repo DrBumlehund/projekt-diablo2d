@@ -11,32 +11,60 @@ package com.se.sem4.group2.common.data;
  */
 public class MetaData {
 
-    private float deltaTime;
-    private int width;
-    private int height;
+    private float delta;
+    private int displayWidth;
+    private int displayHeight;
+    private final GameKeys keys = new GameKeys();
 
-    public float getDeltaTime() {
-        return deltaTime;
+    public GameKeys getKeys() {
+        return keys;
     }
 
-    public void setDeltaTime(float deltaTime) {
-        this.deltaTime = deltaTime;
+//    public float getDeltaTime() {
+//        return deltaTime;
+//    }
+
+//    public void setDeltaTime(float deltaTime) {
+//        this.deltaTime = deltaTime;
+//    }
+
+//    public int getWidth() {
+//        return width;
+//    }
+//
+//    public void setWidth(int width) {
+//        this.width = width;
+//    }
+
+//    public int getHeight() {
+//        return height;
+//    }
+//
+//    public void setHeight(int height) {
+//        this.height = height;
+//    }
+
+    public void setDisplayWidth(int width) {
+        this.displayWidth = width;
     }
 
-    public int getWidth() {
-        return width;
+    public int getDisplayWidth() {
+        return displayWidth;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    public void setDisplayHeight(int height) {
+        this.displayHeight = height;
     }
 
-    public int getHeight() {
-        return height;
+    public int getDisplayHeight() {
+        return displayHeight;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public void setDelta(float delta) {
+        this.delta = delta;
     }
+
+   
+
 
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.se.sem4.group2.core;
+package com.se.sem4.group2.main;
 
 import org.openide.modules.ModuleInstall;
 
@@ -18,7 +18,7 @@ public class Installer extends ModuleInstall {
     public void restored(){
         
         Game game = new Game();
-        game.simpleInitApp();
+//        game.simpleInitApp();
         
     }
     

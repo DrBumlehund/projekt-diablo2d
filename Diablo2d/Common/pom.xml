@@ -19,6 +19,7 @@
                     <publicPackages>
                         <publicPackage>com.se.sem4.group2.common.data</publicPackage>
                         <publicPackage>com.se.sem4.group2.common.services</publicPackage>
+                        <publicPackage>com.se.sem4.group2.common.data.util</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
