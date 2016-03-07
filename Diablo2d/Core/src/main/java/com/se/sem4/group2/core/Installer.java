@@ -18,8 +18,7 @@ public class Installer extends ModuleInstall {
     public void restored(){
         
         Game game = new Game();
-        game.simpleInitApp();
-        
+            
     }
     
 }

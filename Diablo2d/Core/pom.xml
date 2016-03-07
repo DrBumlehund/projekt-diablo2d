@@ -33,18 +33,18 @@
             <artifactId>org-netbeans-api-annotations-common</artifactId>
             <version>${netbeans.version}</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>net.sf.sociaal</groupId>
             <artifactId>jME3-core</artifactId>
             <version>3.0.0.20130526</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-modules</artifactId>
             <version>RELEASE81</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>net.sf.sociaal</groupId>
             <artifactId>jME3-lwjgl</artifactId>
             <version>3.0.0.20130526</version>
@@ -58,6 +58,12 @@
             <groupId>net.sf.sociaal</groupId>
             <artifactId>jME3-lwjgl-natives</artifactId>
             <version>3.0.0.20130526</version>
+        </dependency>-->
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>1.9.0</version>
+            <type>jar</type>
         </dependency>
     </dependencies>
     <properties>
