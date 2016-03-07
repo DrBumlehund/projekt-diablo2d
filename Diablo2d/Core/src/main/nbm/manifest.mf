@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: com/se/sem4/group2/core/Bundle.properties
-OpenIDE-Module-Install: com/se/sem4/group2/core/Installer.class
+OpenIDE-Module-Install: com/se/sem4/group2/main/Installer.class

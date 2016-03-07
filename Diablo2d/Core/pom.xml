@@ -48,8 +48,8 @@
             <groupId>net.sf.sociaal</groupId>
             <artifactId>jME3-lwjgl</artifactId>
             <version>3.0.0.20130526</version>
-        </dependency>
-        <dependency>
+        </dependency>-->
+<!--        <dependency>
             <groupId>net.sf.sociaal</groupId>
             <artifactId>jME3-desktop</artifactId>
             <version>3.0.0.20130526</version>
@@ -59,6 +59,17 @@
             <artifactId>jME3-lwjgl-natives</artifactId>
             <version>3.0.0.20130526</version>
         </dependency>-->
+<!--        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx</artifactId>
+            <version>1.9.0</version>
+            <type>jar</type>
+        </dependency>-->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>
