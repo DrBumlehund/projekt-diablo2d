@@ -23,8 +23,8 @@ public class Installer extends ModuleInstall {
     LwjglApplicationConfiguration cfg =
 			new LwjglApplicationConfiguration();
 		cfg.title = "Diablo ii-D";
-		cfg.width = 800;
-		cfg.height = 640;
+		cfg.width = 640;
+		cfg.height = 480;
 		cfg.useGL30 = false;
 		cfg.resizable = false;
 		

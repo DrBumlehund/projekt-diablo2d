@@ -9,6 +9,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
@@ -22,14 +23,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-
-
-
-   public class Game implements ApplicationListener {
+public class Game implements ApplicationListener {
 
     private static OrthographicCamera cam;
-    private ShapeRenderer sr;
+    private SpriteBatch batch;
 
     private final MetaData md = new MetaData();
 //    private final GameData md = new GameData();
@@ -46,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
         cam.translate(md.getDisplayWidth() / 2, md.getDisplayHeight() / 2);
         cam.update();
 
-        sr = new ShapeRenderer();
+        batch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(md)
@@ -54,7 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.Start(md, world);
+            iGamePlugin.start(md, world);
         }
     }
 
@@ -84,24 +81,15 @@ import java.util.concurrent.ConcurrentHashMap;
     }
 
     private void draw() {
-//        for (Entity entity : world.values()) {
-//
-//            sr.setColor(1, 1, 1, 1);
-//
-//            sr.begin(ShapeRenderer.ShapeType.Line);
-//
-//            float[] shapex = entity.getShapeX();
-//            float[] shapey = entity.getShapeY();
-//
-//            for (int i = 0, j = shapex.length - 1;
-//                    i < shapex.length;
-//                    j = i++) {
-//
-//                sr.line(shapex[i], shapey[i], shapex[j], shapey[j]);
-//            }
-//
-//            sr.end();
-//        }
+        for (Entity entity : world.values()) {
+            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            batch.begin();
+            entity.getSprite().draw(batch);
+            batch.end();
+
+        }
     }
 
     @Override
@@ -127,5 +115,4 @@ import java.util.concurrent.ConcurrentHashMap;
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return SPILocator.locateAll(IEntityProcessingService.class);
     }
-   }
-
+}

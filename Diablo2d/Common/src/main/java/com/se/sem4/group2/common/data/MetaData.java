@@ -40,6 +40,11 @@ public class MetaData {
         this.delta = delta;
     }
 
+    public float getDelta() {
+        return delta;
+    }
+
+    
    
 
 
