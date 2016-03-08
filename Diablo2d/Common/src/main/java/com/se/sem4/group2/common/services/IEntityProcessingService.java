@@ -14,6 +14,6 @@ import java.util.Map;
  */
 public interface IEntityProcessingService {
     
-    public void Process(MetaData md, Map<String, Entity> w,  Entity e);
+    public void process(MetaData metaData, Map<String, Entity> world,  Entity entity);
 
 }

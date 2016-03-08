@@ -14,9 +14,9 @@ import java.util.Map;
  */
 public interface IGamePluginService {
     
-    public void Start(MetaData md, Map<String, Entity> w);
+    public void start(MetaData metaData, Map<String, Entity> world);
     
     
-    public void Stop(MetaData md);
+    public void stop(MetaData metaData);
     
 }

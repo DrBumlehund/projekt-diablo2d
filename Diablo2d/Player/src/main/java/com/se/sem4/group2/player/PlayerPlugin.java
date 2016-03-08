@@ -8,26 +8,44 @@ package com.se.sem4.group2.player;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
+import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
-
-
 
 /**
  *
  * @author ThomasLemqvist
  */
-@ServiceProvider  (service = com.se.sem4.group2.common.services.IGamePluginService.class )
-public class PlayerPlugin implements IGamePluginService{
+@ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
+public class PlayerPlugin implements IGamePluginService {
 
-    @Override
-    public void Start(MetaData md, Map<String, Entity> w) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private Map<String, Entity> world;
+    private Entity player;
+
+    public PlayerPlugin() {
     }
 
     @Override
-    public void Stop(MetaData md) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void start(MetaData metaData, Map<String, Entity> world) {
+        this.world = world;
+        player = createPlayer(metaData);
+        world.put(player.getId(), player);
     }
-    
+
+    private Entity createPlayer(MetaData metaData) {
+        Entity newPlayer = new Entity();
+
+        newPlayer.setType(PLAYER);
+        newPlayer.setPos(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
+        newPlayer.setRadians((float) Math.PI / 2);
+        newPlayer.setSpeed(100);
+
+        return newPlayer;
+    }
+
+    @Override
+    public void stop(MetaData metaData) {
+        world.remove(player.getId());
+    }
+
 }

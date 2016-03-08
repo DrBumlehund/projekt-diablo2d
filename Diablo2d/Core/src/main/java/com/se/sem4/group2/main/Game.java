@@ -78,7 +78,7 @@ import java.util.concurrent.ConcurrentHashMap;
         // Update
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
-                entityProcessorService.Process(md, world, e);
+                entityProcessorService.process(md, world, e);
             }
         }
     }
