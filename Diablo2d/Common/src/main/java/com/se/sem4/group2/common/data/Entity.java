@@ -78,11 +78,15 @@ public class Entity {
         this.x = x;
         this.y = y;
     }
-    
+
     public void setDeltaPos(float dx, float dy) {
         //ved ikke om det er nødvendigt ... men wth ... :D
         this.dx = dx;
         this.dy = dy;
+    }
+
+    public String getId() {
+        return this.id.toString();
     }
 
 }

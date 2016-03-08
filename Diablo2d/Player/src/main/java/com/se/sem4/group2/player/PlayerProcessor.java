@@ -20,7 +20,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class PlayerProcessor implements IEntityProcessingService {
 
     @Override
-    public void Process(MetaData md, Map<String, Entity> w, Entity e) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
