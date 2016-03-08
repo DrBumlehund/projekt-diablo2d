@@ -54,7 +54,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.Start(md, world);
+            iGamePlugin.start(md, world);
         }
     }
 
