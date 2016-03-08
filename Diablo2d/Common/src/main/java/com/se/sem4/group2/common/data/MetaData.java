@@ -20,30 +20,6 @@ public class MetaData {
         return keys;
     }
 
-//    public float getDeltaTime() {
-//        return deltaTime;
-//    }
-
-//    public void setDeltaTime(float deltaTime) {
-//        this.deltaTime = deltaTime;
-//    }
-
-//    public int getWidth() {
-//        return width;
-//    }
-//
-//    public void setWidth(int width) {
-//        this.width = width;
-//    }
-
-//    public int getHeight() {
-//        return height;
-//    }
-//
-//    public void setHeight(int height) {
-//        this.height = height;
-//    }
-
     public void setDisplayWidth(int width) {
         this.displayWidth = width;
     }

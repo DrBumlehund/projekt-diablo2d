@@ -16,7 +16,7 @@ public class Installer extends ModuleInstall {
     
     @Override
     public void restored(){
-        
+        //TODO: tråd
         Game game = new Game();
             
     }
