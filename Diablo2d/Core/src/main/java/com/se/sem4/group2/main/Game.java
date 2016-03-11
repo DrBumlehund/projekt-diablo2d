@@ -16,15 +16,21 @@ import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.managers.GameInputProcessor;
-import com.se.sem4.group2.player.PlayerPlugin;
-import com.se.sem4.group2.player.PlayerProcessor;
+//import com.se.sem4.group2.player.PlayerPlugin;
+//import com.se.sem4.group2.player.PlayerProcessor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import static java.util.Locale.lookup;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 
 public class Game implements ApplicationListener {
+    private final Lookup lookup = Lookup.getDefault();
+    private List<IGamePluginService> gamePlugins;
 
     private static OrthographicCamera cam;
     private SpriteBatch batch;
@@ -53,14 +59,18 @@ public class Game implements ApplicationListener {
                 new GameInputProcessor(metaData)
         );
 
+        Lookup.Result<IGamePluginService> result = lookup.lookupResult(IGamePluginService.class);
+        result.addLookupListener(lookupListener);
+        gamePlugins = new ArrayList<>(result.allInstances());
+        result.allItems();
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
             iGamePlugin.start(metaData, world);
         }
 
-        playerPlugin = new PlayerPlugin();
+//        playerPlugin = new PlayerPlugin();
         playerPlugin.start(metaData, world);
-        playerProcessor = new PlayerProcessor();
+//        playerProcessor = new PlayerProcessor();
     }
 
     @Override
@@ -123,4 +133,16 @@ public class Game implements ApplicationListener {
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return SPILocator.locateAll(IEntityProcessingService.class);
     }
+    
+    private final LookupListener lookupListener = new LookupListener() {
+        @Override
+        public void resultChanged(LookupEvent le) {
+            for (IGamePluginService updatedGamePlugin : lookup.lookupAll(IGamePluginService.class)) {
+                if (!gamePlugins.contains(updatedGamePlugin)) {
+                    updatedGamePlugin.start(metaData, world);
+                    gamePlugins.add(updatedGamePlugin);
+               }
+            }
+        }
+    };
 }

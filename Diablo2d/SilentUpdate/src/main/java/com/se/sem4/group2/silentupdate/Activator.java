@@ -1,4 +1,4 @@
-package org.netbeans.modules.autoupdate.silentupdate;
+package com.se.sem4.group2.silentupdate;
 
 /**
  *
@@ -18,7 +18,8 @@ public class Activator extends ModuleInstall {
 
     @Override
     public void restored() {
-        exector.scheduleAtFixedRate(doCheck, 10000, 10000, TimeUnit.MILLISECONDS);
+        exector.scheduleAtFixedRate(doCheck, 5000, 5000, TimeUnit.MILLISECONDS);
+        System.out.println("Running check!");
     }
 
     private static final Runnable doCheck = new Runnable() {
