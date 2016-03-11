@@ -6,6 +6,7 @@
 package com.se.sem4.group2.common.data;
 
 import java.util.UUID;
+
 /**
  *
  * @author ThomasLemqvist
@@ -13,13 +14,62 @@ import java.util.UUID;
 public class Entity {
 
     //TODO: Tilføj sprite/billede/form...
-    private float x, y, dx, dy, radians, speed;
+    private float x;
+    private float y;
+    private float dx;
+    private float dy;
+    private float radians;
+    private float maxSpeed;
+    private float acceleration;
+    private float deacceleration;
+    private float[] shapeX;
+    private float[] shapeY;
+    private float radius;
     private EntityType type;
     private final UUID id = UUID.randomUUID();
-    private float[] shapeX, shapeY;
+
+    public float getAcceleration() {
+        return acceleration;
+    }
+
+    public void setAcceleration(float acceleration) {
+        this.acceleration = acceleration;
+    }
+
+    public float getDeacceleration() {
+        return deacceleration;
+    }
+
+    public void setDeacceleration(float deacceleration) {
+        this.deacceleration = deacceleration;
+    }
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
 
     public float getX() {
         return x;
+    }
+
+    public float[] getShapeX() {
+        return shapeX;
+    }
+
+    public void setShapeX(float[] shapeX) {
+        this.shapeX = shapeX;
+    }
+
+    public float[] getShapeY() {
+        return shapeY;
+    }
+
+    public void setShapeY(float[] shapeY) {
+        this.shapeY = shapeY;
     }
 
     public void setX(float x) {
@@ -56,14 +106,15 @@ public class Entity {
 
     public void setRadians(float radians) {
         this.radians = radians % (float) (2 * Math.PI);
+        this.radians = radians;
     }
 
-    public float getSpeed() {
-        return speed;
+    public float getMaxSpeed() {
+        return maxSpeed;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public void setMaxSpeed(float speed) {
+        this.maxSpeed = speed;
     }
 
     public EntityType getType() {
@@ -89,5 +140,5 @@ public class Entity {
         return this.id.toString();
     }
     //TODO: MAKE SHIT FOR SHAPEX,Y
-    
+
 }

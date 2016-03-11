@@ -9,10 +9,10 @@ import com.se.sem4.group2.common.data.Entity;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
+import static com.se.sem4.group2.common.data.GameKeys.*;
+import java.awt.Point;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 /**
  *
@@ -28,25 +28,46 @@ public class PlayerProcessor implements IEntityProcessingService {
         float dt = metaData.getDelta();
         float dx = entity.getDx();
         float dy = entity.getDy();
-        float speed = entity.getSpeed();
+        float maxSpeed = entity.getMaxSpeed();
+        float acceleration = entity.getAcceleration();
+        float deacceleration = entity.getDeacceleration();
         float radians = entity.getRadians();
+        Point mousePos = metaData.getMousePos();
 
         if (entity.getType().equals(PLAYER)) {
-            //TODO: IMPLEMENTER KEYS
+
+            //angle
+            float tmpX = mousePos.x - x;
+            float tmpY = mousePos.y - y;
+            radians = (float) (Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
+            if (radians < 0) {
+                radians += (float) (2 * Math.PI);
+            }
+
             //movement
-//            if (metaData.getKeys().isDown(UP)) {
-                dx += cos(radians) * speed * dt;
-                dy += sin(radians) * speed * dt;
-//            } else if (metaData.getKeys().isDown(LEFT)) {
-                dx += cos(radians + (float) (Math.PI / 2)) * speed * dt;
-                dy += sin(radians + (float) (Math.PI / 2)) * speed * dt;
-//            } else if (metaData.getKeys().isDown(RIGHT)) {
-                dx += cos(radians - (float) (Math.PI / 2)) * speed * dt;
-                dy += sin(radians - (float) (Math.PI / 2)) * speed * dt;
-//            } else if (metaData.getKeys().isDown(DOWN)) {
-                dx += cos(radians + (float) Math.PI) * speed * dt;
-                dy += sin(radians + (float) Math.PI) * speed * dt;
-//            }
+            if (metaData.getKeys().isDown(RIGHT)) {
+                dx += acceleration * dt;
+            }
+            if (metaData.getKeys().isDown(UP)) {
+                dy += acceleration * dt;
+            }
+            if (metaData.getKeys().isDown(DOWN)) {
+                dy -= acceleration * dt;
+            }
+            if (metaData.getKeys().isDown(LEFT)) {
+                dx -= acceleration * dt;
+            }
+
+            //deacceleration
+            float vec = (float) Math.sqrt(dx * dx + dy * dy);
+            if (vec > 0) {
+                dx -= (dx / vec) * deacceleration * dt;
+                dy -= (dy / vec) * deacceleration * dt;
+            }
+            if (vec > maxSpeed) {
+                dx = (dx / vec) * maxSpeed;
+                dy = (dy / vec) * maxSpeed;
+            }
 
             //TODO: bliv enige om gameplay og fix wrap metode...
             //set position
@@ -64,14 +85,31 @@ public class PlayerProcessor implements IEntityProcessingService {
                 y = metaData.getDisplayHeight();
             }
 
-            
             // Update entity
             entity.setPos(x, y);
             entity.setDx(dx);
             entity.setDy(dy);
             entity.setRadians(radians);
-            
+
         }
+
+    }
+
+    private void updateShape(Entity entity) {
+        float[] shapex = entity.getShapeX();
+        float[] shapey = entity.getShapeY();
+        float x = entity.getX();
+        float y = entity.getY();
+        float radians = entity.getRadians();
+
+        shapex[0] = (float) (x);
+        shapey[0] = (float) (y);
+
+        shapex[1] = (float) (x + Math.cos(radians) * entity.getRadius());
+        shapey[1] = (float) (y + Math.sin(radians) * entity.getRadius());
+
+        entity.setShapeX(shapex);
+        entity.setShapeY(shapey);
     }
 
 }
