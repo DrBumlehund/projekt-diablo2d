@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: com/se/sem4/group2/silentupdate/Bundle.properties
-OpenIDE-Module-Install: com/se/sem4/group2/silentupdate/Activator.class
-OpenIDE-Module-Layer: com/se/sem4/group2/silentupdate/layer.xml
-

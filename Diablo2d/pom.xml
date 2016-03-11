@@ -63,12 +63,10 @@
         <module>Core</module>
         <module>Map</module>
         <module>Player</module>
-        <module>SilentUpdate</module>
     </modules>
 
     <properties>
         <netbeans.version>RELEASE81</netbeans.version>
         <brandingToken>diablo2d</brandingToken>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 </project>
