@@ -10,9 +10,10 @@ import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import static com.se.sem4.group2.common.data.GameKeys.*;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
-import java.awt.Point;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 /**
  *
@@ -32,30 +33,61 @@ public class PlayerProcessor implements IEntityProcessingService {
         float acceleration = entity.getAcceleration();
         float deacceleration = entity.getDeacceleration();
         float radians = entity.getRadians();
-        Point mousePos = new Point(metaData.getMouseX(), metaData.getMouseY());
 
         if (entity.getType().equals(PLAYER)) {
-            
+            //TODO: IMPLEMENTER KEYS
             // Angle
-            float tmpX = mousePos.x - x, tmpY = mousePos.y - y;
-            radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI) ;
-            if(radians < 0) radians += (float) 2 * Math.PI;
+//            System.out.println("1 = " + metaData.getMouseX() + ", " + metaData.getMouseY());
+//            radians = ((x * metaData.getMouseX()) + (y
+//                    * metaData.getMouseY())) / ((float) Math.sqrt((Math.pow(x, 2)
+//                            + Math.pow(y, 2)) * (Math.pow(metaData.getMouseX(), 2)
+//                            + Math.pow(metaData.getMouseY(), 2))));
+            float tmpX, tmpY;
+            if (x < metaData.getMouseX()) {
+                tmpX = metaData.getMouseX() - x;
 
-            //movement
+            } else {
+                tmpX = x - metaData.getMouseX();
+
+            }
+            if (y < metaData.getMouseY()) {
+                tmpY = metaData.getMouseY() - y;
+
+            } else {
+                tmpY = y - metaData.getMouseY();
+
+            }
+            radians = (float) (Math.acos(tmpX / (Math.sqrt(Math.pow(tmpX, 2) + Math.pow(tmpY, 2)))));
+
+            if (x > metaData.getMouseX() && y > metaData.getMouseY()) {
+                radians += (float) Math.PI * 0.5;
+            } else if (x > metaData.getMouseX() && y < metaData.getMouseY()) {
+                radians += (float) Math.PI;
+            } else if (x < metaData.getMouseX() && y > metaData.getMouseY()) {
+                radians -= (float) Math.PI * 0.5;
+            }
+
+            
+            
+            //System.out.println("2 = " + x + ", " + y);
+//movement
             if (metaData.getKeys().isDown(RIGHT)) {
-                dx += acceleration * dt;
+                dx += /*cos(radians) */ acceleration * dt;
+                //dy += sin(radians) * acceleration * dt;
             }
             if (metaData.getKeys().isDown(UP)) {
-                dy += acceleration * dt;
+                //dx += cos(radians + (float) (Math.PI / 2)) * acceleration * dt;
+                dy += /*sin(radians + (float) (Math.PI / 2)) */ acceleration * dt;
             }
             if (metaData.getKeys().isDown(DOWN)) {
-                dy -= acceleration * dt;
+                //dx += cos(radians - (float) (Math.PI / 2)) * acceleration * dt;
+                dy -= /*sin(radians - (float) (Math.PI / 2)) */ acceleration * dt;
             }
             if (metaData.getKeys().isDown(LEFT)) {
-                dx -= acceleration * dt;
+                dx -= /*cos(radians + (float) Math.PI) */ acceleration * dt;
+                //dy += sin(radians + (float) Math.PI) * acceleration * dt;
             }
 
-            // deacceleration
             float vec = (float) Math.sqrt(dx * dx + dy * dy);
             if (vec > 0) {
                 dx -= (dx / vec) * deacceleration * dt;

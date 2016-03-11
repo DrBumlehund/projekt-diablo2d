@@ -15,21 +15,21 @@ public class MetaData {
     private int displayWidth;
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
-    private int mouseX, mouseY;
+    private float mouseX, mouseY;
 
-    public int getMouseX() {
+    public float getMouseX() {
         return mouseX;
     }
 
-    public void setMouseX(int mouseX) {
+    public void setMouseX(float mouseX) {
         this.mouseX = mouseX;
     }
 
-    public int getMouseY() {
+    public float getMouseY() {
         return mouseY;
     }
 
-    public void setMouseY(int mouseY) {
+    public void setMouseY(float mouseY) {
         this.mouseY = mouseY;
     }
 
