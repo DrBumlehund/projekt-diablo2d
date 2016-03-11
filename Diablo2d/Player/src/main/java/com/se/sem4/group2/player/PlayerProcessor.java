@@ -85,8 +85,8 @@ public class PlayerProcessor implements IEntityProcessingService {
         shapex[0] = (float) (x);
         shapey[0] = (float) (y);
 
-        shapex[1] = (float) (x + Math.cos(radians - 4 * 3.1415f / 5) * 8);
-        shapey[1] = (float) (y + Math.sin(radians - 4 * 3.1415f / 5) * 8);
+        shapex[1] = (float) (x + Math.cos(radians) * entity.getRadius());
+        shapey[1] = (float) (y + Math.sin(radians) * entity.getRadius());
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);

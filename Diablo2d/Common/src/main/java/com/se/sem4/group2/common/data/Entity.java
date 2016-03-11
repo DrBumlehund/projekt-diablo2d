@@ -17,6 +17,15 @@ public class Entity {
     private EntityType type;
     private final UUID id = UUID.randomUUID();
     private float[] shapeX, shapeY;
+    private float radius;
+
+    public float getRadius() {
+        return radius;
+    }
+
+    public void setRadius(float radius) {
+        this.radius = radius;
+    }
 
     public float getX() {
         return x;
@@ -65,7 +74,7 @@ public class Entity {
     public void setDy(float dy) {
         this.dy = dy;
     }
-
+    
     public float getRadians() {
         return radians;
     }

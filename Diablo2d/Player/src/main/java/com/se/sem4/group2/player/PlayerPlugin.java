@@ -40,9 +40,10 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setRadians((float) Math.PI / 2);
         newPlayer.setSpeed(100);
 
-        //TODO: MAKE SHIT FOR SHAPEX,Y
+
         newPlayer.setShapeX(new float[2]);
         newPlayer.setShapeY(new float[2]);
+        newPlayer.setRadius(10f);
         
         return newPlayer;
     }

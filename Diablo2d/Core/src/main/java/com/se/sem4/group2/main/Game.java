@@ -100,10 +100,9 @@ public class Game implements ApplicationListener {
             float[] shapeX = entity.getShapeX();
             float[] shapeY = entity.getShapeY();
             
-            for(int i = 0, j = shapeX.length - 1; i < shapeX.length; j = i++){
-            shapeRenderer.line(shapeX[i], shapeY[i], shapeX[j], shapeY[j]);
-            shapeRenderer.circle(entity.getX(), entity.getY(), 10);
-            }
+            shapeRenderer.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+            shapeRenderer.circle(entity.getX(), entity.getY(), entity.getRadius());
+            
             shapeRenderer.end();
 
         }
