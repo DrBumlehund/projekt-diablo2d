@@ -22,6 +22,22 @@ public class Entity {
         return x;
     }
 
+    public float[] getShapeX() {
+        return shapeX;
+    }
+
+    public void setShapeX(float[] shapeX) {
+        this.shapeX = shapeX;
+    }
+
+    public float[] getShapeY() {
+        return shapeY;
+    }
+
+    public void setShapeY(float[] shapeY) {
+        this.shapeY = shapeY;
+    }
+
     public void setX(float x) {
         this.x = x;
     }

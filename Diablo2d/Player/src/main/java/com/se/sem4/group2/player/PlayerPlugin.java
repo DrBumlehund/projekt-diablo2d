@@ -41,6 +41,8 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setSpeed(100);
 
         //TODO: MAKE SHIT FOR SHAPEX,Y
+        newPlayer.setShapeX(new float[4]);
+        newPlayer.setShapeY(new float[4]);
         
         return newPlayer;
     }
