@@ -10,13 +10,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.managers.GameInputProcessor;
+import com.se.sem4.group2.player.PlayerPlugin;
+import com.se.sem4.group2.player.PlayerProcessor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +29,10 @@ public class Game implements ApplicationListener {
     private static OrthographicCamera cam;
     private SpriteBatch batch;
 
-    private final MetaData md = new MetaData();
+    private IGamePluginService playerPlugin;
+    private IEntityProcessingService playerProcessor;
+
+    private final MetaData metaData = new MetaData();
 //    private final GameData md = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private Map<String, Entity> world = new ConcurrentHashMap<>();
@@ -36,23 +40,27 @@ public class Game implements ApplicationListener {
     @Override
     public void create() {
 
-        md.setDisplayWidth(Gdx.graphics.getWidth());
-        md.setDisplayHeight(Gdx.graphics.getHeight());
+        metaData.setDisplayWidth(Gdx.graphics.getWidth());
+        metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
-        cam = new OrthographicCamera(md.getDisplayWidth(), md.getDisplayHeight());
-        cam.translate(md.getDisplayWidth() / 2, md.getDisplayHeight() / 2);
+        cam = new OrthographicCamera(metaData.getDisplayWidth(), metaData.getDisplayHeight());
+        cam.translate(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         cam.update();
 
         batch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(
-                new GameInputProcessor(md)
+                new GameInputProcessor(metaData)
         );
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.start(md, world);
+            iGamePlugin.start(metaData, world);
         }
+
+        playerPlugin = new PlayerPlugin();
+        playerPlugin.start(metaData, world);
+        playerProcessor = new PlayerProcessor();
     }
 
     @Override
@@ -62,20 +70,20 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        md.setDelta(Gdx.graphics.getDeltaTime());
+        metaData.setDelta(Gdx.graphics.getDeltaTime());
 
         update();
 
         draw();
 
-        md.getKeys().update();
+        metaData.getKeys().update();
     }
 
     private void update() {
         // Update
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
-                entityProcessorService.process(md, world, e);
+                entityProcessorService.process(metaData, world, e);
             }
         }
     }

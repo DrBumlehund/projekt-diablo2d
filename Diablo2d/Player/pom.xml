@@ -16,6 +16,9 @@
                 <extensions>true</extensions>
                 <configuration>
                     <useOSGiDependencies>true</useOSGiDependencies>
+                    <publicPackages>
+                        <publicPackage>com.se.sem4.group2.player</publicPackage>
+                    </publicPackages>
                 </configuration>
             </plugin>
             <plugin>

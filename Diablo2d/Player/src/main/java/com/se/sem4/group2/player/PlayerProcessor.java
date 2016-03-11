@@ -13,8 +13,6 @@ import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
-import static java.lang.Math.tan;
 
 /**
  *

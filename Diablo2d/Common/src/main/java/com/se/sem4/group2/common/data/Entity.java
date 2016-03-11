@@ -5,10 +5,8 @@
  */
 package com.se.sem4.group2.common.data;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import java.util.UUID;
+import javax.media.j3d.Texture;
 
 /**
  *
@@ -20,7 +18,7 @@ public class Entity {
     private float x, y, dx, dy, radians, speed;
     private EntityType type;
     private final UUID id = UUID.randomUUID();
-    private Sprite sprite;
+    private float[] shapeX, shapeY;
 
     public float getX() {
         return x;
@@ -92,18 +90,5 @@ public class Entity {
     public String getId() {
         return this.id.toString();
     }
-
-    public void rotateSprite(float rad) {
-        sprite.setRotation(radians * (float) (180 / Math.PI));
-    }
-
-    public void setSprite(String spritePath) {
-        this.sprite = new Sprite(new Texture(Gdx.files.internal(spritePath)));
-    }
-
-    public Sprite getSprite() {
-        return sprite;
-    }
-    
-    
+    //TODO: MAKE SHIT FOR SHAPEX,Y
 }

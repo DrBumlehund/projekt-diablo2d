@@ -40,7 +40,7 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setRadians((float) Math.PI / 2);
         newPlayer.setSpeed(100);
 
-        newPlayer.setSprite("src/main/resources/asssets/ct2.bmp");
+        //TODO: MAKE SHIT FOR SHAPEX,Y
         
         return newPlayer;
     }
