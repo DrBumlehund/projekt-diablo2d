@@ -13,9 +13,25 @@ import java.util.UUID;
 public class Entity {
 
     //TODO: Tilføj sprite/billede/form...
-    private float x, y, dx, dy, radians, speed;
+    private float x, y, dx, dy, radians, maxSpeed, acceleration, deacceleration;
     private EntityType type;
     private final UUID id = UUID.randomUUID();
+
+    public float getAcceleration() {
+        return acceleration;
+    }
+
+    public void setAcceleration(float acceleration) {
+        this.acceleration = acceleration;
+    }
+
+    public float getDeacceleration() {
+        return deacceleration;
+    }
+
+    public void setDeacceleration(float deacceleration) {
+        this.deacceleration = deacceleration;
+    }
     private float[] shapeX, shapeY;
     private float radius;
 
@@ -80,15 +96,15 @@ public class Entity {
     }
 
     public void setRadians(float radians) {
-        this.radians = radians % (float) (2 * Math.PI);
+        this.radians = radians;
     }
 
-    public float getSpeed() {
-        return speed;
+    public float getMaxSpeed() {
+        return maxSpeed;
     }
 
-    public void setSpeed(float speed) {
-        this.speed = speed;
+    public void setMaxSpeed(float speed) {
+        this.maxSpeed = speed;
     }
 
     public EntityType getType() {
