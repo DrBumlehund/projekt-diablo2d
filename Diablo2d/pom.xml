@@ -63,6 +63,7 @@
         <module>Core</module>
         <module>Map</module>
         <module>Player</module>
+        <module>SilentUpdate</module>
     </modules>
 
     <properties>
