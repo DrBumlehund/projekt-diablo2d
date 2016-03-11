@@ -27,6 +27,15 @@
             </plugin>
         </plugins>
     </build>
+    
+    
+    
+    
+    
+    <!--OLD DEPENDENCIES-->
+    
+    
+    
     <dependencies>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -39,17 +48,8 @@
             <version>RELEASE81</version>
             <type>jar</type>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-                <dependency>
-            <groupId>com.badlogicgames.gdx</groupId>
-            <artifactId>gdx</artifactId>
-            <version>1.9.0</version>
-            <type>jar</type>
-        </dependency>
+
+
         <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-platform</artifactId>
@@ -84,16 +84,33 @@
             <classifier>natives-desktop</classifier>
             <version>1.9.0</version>
         </dependency>
-<!--        <dependency>
+        <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx</artifactId>
             <version>1.9.0</version>
             <type>jar</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>com.badlogicgames.gdx</groupId>
             <artifactId>gdx-backend-lwjgl</artifactId>
             <version>1.9.0</version>
+        </dependency>-->
+
+    
+    
+    
+    <!--END OLD DEPENDENCIES-->
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+<!--        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-openide-modules</artifactId>
+            <version>RELEASE81</version>
+            <type>jar</type>
         </dependency>-->
     </dependencies>
     <properties>
