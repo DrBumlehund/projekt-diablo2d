@@ -13,54 +13,13 @@ import java.util.UUID;
 public class Entity {
 
     //TODO: Tilføj sprite/billede/form...
-    private float x, y, dx, dy, radians, maxSpeed, acceleration, deacceleration;
+    private float x, y, dx, dy, radians, speed;
     private EntityType type;
     private final UUID id = UUID.randomUUID();
-
-    public float getAcceleration() {
-        return acceleration;
-    }
-
-    public void setAcceleration(float acceleration) {
-        this.acceleration = acceleration;
-    }
-
-    public float getDeacceleration() {
-        return deacceleration;
-    }
-
-    public void setDeacceleration(float deacceleration) {
-        this.deacceleration = deacceleration;
-    }
     private float[] shapeX, shapeY;
-    private float radius;
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setRadius(float radius) {
-        this.radius = radius;
-    }
 
     public float getX() {
         return x;
-    }
-
-    public float[] getShapeX() {
-        return shapeX;
-    }
-
-    public void setShapeX(float[] shapeX) {
-        this.shapeX = shapeX;
-    }
-
-    public float[] getShapeY() {
-        return shapeY;
-    }
-
-    public void setShapeY(float[] shapeY) {
-        this.shapeY = shapeY;
     }
 
     public void setX(float x) {
@@ -90,21 +49,21 @@ public class Entity {
     public void setDy(float dy) {
         this.dy = dy;
     }
-    
+
     public float getRadians() {
         return radians;
     }
 
     public void setRadians(float radians) {
-        this.radians = radians;
+        this.radians = radians % (float) (2 * Math.PI);
     }
 
-    public float getMaxSpeed() {
-        return maxSpeed;
+    public float getSpeed() {
+        return speed;
     }
 
-    public void setMaxSpeed(float speed) {
-        this.maxSpeed = speed;
+    public void setSpeed(float speed) {
+        this.speed = speed;
     }
 
     public EntityType getType() {

@@ -10,7 +10,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.util.SPILocator;
@@ -28,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Game implements ApplicationListener {
 
     private static OrthographicCamera cam;
-    private ShapeRenderer shapeRenderer;
+    private SpriteBatch batch;
 
     private IGamePluginService playerPlugin;
     private IEntityProcessingService playerProcessor;
@@ -48,7 +47,7 @@ public class Game implements ApplicationListener {
         cam.translate(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         cam.update();
 
-        shapeRenderer = new ShapeRenderer();
+        batch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(metaData)
@@ -91,19 +90,12 @@ public class Game implements ApplicationListener {
 
     private void draw() {
         for (Entity entity : world.values()) {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClearColor(1, 1, 1, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            batch.begin();
             //TODO: draw stuff...
-            
-            float[] shapeX = entity.getShapeX();
-            float[] shapeY = entity.getShapeY();
-            
-            shapeRenderer.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
-            shapeRenderer.circle(entity.getX(), entity.getY(), entity.getRadius());
-            
-            shapeRenderer.end();
+            batch.end();
 
         }
     }

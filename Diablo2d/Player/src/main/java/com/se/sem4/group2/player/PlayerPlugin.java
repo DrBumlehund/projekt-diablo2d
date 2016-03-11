@@ -38,14 +38,9 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setType(PLAYER);
         newPlayer.setPos(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         newPlayer.setRadians((float) Math.PI / 2);
-        newPlayer.setMaxSpeed(100);
-        newPlayer.setAcceleration(600);
-        newPlayer.setDeacceleration(400);
+        newPlayer.setSpeed(100);
 
-
-        newPlayer.setShapeX(new float[2]);
-        newPlayer.setShapeY(new float[2]);
-        newPlayer.setRadius(10f);
+        //TODO: MAKE SHIT FOR SHAPEX,Y
         
         return newPlayer;
     }
