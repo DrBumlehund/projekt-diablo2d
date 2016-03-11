@@ -6,8 +6,6 @@
 package com.se.sem4.group2.common.data;
 
 import java.util.UUID;
-import javax.media.j3d.Texture;
-
 /**
  *
  * @author ThomasLemqvist
@@ -91,4 +89,5 @@ public class Entity {
         return this.id.toString();
     }
     //TODO: MAKE SHIT FOR SHAPEX,Y
+    
 }
