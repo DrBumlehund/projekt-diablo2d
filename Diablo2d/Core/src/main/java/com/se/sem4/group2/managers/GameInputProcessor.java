@@ -15,9 +15,9 @@ import com.se.sem4.group2.common.data.MetaData;
  * @author jakobtottrup
  */
 public class GameInputProcessor extends InputAdapter {
-    
+
     private final MetaData metaData;
-    
+
     public GameInputProcessor(MetaData metaData) {
         this.metaData = metaData;
     }
@@ -26,10 +26,10 @@ public class GameInputProcessor extends InputAdapter {
     // UNIMPLEMENTED//
     @Override
     public boolean mouseMoved(int x, int y) {
-        metaData.setMousePos(x, y);
+        metaData.setMousePos(x, (metaData.getDisplayHeight() - y));
         return true;
     }
-    
+
     public boolean keyDown(int k) {
         if (k == Input.Keys.UP) {
             metaData.getKeys().setKey(GameKeys.UP, true);
@@ -57,7 +57,7 @@ public class GameInputProcessor extends InputAdapter {
         }
         return true;
     }
-    
+
     public boolean keyUp(int k) {
         if (k == Input.Keys.UP) {
             metaData.getKeys().setKey(GameKeys.UP, false);
@@ -85,5 +85,5 @@ public class GameInputProcessor extends InputAdapter {
         }
         return true;
     }
-    
+
 }

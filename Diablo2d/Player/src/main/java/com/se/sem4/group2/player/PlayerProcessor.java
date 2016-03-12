@@ -39,7 +39,7 @@ public class PlayerProcessor implements IEntityProcessingService {
             //angle
             float tmpX = mousePos.x - x;
             float tmpY = mousePos.y - y;
-            radians = (float) (Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
+            radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
             if (radians < 0) {
                 radians += (float) (2 * Math.PI);
             }
@@ -90,7 +90,7 @@ public class PlayerProcessor implements IEntityProcessingService {
             entity.setDx(dx);
             entity.setDy(dy);
             entity.setRadians(radians);
-
+            updateShape(entity);
         }
 
     }
