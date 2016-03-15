@@ -45,6 +45,7 @@ public class PlayerProcessor implements IEntityProcessingService {
         float radians = entity.getRadians();
         Point mousePos = metaData.getMousePos();
 
+        if (entity instanceof Entity) 
         if (entity.getType().equals(PLAYER)) {
 
             //angle

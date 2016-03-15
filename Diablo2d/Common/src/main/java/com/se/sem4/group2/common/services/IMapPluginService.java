@@ -14,12 +14,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.se.sem4.group2.common.data;
+package com.se.sem4.group2.common.services;
+
+import com.se.sem4.group2.common.data.MetaData;
+import com.se.sem4.group2.common.data.WorldMap;
+import java.util.Map;
 
 /**
  *
  * @author ThomasLemqvist
  */
-public class Chunck {
-    //indeholder maps
+public interface IMapPluginService {
+    
+    public WorldMap start(MetaData metaData);
+    
+    public void stop(MetaData metaData);
 }
