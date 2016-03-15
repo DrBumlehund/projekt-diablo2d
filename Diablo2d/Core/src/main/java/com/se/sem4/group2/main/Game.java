@@ -8,6 +8,7 @@ package com.se.sem4.group2.main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -49,6 +50,7 @@ public class Game implements ApplicationListener {
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private Map<String, Entity> world = new ConcurrentHashMap<>();
     private WorldMap worldMap;
+    private SpriteBatch batch;
 
     @Override
     public void create() {
@@ -61,6 +63,7 @@ public class Game implements ApplicationListener {
         cam.update();
 
         sr = new ShapeRenderer();
+        batch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(metaData)
@@ -102,22 +105,6 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
-        for (Entity entity : world.values()) {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-            float[] shapeX = entity.getShapeX();
-            float[] shapeY = entity.getShapeY();
-            
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            
-            sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
-            sr.circle(entity.getX(), entity.getY(), entity.getRadius());
-            
-            sr.end();
-
-        }
-        
         for (int x=0; x<worldMap.getMap().length; x++) {
             for (int y=0; y<worldMap.getMap().length; y++) {
                 Tile tile = worldMap.getMap()[x][y];
@@ -133,6 +120,24 @@ public class Game implements ApplicationListener {
                 batch.draw(texture, x*texture.getWidth(), y*texture.getHeight());
                 batch.end();
             }
+        }
+        
+        for (Entity entity : world.values()) {
+            //Gdx.gl.glClearColor(0, 0, 0, 1);
+            //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            float[] shapeX = entity.getShapeX();
+            float[] shapeY = entity.getShapeY();
+            
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+            sr.setColor(Color.WHITE);
+            sr.circle(entity.getX(), entity.getY(), entity.getRadius());
+            
+            sr.end();
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.setColor(Color.BLACK);
+            sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+            sr.end();
         }
     }
     
