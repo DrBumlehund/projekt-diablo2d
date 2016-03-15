@@ -16,77 +16,74 @@ import com.se.sem4.group2.common.data.MetaData;
  */
 public class GameInputProcessor extends InputAdapter {
 
-    private final MetaData gameData;
+    private final MetaData metaData;
 
-    public GameInputProcessor(MetaData gameData) {
-        this.gameData = gameData;
+    public GameInputProcessor(MetaData metaData) {
+        this.metaData = metaData;
     }
-    
+
     // ============= MOVE SYSTEM ================ // 
     // UNIMPLEMENTED//
+    @Override
+    public boolean mouseMoved(int x, int y) {
+        metaData.setMousePos(x, (metaData.getDisplayHeight() - y));
+        return true;
+    }
 
     public boolean keyDown(int k) {
-        if(k == Input.Keys.UP) {
-            gameData.getKeys().setKey(GameKeys.UP, true);
+        if (k == Input.Keys.UP || k == Input.Keys.W) {
+            metaData.getKeys().setKey(GameKeys.UP, true);
         }
-        if(k == Input.Keys.LEFT) {
-            gameData.getKeys().setKey(GameKeys.LEFT, true);
+        if (k == Input.Keys.LEFT || k == Input.Keys.A) {
+            metaData.getKeys().setKey(GameKeys.LEFT, true);
         }
-        if(k == Input.Keys.DOWN) {
-            gameData.getKeys().setKey(GameKeys.DOWN, true);
+        if (k == Input.Keys.DOWN || k == Input.Keys.S) {
+            metaData.getKeys().setKey(GameKeys.DOWN, true);
         }
-        if(k == Input.Keys.RIGHT) {
-            gameData.getKeys().setKey(GameKeys.RIGHT, true);
+        if (k == Input.Keys.RIGHT || k == Input.Keys.D) {
+            metaData.getKeys().setKey(GameKeys.RIGHT, true);
         }
-        if(k == Input.Keys.ENTER) {
-            gameData.getKeys().setKey(GameKeys.ENTER, true);
+        if (k == Input.Keys.ENTER) {
+            metaData.getKeys().setKey(GameKeys.ENTER, true);
         }
-        if(k == Input.Keys.ESCAPE) {
-            gameData.getKeys().setKey(GameKeys.ESCAPE, true);
+        if (k == Input.Keys.ESCAPE) {
+            metaData.getKeys().setKey(GameKeys.ESCAPE, true);
         }
-        if(k == Input.Keys.SPACE) {
-            gameData.getKeys().setKey(GameKeys.SPACE, true);
+        if (k == Input.Keys.SPACE) {
+            metaData.getKeys().setKey(GameKeys.SPACE, true);
         }
-        if(k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
-            gameData.getKeys().setKey(GameKeys.SHIFT, true);
+        if (k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
+            metaData.getKeys().setKey(GameKeys.SHIFT, true);
         }
         return true;
     }
 
     public boolean keyUp(int k) {
-        if(k == Input.Keys.UP) {
-            gameData.getKeys().setKey(GameKeys.UP, false);
+        if (k == Input.Keys.UP || k == Input.Keys.W) {
+            metaData.getKeys().setKey(GameKeys.UP, false);
         }
-        if(k == Input.Keys.LEFT) {
-            gameData.getKeys().setKey(GameKeys.LEFT, false);
+        if (k == Input.Keys.LEFT || k == Input.Keys.A) {
+            metaData.getKeys().setKey(GameKeys.LEFT, false);
         }
-        if(k == Input.Keys.DOWN) {
-            gameData.getKeys().setKey(GameKeys.DOWN, false);
+        if (k == Input.Keys.DOWN || k == Input.Keys.S) {
+            metaData.getKeys().setKey(GameKeys.DOWN, false);
         }
-        if(k == Input.Keys.RIGHT) {
-            gameData.getKeys().setKey(GameKeys.RIGHT, false);
+        if (k == Input.Keys.RIGHT || k == Input.Keys.D) {
+            metaData.getKeys().setKey(GameKeys.RIGHT, false);
         }
-        if(k == Input.Keys.ENTER) {
-            gameData.getKeys().setKey(GameKeys.ENTER, false);
+        if (k == Input.Keys.ENTER) {
+            metaData.getKeys().setKey(GameKeys.ENTER, false);
         }
-        if(k == Input.Keys.ESCAPE) {
-            gameData.getKeys().setKey(GameKeys.ESCAPE, false);
+        if (k == Input.Keys.ESCAPE) {
+            metaData.getKeys().setKey(GameKeys.ESCAPE, false);
         }
-        if(k == Input.Keys.SPACE) {
-            gameData.getKeys().setKey(GameKeys.SPACE, false);
+        if (k == Input.Keys.SPACE) {
+            metaData.getKeys().setKey(GameKeys.SPACE, false);
         }
-        if(k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
-            gameData.getKeys().setKey(GameKeys.SHIFT, false);
+        if (k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
+            metaData.getKeys().setKey(GameKeys.SHIFT, false);
         }
         return true;
     }
-	
+
 }
-
-
-
-
-
-
-
-

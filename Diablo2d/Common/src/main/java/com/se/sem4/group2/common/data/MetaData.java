@@ -5,6 +5,8 @@
  */
 package com.se.sem4.group2.common.data;
 
+import java.awt.Point;
+
 /**
  *
  * @author ThomasLemqvist
@@ -15,6 +17,15 @@ public class MetaData {
     private int displayWidth;
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
+    private Point mousePos = new Point();
+
+    public Point getMousePos() {
+        return mousePos;
+    }
+
+    public void setMousePos(int x, int y) {
+        this.mousePos = new Point(x, y);
+    }
 
     public GameKeys getKeys() {
         return keys;
@@ -43,9 +54,5 @@ public class MetaData {
     public float getDelta() {
         return delta;
     }
-
-    
-   
-
 
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
@@ -36,7 +37,8 @@ import javax.swing.plaf.metal.MetalIconFactory;
 public class Game implements ApplicationListener {
 
     private static OrthographicCamera cam;
-    private SpriteBatch batch;
+
+    private ShapeRenderer sr;
 
     private IGamePluginService playerPlugin;
     private IMapPluginService mapPlugin;
@@ -58,7 +60,7 @@ public class Game implements ApplicationListener {
         cam.translate(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         cam.update();
 
-        batch = new SpriteBatch();
+        sr = new ShapeRenderer();
 
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(metaData)
@@ -101,12 +103,18 @@ public class Game implements ApplicationListener {
 
     private void draw() {
         for (Entity entity : world.values()) {
-            Gdx.gl.glClearColor(1, 1, 1, 1);
+            Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            batch.begin();
-            //TODO: draw stuff...
-            batch.end();
+            float[] shapeX = entity.getShapeX();
+            float[] shapeY = entity.getShapeY();
+            
+            sr.begin(ShapeRenderer.ShapeType.Line);
+            
+            sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+            sr.circle(entity.getX(), entity.getY(), entity.getRadius());
+            
+            sr.end();
 
         }
         
