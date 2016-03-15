@@ -45,6 +45,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.swing.plaf.metal.MetalIconFactory;
+import org.openide.util.Lookup;
+import org.openide.util.LookupEvent;
+import org.openide.util.LookupListener;
 
 public class Game implements ApplicationListener {
 
@@ -62,6 +65,8 @@ public class Game implements ApplicationListener {
     private Map<String, Entity> world = new ConcurrentHashMap<>();
     private WorldMap worldMap;
     private SpriteBatch batch;
+    private List<IGamePluginService> gamePlugins;
+    private final Lookup lookup = Lookup.getDefault();
 
     @Override
     public void create() {
@@ -79,6 +84,12 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(metaData)
         );
+        
+        
+        Lookup.Result<IGamePluginService> result = lookup.lookupResult(IGamePluginService.class);
+        result.addLookupListener(lookupListener);
+        gamePlugins = new ArrayList<>(result.allInstances());
+        result.allItems();
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
@@ -181,4 +192,16 @@ public class Game implements ApplicationListener {
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return SPILocator.locateAll(IEntityProcessingService.class);
     }
+    
+    private final LookupListener lookupListener = new LookupListener() {
+        @Override
+        public void resultChanged(LookupEvent le) {
+            for (IGamePluginService updatedGamePlugin : lookup.lookupAll(IGamePluginService.class)) {
+                if (!gamePlugins.contains(updatedGamePlugin)) {
+                    updatedGamePlugin.start(metaData, world);
+                    gamePlugins.add(updatedGamePlugin);
+               }
+            }
+        }
+    };
 }
