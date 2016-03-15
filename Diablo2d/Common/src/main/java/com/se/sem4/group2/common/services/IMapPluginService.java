@@ -5,10 +5,17 @@
  */
 package com.se.sem4.group2.common.services;
 
+import com.se.sem4.group2.common.data.MetaData;
+import com.se.sem4.group2.common.data.WorldMap;
+import java.util.Map;
+
 /**
  *
  * @author ThomasLemqvist
  */
-public interface IMapService {
+public interface IMapPluginService {
     
+    public WorldMap start(MetaData metaData);
+    
+    public void stop(MetaData metaData);
 }

@@ -31,6 +31,7 @@ public class PlayerProcessor implements IEntityProcessingService {
         float speed = entity.getSpeed();
         float radians = entity.getRadians();
 
+        if (entity instanceof Entity) 
         if (entity.getType().equals(PLAYER)) {
             //TODO: IMPLEMENTER KEYS
             //movement

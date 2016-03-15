@@ -9,6 +9,7 @@ package com.se.sem4.group2.common.data;
  *
  * @author ThomasLemqvist
  */
-public class Chunck {
-    //indeholder maps
+public class Chunk {
+    //indeholder tiles
+    
 }
