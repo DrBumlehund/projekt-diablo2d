@@ -36,30 +36,9 @@ public class Entity {
     private float[] shapeX;
     private float[] shapeY;
     private float radius;
-    private float width;
-    private float height;
     private EntityType type;
     private final UUID id = UUID.randomUUID();
 
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public void setWidth(float width) {
-        this.width = width;
-    }
-
-    public void setHeight(float height) {
-        this.height = height;
-    }
-
-    
-    
-    
     public float getAcceleration() {
         return acceleration;
     }
