@@ -81,11 +81,8 @@ public class Game implements ApplicationListener {
         sr = new ShapeRenderer();
         batch = new SpriteBatch();
 
-        Gdx.input.setInputProcessor(
-                new GameInputProcessor(metaData)
-        );
-        
-        
+        Gdx.input.setInputProcessor(new GameInputProcessor(metaData));
+
         Lookup.Result<IGamePluginService> result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
         gamePlugins = new ArrayList<>(result.allInstances());
@@ -95,7 +92,7 @@ public class Game implements ApplicationListener {
         for (IGamePluginService iGamePlugin : getPluginServices()) {
             iGamePlugin.start(metaData, world);
         }
-        
+
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
             worldMap = iMapPlugin.start(metaData);
         }
@@ -127,8 +124,8 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
-        for (int x=0; x<worldMap.getMap().length; x++) {
-            for (int y=0; y<worldMap.getMap().length; y++) {
+        for (int x = 0; x < worldMap.getMap().length; x++) {
+            for (int y = 0; y < worldMap.getMap().length; y++) {
                 Tile tile = worldMap.getMap()[x][y];
                 Texture texture = null;
                 if (textureResources.containsKey(tile.toString() + tile.getSource())) {
@@ -139,22 +136,22 @@ public class Game implements ApplicationListener {
                     textureResources.put(tile.toString() + tile.getSource(), texture);
                 }
                 batch.begin();
-                batch.draw(texture, x*texture.getWidth(), y*texture.getHeight());
+                batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                 batch.end();
             }
         }
-        
+
         for (Entity entity : world.values()) {
             //Gdx.gl.glClearColor(0, 0, 0, 1);
             //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             float[] shapeX = entity.getShapeX();
             float[] shapeY = entity.getShapeY();
-            
+
             sr.begin(ShapeRenderer.ShapeType.Filled);
             sr.setColor(Color.WHITE);
             sr.circle(entity.getX(), entity.getY(), entity.getRadius());
-            
+
             sr.end();
             sr.begin(ShapeRenderer.ShapeType.Line);
             sr.setColor(Color.BLACK);
@@ -162,7 +159,7 @@ public class Game implements ApplicationListener {
             sr.end();
         }
     }
-    
+
     Map<String, Texture> textureResources = new HashMap<>();
 
     @Override
@@ -192,7 +189,7 @@ public class Game implements ApplicationListener {
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return SPILocator.locateAll(IEntityProcessingService.class);
     }
-    
+
     private final LookupListener lookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
@@ -200,7 +197,7 @@ public class Game implements ApplicationListener {
                 if (!gamePlugins.contains(updatedGamePlugin)) {
                     updatedGamePlugin.start(metaData, world);
                     gamePlugins.add(updatedGamePlugin);
-               }
+                }
             }
         }
     };

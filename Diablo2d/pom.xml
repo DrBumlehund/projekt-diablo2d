@@ -64,6 +64,7 @@
         <module>Map</module>
         <module>Player</module>
         <module>SilentUpdate</module>
+        <module>Npc</module>
     </modules>
 
     <properties>
