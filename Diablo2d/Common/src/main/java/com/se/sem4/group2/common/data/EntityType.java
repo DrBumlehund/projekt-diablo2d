@@ -21,7 +21,8 @@ package com.se.sem4.group2.common.data;
  * @author ThomasLemqvist
  */
 public enum EntityType {
-    PLAYER,
-    PROJECTILE,
-    NPC;
+    
+    PLAYER, 
+    PROJECTILE;
+    
 }
