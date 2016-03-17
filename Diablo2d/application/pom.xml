@@ -396,11 +396,6 @@
         </dependency>
         -->
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>SilentUpdate</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>
             <version>RELEASE81</version>
@@ -411,14 +406,9 @@
             <version>RELEASE81</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Map</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Player</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-autoupdate-ui</artifactId>
+            <version>RELEASE81</version>
         </dependency>
     </dependencies>
 
