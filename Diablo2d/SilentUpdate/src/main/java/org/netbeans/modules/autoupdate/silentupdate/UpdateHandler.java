@@ -11,6 +11,7 @@ import org.netbeans.api.autoupdate.InstallSupport.Validator;
 import org.netbeans.api.autoupdate.OperationContainer;
 import org.netbeans.api.autoupdate.OperationContainer.OperationInfo;
 import org.netbeans.api.autoupdate.OperationException;
+import org.netbeans.api.autoupdate.OperationSupport;
 import org.netbeans.api.autoupdate.OperationSupport.Restarter;
 import org.netbeans.api.autoupdate.UpdateElement;
 import org.netbeans.api.autoupdate.UpdateManager;
@@ -45,6 +46,7 @@ public final class UpdateHandler {
     public static void checkAndHandleUpdates() {
         // refresh silent update center first
         refreshSilentUpdateProvider();
+        
 
         Collection<UpdateElement> updates = findUpdates();
         Collection<UpdateElement> available = Collections.emptySet();
@@ -261,4 +263,78 @@ public final class UpdateHandler {
         String s = NbBundle.getBundle("org.netbeans.modules.autoupdate.silentupdate.resources.Bundle").getString("UpdateHandler.NewModules");
         return Boolean.parseBoolean(s);
     }
+
+    
+    //Kode fra Netbeans2 slides
+    public static void doDisable() {
+        List<String> modules = Collections.singletonList("com.galileo.netbeans.modules3"); // Hvad skal der stå her?
+        OperationContainer<OperationSupport> cont = OperationContainer.createForDirectDisable();
+        for (UpdateUnit unit : UpdateManager.getDefault().getUpdateUnits(UpdateManager.TYPE.MODULE)) {
+
+            if (unit.getInstalled() != null){
+                UpdateElement elem = unit.getInstalled();
+                if (elem.isEnabled()){
+                    if (modules.contains(elem.getCodeName())){
+                        if (cont.canBeAdded(unit, elem)){
+                            OperationInfo<OperationSupport> operationInfo = cont.add(elem);
+                            if (operationInfo != null){
+                                cont.add(operationInfo.getRequiredElements());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!cont.listAll().isEmpty()){
+            try {
+                Restarter restarter = cont.getSupport().doOperation(null);
+            } catch (OperationException ex){
+                OutputLogger.log(ex.getMessage());
+            }
+        }
+    }
+
+    
+    // Source: https://dzone.com/articles/how-quietly-disable-netbeans-m
+//    public void doDisable(Collection codeNames) { // codeName contains code name of modules for disbale
+//        Collection toDisable = new HashSet<>();
+//
+//        for (UpdateUnit unit : UpdateManager.getDefault().getUpdateUnits(UpdateManager.TYPE.MODULE)) {
+//            if (unit.getInstalled() != null) { // filter all installed modules
+//                UpdateElement el = unit.getInstalled();
+//                if (el.isEnabled()) { // filter all enabled modules
+//                    if (codeNames.contains(el.getCodeName())) { // filter given module in the parameter
+//                        toDisable.add(el);
+//                    }
+//                }
+//            }
+//        }
+//
+//        OperationContainer oc = OperationContainer.createForDirectDisable();
+//
+//        for (UpdateElement moduleunit : toDisable) {
+//            if (oc.canBeAdded(module.getUpdateUnit(), module)) { // check if module can be disabled
+//                OperationInfo operationInfo = oc.add(module);
+//                if (operationInfo == null) { // it means it's already planned to disable
+//                    continue;
+//                }
+//                // get all module depending on this module
+//                Set requiredElements = operationInfo.getRequiredElements();
+//                // add all of them between modules for disable
+//                oc.add(requiredElements);
+//            }
+//        }
+//
+//        // check the container doesn't contain any invalid element
+//        assert oc.listInvalid().isEmpty();
+//        try {
+//            // get operation support for complete the disable operation
+//            Restarter restarter = oc.getSupport().doOperation(null);
+//            // no restart needed in this case
+//            assert restarter == null;
+//        } catch (OperationException ex) {
+//            Exceptions.printStackTrace(ex);
+//        }
+//    }
+
 }
