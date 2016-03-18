@@ -65,6 +65,7 @@
         <module>Player</module>
         <module>SilentUpdate</module>
         <module>Npc</module>
+        <module>Projectile</module>
     </modules>
 
     <properties>

@@ -15,38 +15,38 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author ThomasLemqvist
+ * @author Thomas
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
 public class NpcPlugin implements IGamePluginService {
 
-    private Map<String, Entity> world;
-    private Entity npc;
-
+    Map<String, Entity> world;
+    Entity npc;
     Random rng = new Random();
 
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
+
         this.world = world;
-        npc = createNpc(metaData);
+        this.npc = createNpc(metaData);
         world.put(npc.getId(), npc);
     }
 
     private Entity createNpc(MetaData metaData) {
-        Entity newNpc = new Entity();
-        newNpc.setType(NPC);
-        newNpc.setPos(rng.nextInt(metaData.getDisplayWidth()), rng.nextInt(metaData.getDisplayHeight()));
+        Entity n = new Entity();
+        n.setType(NPC);
+        n.setPos(rng.nextFloat() * metaData.getDisplayWidth(),
+                rng.nextFloat() * metaData.getDisplayHeight());
+        n.setRadians((float) Math.PI / 2);
+        n.setMaxSpeed(100);
+        n.setAcceleration(600);
+        n.setDeacceleration(400);
 
-        newNpc.setRadians((float) Math.PI / 2);
-        newNpc.setMaxSpeed(100);
-        newNpc.setAcceleration(600);
-        newNpc.setDeacceleration(400);
+        n.setShapeX(new float[2]);
+        n.setShapeY(new float[2]);
+        n.setRadius(10f);
 
-        newNpc.setShapeX(new float[2]);
-        newNpc.setShapeY(new float[2]);
-        newNpc.setRadius(10f);
-
-        return newNpc;
+        return n;
     }
 
     @Override

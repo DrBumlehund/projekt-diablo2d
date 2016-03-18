@@ -15,7 +15,7 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author ThomasLemqvist
+ * @author Thomas
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class NpcProcessor implements IEntityProcessingService {
@@ -33,64 +33,64 @@ public class NpcProcessor implements IEntityProcessingService {
         float radians = entity.getRadians();
         Point mousePos = metaData.getMousePos();
 
-        if (entity instanceof Entity) {
-            if (entity.getType().equals(NPC)) {
+        if (entity instanceof Entity) 
+        if (entity.getType().equals(NPC)) {
 
-                //angle
-                float tmpX = mousePos.x - x;
-                float tmpY = mousePos.y - y;
-                radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
-                if (radians < 0) {
-                    radians += (float) (2 * Math.PI);
-                }
-
-                //movement
-//                if (metaData.getKeys().isDown(RIGHT)) {
-//                    dx += acceleration * dt;
-//                }
-//                if (metaData.getKeys().isDown(UP)) {
-//                    dy += acceleration * dt;
-//                }
-//                if (metaData.getKeys().isDown(DOWN)) {
-//                    dy -= acceleration * dt;
-//                }
-//                if (metaData.getKeys().isDown(LEFT)) {
-//                    dx -= acceleration * dt;
-//                }
-                //deacceleration
-                float vec = (float) Math.sqrt(dx * dx + dy * dy);
-                if (vec > 0) {
-                    dx -= (dx / vec) * deacceleration * dt;
-                    dy -= (dy / vec) * deacceleration * dt;
-                }
-                if (vec > maxSpeed) {
-                    dx = (dx / vec) * maxSpeed;
-                    dy = (dy / vec) * maxSpeed;
-                }
-
-                //TODO: bliv enige om gameplay og fix wrap metode...
-                //set position
-                x += dx * dt;
-                if (x > metaData.getDisplayWidth()) {
-                    x = 0;
-                } else if (x < 0) {
-                    x = metaData.getDisplayWidth();
-                }
-
-                y += dy * dt;
-                if (y > metaData.getDisplayHeight()) {
-                    y = 0;
-                } else if (y < 0) {
-                    y = metaData.getDisplayHeight();
-                }
-
-                // Update entity
-                entity.setPos(x, y);
-                entity.setDx(dx);
-                entity.setDy(dy);
-                entity.setRadians(radians);
-                updateShape(entity);
+            //angle
+            float tmpX = mousePos.x - x;
+            float tmpY = mousePos.y - y;
+            radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
+            if (radians < 0) {
+                radians += (float) (2 * Math.PI);
             }
+
+            //movement
+//            if (metaData.getKeys().isDown(RIGHT)) {
+//                dx += acceleration * dt;
+//            }
+//            if (metaData.getKeys().isDown(UP)) {
+//                dy += acceleration * dt;
+//            }
+//            if (metaData.getKeys().isDown(DOWN)) {
+//                dy -= acceleration * dt;
+//            }
+//            if (metaData.getKeys().isDown(LEFT)) {
+//                dx -= acceleration * dt;
+//            }
+
+            //deacceleration
+            float vec = (float) Math.sqrt(dx * dx + dy * dy);
+            if (vec > 0) {
+                dx -= (dx / vec) * deacceleration * dt;
+                dy -= (dy / vec) * deacceleration * dt;
+            }
+            if (vec > maxSpeed) {
+                dx = (dx / vec) * maxSpeed;
+                dy = (dy / vec) * maxSpeed;
+            }
+
+            //TODO: bliv enige om gameplay og fix wrap metode...
+            //set position
+            x += dx * dt;
+            if (x > metaData.getDisplayWidth()) {
+                x = 0;
+            } else if (x < 0) {
+                x = metaData.getDisplayWidth();
+            }
+
+            y += dy * dt;
+            if (y > metaData.getDisplayHeight()) {
+                y = 0;
+            } else if (y < 0) {
+                y = metaData.getDisplayHeight();
+            }
+
+            // Update entity
+            entity.setPos(x, y);
+            entity.setDx(dx);
+            entity.setDy(dy);
+            entity.setRadians(radians);
+            updateShape(entity);
         }
 
     }
@@ -111,4 +111,5 @@ public class NpcProcessor implements IEntityProcessingService {
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
     }
+    
 }

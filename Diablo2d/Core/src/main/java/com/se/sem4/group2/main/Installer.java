@@ -38,7 +38,7 @@ class StarterThread extends Thread {
     public void run() {
         LwjglApplicationConfiguration cfg
                 = new LwjglApplicationConfiguration();
-        cfg.title = "Lost Wizard - Never Forget... w8 wot";
+        cfg.title = "Diablo ii-D";
         cfg.width = 640;
         cfg.height = 480;
         cfg.useGL30 = false;

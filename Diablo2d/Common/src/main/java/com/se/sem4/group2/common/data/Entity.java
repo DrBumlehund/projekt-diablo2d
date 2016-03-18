@@ -36,6 +36,8 @@ public class Entity {
     private float[] shapeX;
     private float[] shapeY;
     private float radius;
+    private int height;
+    private int width;
     private EntityType type;
     private final UUID id = UUID.randomUUID();
 
@@ -150,6 +152,22 @@ public class Entity {
     public String getId() {
         return this.id.toString();
     }
-    //TODO: MAKE SHIT FOR SHAPEX,Y
+    
+    // TODO: REMOVE FOR SMARTER SHIZZLE >>>>
+    public int getHeight() {
+        return height;
+    }
 
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+    // <<<<
 }
