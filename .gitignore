@@ -22,3 +22,6 @@ hs_err_pid*
 /Diablo2d/Map/target/
 /Diablo2d/Player/target/
 /Diablo2d/Projectile/target/
+
+# Update Center #
+/Diablo2d/SilentUpdate/src/main/resources/org/netbeans/modules/autoupdate/silentupdate/resources/Bundle.properties

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><module codename="com.se.sem4.group2.Projectile">
-    <module_version install_time="1459240436430" last="true" origin="installer" specification_version="1.0">
-        <file crc="1025435785" name="config/Modules/com-se-sem4-group2-Projectile.xml"/>
-        <file crc="2411377001" name="modules/com-se-sem4-group2-Projectile.jar"/>
-    </module_version>
-</module>
