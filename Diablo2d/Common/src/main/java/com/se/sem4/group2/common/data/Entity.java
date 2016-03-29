@@ -16,7 +16,7 @@
  */
 package com.se.sem4.group2.common.data;
 
-import java.util.UUID;
+import java.awt.Color;
 
 /**
  *
@@ -38,6 +38,15 @@ public class Entity extends Transform {
     private EntityType type;
     private int height;
     private int width;
+    private Color color;
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
     public float getAcceleration() {
         return acceleration;
