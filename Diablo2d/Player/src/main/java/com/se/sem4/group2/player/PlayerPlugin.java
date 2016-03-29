@@ -16,12 +16,19 @@
  */
 package com.se.sem4.group2.player;
 
+import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
+import com.se.sem4.group2.common.data.util.SPILocator;
+import java.awt.Shape;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
+import java.util.Collection;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
+import com.se.sem4.group2.common.services.IColliderService;
 
 /**
  *
@@ -56,12 +63,21 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setShapeX(new float[2]);
         newPlayer.setShapeY(new float[2]);
         newPlayer.setRadius(10f);
+        
+        Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 5, 5);
+        Collider collider = new Collider(shape, newPlayer);
+        getColliderService().start(player, collider);
+        
         return newPlayer;
     }
 
     @Override
     public void stop(MetaData metaData) {
         world.remove(player.getId());
+    }
+
+    private IColliderService getColliderService() {
+        return SPILocator.locateFirst(IColliderService.class);
     }
 
 }

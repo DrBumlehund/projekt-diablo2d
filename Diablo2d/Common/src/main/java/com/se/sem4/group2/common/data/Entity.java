@@ -22,22 +22,20 @@ import java.util.UUID;
  *
  * @author ThomasLemqvist
  */
-public class Entity {
+public class Entity extends Transform {
 
     //TODO: Tilføj sprite/billede/form...
-    private float x;
-    private float y;
     private float dx;
     private float dy;
     private float radians;
     private float maxSpeed;
     private float acceleration;
     private float deacceleration;
+    // TODO: Don't use shapex and shapey
     private float[] shapeX;
     private float[] shapeY;
     private float radius;
     private EntityType type;
-    private final UUID id = UUID.randomUUID();
 
     public float getAcceleration() {
         return acceleration;
@@ -63,10 +61,6 @@ public class Entity {
         this.radius = radius;
     }
 
-    public float getX() {
-        return x;
-    }
-
     public float[] getShapeX() {
         return shapeX;
     }
@@ -82,19 +76,7 @@ public class Entity {
     public void setShapeY(float[] shapeY) {
         this.shapeY = shapeY;
     }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
+    
     public float getDx() {
         return dx;
     }
@@ -145,10 +127,6 @@ public class Entity {
         //ved ikke om det er nødvendigt ... men wth ... :D
         this.dx = dx;
         this.dy = dy;
-    }
-
-    public String getId() {
-        return this.id.toString();
     }
     //TODO: MAKE SHIT FOR SHAPEX,Y
 
