@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><module codename="com.se.sem4.group2.Player">
+    <module_version install_time="1459240435377" last="true" origin="installer" specification_version="1.0">
+        <file crc="4276670383" name="config/Modules/com-se-sem4-group2-Player.xml"/>
+        <file crc="2730194380" name="modules/com-se-sem4-group2-Player.jar"/>
+    </module_version>
+</module>
