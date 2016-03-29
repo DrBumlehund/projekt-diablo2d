@@ -41,6 +41,7 @@ public class GameInputProcessor extends InputAdapter {
         return true;
     }
 
+    @Override
     public boolean keyDown(int k) {
         if (k == Input.Keys.UP || k == Input.Keys.W) {
             metaData.getKeys().setKey(GameKeys.UP, true);
@@ -69,6 +70,7 @@ public class GameInputProcessor extends InputAdapter {
         return true;
     }
 
+    @Override
     public boolean keyUp(int k) {
         if (k == Input.Keys.UP || k == Input.Keys.W) {
             metaData.getKeys().setKey(GameKeys.UP, false);

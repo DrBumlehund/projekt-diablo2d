@@ -36,6 +36,8 @@ public class Entity extends Transform {
     private float[] shapeY;
     private float radius;
     private EntityType type;
+    private int height;
+    private int width;
 
     public float getAcceleration() {
         return acceleration;
@@ -129,5 +131,22 @@ public class Entity extends Transform {
         this.dy = dy;
     }
     //TODO: MAKE SHIT FOR SHAPEX,Y
+    
+    // TODO: REMOVE FOR SMARTER SHIZZLE >>>>
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 
 }
