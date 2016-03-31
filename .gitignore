@@ -15,6 +15,7 @@ hs_err_pid*
 # Target Folders #
 /Diablo2d/Core/target/
 /Diablo2d/Common/target/
+/Diablo2d/Collider/target/
 /Diablo2d/branding/target/
 /Diablo2d/application/target/
 /Diablo2d/Npc/target/
