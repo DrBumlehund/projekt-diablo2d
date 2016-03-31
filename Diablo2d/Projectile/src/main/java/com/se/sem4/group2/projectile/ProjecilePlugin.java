@@ -20,22 +20,24 @@ import org.openide.util.lookup.ServiceProvider;
 public class ProjecilePlugin implements IGamePluginService{
 
     private Map<String, Entity> world;
-     private MetaData metaData;
- 
+    private Entity projectile;
+     
      @Override
      public void start(MetaData metaData, Map<String, Entity> world) {
          this.world = world;
-         this.metaData = metaData;
-         fireProjectile();
+         this.projectile = fireProjectile();
+         world.put(projectile.getId(), projectile);
      }
  
      @Override
      public void stop(MetaData metaData) {
-         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         world.remove(projectile.getId());
      }
- 
-     void fireProjectile () {
-         // maybe we should get this value through a parameter?
+     
+     private Entity fireProjectile () {
+         // XXX: maybe we should get this value through a parameter?
+         // evt. sin egen processor, på nuværende tidspunkt er det kun 
+         // PLAYER-entities der kan skyde...
          Entity player = null;
          for (Map.Entry<String, Entity> entrySet : world.entrySet()) {
              Entity value = entrySet.getValue();
@@ -45,18 +47,17 @@ public class ProjecilePlugin implements IGamePluginService{
              }
          }
          if (player == null) {
-             return;
+             return null;
          }
          
-         Entity projectile = new Entity();
-         projectile.setX(player.getX());
-         projectile.setY(player.getY());
-         projectile.setWidth(2);
-         projectile.setHeight(2);
-         float speed = 350;
-         projectile.setDx((float) Math.cos(player.getRadians() * speed));
-         projectile.setDy((float) Math.sin(player.getRadians() * speed));
+         Entity newProjectile = new Entity();
+         newProjectile.setX(player.getX());
+         newProjectile.setY(player.getY());
+         newProjectile.setRadius(2);
          
-         world.put(projectile.getId(), projectile);
+         newProjectile.setMaxSpeed(350f);
+         newProjectile.setRadians(player.getRadians());
+         
+         return newProjectile;
      }   
 }

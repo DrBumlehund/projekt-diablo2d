@@ -26,24 +26,19 @@ public class ProjectileProcessor implements IEntityProcessingService {
             float x = entity.getX();
             float y = entity.getY();
             float dt = metaData.getDelta();
-            float dx = entity.getDx();
-            float dy = entity.getDy();
+            float dx;
+            float dy;
+            float speed = entity.getMaxSpeed();
+            float radians = entity.getRadians();
 
-            x = dx * dt;
-            if (x > metaData.getDisplayWidth()) {
-                x = 0;
-            } else if (x < 0) {
-                x = metaData.getDisplayWidth();
-            }
-
-            y = dy * dt;
-            if (y > metaData.getDisplayHeight()) {
-                y = 0;
-            } else if (y < 0) {
-                y = metaData.getDisplayHeight();
-            }
-
-            entity.setPos(x, y);
+            dx = ((float) Math.cos(radians * speed)) * dt;
+            dy = ((float) Math.sin(radians * speed)) * dt;
+            
+            //XXX: bruger colider entitys dx/dy, eller dem ovenfor?
+            entity.setDx(dx);
+            entity.setDy(dy);
+            
+            entity.setPos(x + dx, y + dy);
 
         }
 
