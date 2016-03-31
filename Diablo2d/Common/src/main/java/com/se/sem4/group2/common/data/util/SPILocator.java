@@ -65,4 +65,13 @@ public class SPILocator {
 
         return list;
     }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T locateFirst(Class<T> service) {
+        List<T> services = locateAll(service);
+        if (services.isEmpty())
+            return null;
+        else
+            return services.get(0);
+    }
 }

@@ -6,6 +6,7 @@
 package com.se.sem4.group2.npc;
 
 import com.se.sem4.group2.common.data.Entity;
+import com.se.sem4.group2.common.data.Character;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
@@ -33,7 +34,8 @@ public class NpcPlugin implements IGamePluginService {
     }
 
     private Entity createNpc(MetaData metaData) {
-        Entity n = new Entity();
+        Character n = new Character();
+        
         n.setType(NPC);
         n.setPos(rng.nextFloat() * metaData.getDisplayWidth(),
                 rng.nextFloat() * metaData.getDisplayHeight());
@@ -45,6 +47,9 @@ public class NpcPlugin implements IGamePluginService {
         n.setShapeX(new float[2]);
         n.setShapeY(new float[2]);
         n.setRadius(10f);
+        
+        n.setHostile(true);
+        //Set Sprite, Weapon, Color
 
         return n;
     }

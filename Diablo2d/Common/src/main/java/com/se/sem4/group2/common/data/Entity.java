@@ -16,30 +16,37 @@
  */
 package com.se.sem4.group2.common.data;
 
-import java.util.UUID;
+import java.awt.Color;
 
 /**
  *
  * @author ThomasLemqvist
  */
-public class Entity {
+public class Entity extends Transform {
 
     //TODO: Tilføj sprite/billede/form...
-    private float x;
-    private float y;
     private float dx;
     private float dy;
     private float radians;
     private float maxSpeed;
     private float acceleration;
     private float deacceleration;
+    // TODO: Don't use shapex and shapey
     private float[] shapeX;
     private float[] shapeY;
     private float radius;
+    private EntityType type;
     private int height;
     private int width;
-    private EntityType type;
-    private final UUID id = UUID.randomUUID();
+    private Color color;
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
     public float getAcceleration() {
         return acceleration;
@@ -65,10 +72,6 @@ public class Entity {
         this.radius = radius;
     }
 
-    public float getX() {
-        return x;
-    }
-
     public float[] getShapeX() {
         return shapeX;
     }
@@ -84,19 +87,7 @@ public class Entity {
     public void setShapeY(float[] shapeY) {
         this.shapeY = shapeY;
     }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
+    
     public float getDx() {
         return dx;
     }
@@ -148,10 +139,7 @@ public class Entity {
         this.dx = dx;
         this.dy = dy;
     }
-
-    public String getId() {
-        return this.id.toString();
-    }
+    //TODO: MAKE SHIT FOR SHAPEX,Y
     
     // TODO: REMOVE FOR SMARTER SHIZZLE >>>>
     public int getHeight() {
@@ -169,5 +157,5 @@ public class Entity {
     public void setWidth(int width) {
         this.width = width;
     }
-    // <<<<
+
 }
