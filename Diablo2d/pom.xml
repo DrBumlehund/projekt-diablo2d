@@ -63,7 +63,6 @@
         <module>Core</module>
         <module>Map</module>
         <module>Player</module>
-        <module>SilentUpdate</module>
         <module>Npc</module>
         <module>Projectile</module>
         <module>Collider</module>

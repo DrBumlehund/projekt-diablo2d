@@ -216,6 +216,7 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
                 entityProcessorService.process(metaData, world, e);
+                System.out.println("KAGEMAND");
             }
         }
         
