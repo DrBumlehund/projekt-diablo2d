@@ -1,6 +1,7 @@
+# Compiled files #
 *.class
 
-# Mobile Tools for Java (J2ME)
+# Mobile Tools for Java (J2ME) #
 .mtj.tmp/
 
 # Package Files #
@@ -8,11 +9,19 @@
 *.war
 *.ear
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# virtual machine crash logs, see http://www.java.com/en/download/help/ # error_hotspot.xml
 hs_err_pid*
+
+# Target Folders #
 /Diablo2d/Core/target/
 /Diablo2d/Common/target/
 /Diablo2d/branding/target/
 /Diablo2d/application/target/
 /Diablo2d/Npc/target/
+/Diablo2d/SilentUpdate/target/
+/Diablo2d/Map/target/
+/Diablo2d/Player/target/
 /Diablo2d/Projectile/target/
+
+# Update Center #
+/Diablo2d/SilentUpdate/src/main/resources/org/netbeans/modules/autoupdate/silentupdate/resources/Bundle.properties

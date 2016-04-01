@@ -17,7 +17,7 @@ import org.openide.util.lookup.ServiceProvider;
  * @author Thomas
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
-public class ProjecilePlugi implements IGamePluginService{
+public class ProjecilePlugin implements IGamePluginService{
 
     private Map<String, Entity> world;
      private MetaData metaData;
