@@ -11,11 +11,13 @@ import com.se.sem4.group2.common.data.EntityType;
 import com.se.sem4.group2.common.data.Transform;
 import com.se.sem4.group2.common.services.IColliderService;
 import java.util.List;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
  * @author Simon
  */
+@ServiceProvider(service = com.se.sem4.group2.common.services.IColliderService.class)
 public class ColliderService implements IColliderService {
 
     private Collider collider;
