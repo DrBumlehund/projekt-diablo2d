@@ -15,6 +15,7 @@ hs_err_pid*
 # Target Folders #
 /Diablo2d/Core/target/
 /Diablo2d/Common/target/
+/Diablo2d/Collider/target/
 /Diablo2d/branding/target/
 /Diablo2d/application/target/
 /Diablo2d/Npc/target/
@@ -22,6 +23,7 @@ hs_err_pid*
 /Diablo2d/Map/target/
 /Diablo2d/Player/target/
 /Diablo2d/Projectile/target/
+/Diablo2d/target/
 
 # Update Center #
 /Diablo2d/SilentUpdate/src/main/resources/org/netbeans/modules/autoupdate/silentupdate/resources/Bundle.properties
