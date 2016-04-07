@@ -54,6 +54,8 @@ public class ProjecilePlugin implements IGamePluginService{
          newProjectile.setX(player.getX());
          newProjectile.setY(player.getY());
          newProjectile.setRadius(2);
+         newProjectile.setShapeX(new float[0]);
+         newProjectile.setShapeY(new float[0]);
          
          newProjectile.setMaxSpeed(350f);
          newProjectile.setRadians(player.getRadians());

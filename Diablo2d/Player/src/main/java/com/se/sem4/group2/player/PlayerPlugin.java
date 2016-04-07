@@ -65,9 +65,9 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setShapeY(new float[2]);
         newPlayer.setRadius(10f);
         
-        Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 5, 5);
-        Collider collider = new Collider(shape, newPlayer);
-        getColliderService().start(player, collider);
+        //Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 5, 5);
+        //Collider collider = new Collider(shape, newPlayer);
+        //getColliderService().start(player, collider);
         
         //Set Sprite, Weapon, Color
         
