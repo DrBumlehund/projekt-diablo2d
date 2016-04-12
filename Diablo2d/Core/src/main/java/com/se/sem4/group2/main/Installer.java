@@ -43,6 +43,8 @@ class StarterThread extends Thread {
         cfg.height = 480;
         cfg.useGL30 = false;
         cfg.resizable = false;
+        cfg.foregroundFPS = 0;
+        cfg.vSyncEnabled = false;
 
         new LwjglApplication(new Game(), cfg);
     }
