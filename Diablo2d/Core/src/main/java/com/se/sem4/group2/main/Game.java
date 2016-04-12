@@ -237,7 +237,7 @@ public class Game implements ApplicationListener {
         }
 
         long elapsedTime = System.nanoTime() - start;
-        System.out.println("Time to update colliders: " + elapsedTime);
+///////        System.out.println("Time to update colliders: " + elapsedTime);
     }
 
     private void draw() {
