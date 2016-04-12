@@ -27,7 +27,7 @@ public class ColliderProcessor implements IColliderProcessingService {
             } else {
                 continue;
             }
-            if (entity.getDx() < 0.001f && entity.getDy() < 0.001f) 
+            if (Math.abs(entity.getDx()) < 0.001f && Math.abs(entity.getDy()) < 0.001f) 
                 continue;
             for (Collider otherCollider : colliders) {
                 if (!collider.getTransform().getId().equals(otherCollider.getTransform().getId())) {

@@ -60,6 +60,7 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setMaxSpeed(3);
         newPlayer.setAcceleration(50f);
         newPlayer.setDeacceleration(1.3f);
+        newPlayer.setName("Player");
         
         newPlayer.setShapeX(new float[2]);
         newPlayer.setShapeY(new float[2]);

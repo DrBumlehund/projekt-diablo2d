@@ -114,8 +114,9 @@ public class Game implements ApplicationListener {
 //            transform.setName("nummer 1");
 //            colliderSErvices.start(transform, new Collider(new Rectangle(50,50), transform));
             transform = new Transform();
+            transform.setX(5);
             transform.setName("nummer 2");
-            colliderSErvices.start(transform, new Collider(new Rectangle(3, 0, 4, 4), transform));
+            colliderSErvices.start(transform, new Collider(new Rectangle(10, 10, 200, 20), transform));
         }
     
         Collection<? extends IColliderService> colliderServices = getColliderServices();
