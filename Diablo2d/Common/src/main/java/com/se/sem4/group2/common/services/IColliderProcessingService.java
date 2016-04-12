@@ -5,17 +5,15 @@
  */
 package com.se.sem4.group2.common.services;
 
-import com.se.sem4.group2.common.data.Collider;
-import com.se.sem4.group2.common.data.Transform;
+import com.se.sem4.group2.common.data.Entity;
+import java.util.Map;
 
 /**
  *
  * @author Simon
  */
-public interface IColliderService {
-        
-    public void start(Transform transform, Collider collider);
+public interface IColliderProcessingService {
     
-    public void stop();
-       
+    public void process();
+    
 }

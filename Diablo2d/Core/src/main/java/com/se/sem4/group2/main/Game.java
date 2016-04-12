@@ -27,19 +27,23 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
+import com.se.sem4.group2.common.data.EntityType;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.Transform;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IColliderProcessingService;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.common.services.IMapPluginService;
 import com.se.sem4.group2.managers.GameInputProcessor;
 import java.awt.Polygon;
+import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.InputStream;
@@ -56,7 +60,7 @@ import org.openide.util.LookupListener;
 
 public class Game implements ApplicationListener {
 
-    private static OrthographicCamera cam;
+    private OrthographicCamera cam;
 
     private ShapeRenderer sr;
 
@@ -80,7 +84,6 @@ public class Game implements ApplicationListener {
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
         cam = new OrthographicCamera(metaData.getDisplayWidth(), metaData.getDisplayHeight());
-        cam.translate(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         cam.update();
 
         sr = new ShapeRenderer();
@@ -108,91 +111,16 @@ public class Game implements ApplicationListener {
         
         for (IColliderService colliderSErvices : getColliderServices()) {
             Transform transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
+//            transform.setName("nummer 1");
+//            colliderSErvices.start(transform, new Collider(new Rectangle(50,50), transform));
             transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
-            colliderSErvices.start(transform, new Collider(new Polygon(), transform));
-            transform = new Transform();
+            transform.setName("nummer 2");
+            colliderSErvices.start(transform, new Collider(new Rectangle(3, 0, 4, 4), transform));
         }
+    
+        Collection<? extends IColliderService> colliderServices = getColliderServices();
+        System.out.println("Collider service count: " + colliderServices.size());
+    
     }
 
     @Override
@@ -203,6 +131,8 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         metaData.setDelta(Gdx.graphics.getDeltaTime());
+        sr.setProjectionMatrix(cam.combined);
+        batch.setProjectionMatrix(cam.combined);
 
         update();
 
@@ -216,31 +146,17 @@ public class Game implements ApplicationListener {
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
                 entityProcessorService.process(metaData, world, e);
-                System.out.println("KAGEMAND");
+                if (e.getType() == EntityType.PLAYER) {
+                    cam.position.set(new Vector3((float)e.getX(), (float)e.getY(), 1f));
+                    cam.update();
+                }
             }
         }
         
-        long start = System.nanoTime();    
-        // Physics update
-        for (Entity entity : world.values()) {
-            // TODO: dx and dy are probably never zero. Might wanna floor them down a couple decimal places
-            //if (entity.getDx() != 0 && entity.getDy() != 0) {
-                final Collection<? extends IColliderService> colliderServices = getColliderServices();
-                for (IColliderService colliderService : colliderServices) {
-                    Collider collider = colliderService.getCollider();
-                    for (IColliderService colliderService2 : colliderServices) {
-                        if (colliderService2.checkCollision(collider)) {
-                            entity.setX(entity.getX() - entity.getDx());
-                            entity.setY(entity.getY() - entity.getDy());
-                            
-                        }
-                    }
-                }
-            //}
+        for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
+            colliderProcessingService.process();
         }
         
-        long elapsedTime = System.nanoTime() - start;
-        System.out.println("Time to update colliders: " + elapsedTime);
     }
 
     private void draw() {
@@ -312,6 +228,10 @@ public class Game implements ApplicationListener {
 
     private Collection<? extends IColliderService> getColliderServices() {
         return SPILocator.locateAll(IColliderService.class);
+    }
+
+    private Collection<? extends IColliderProcessingService> getColliderProcessingServices() {
+        return SPILocator.locateAll(IColliderProcessingService.class);
     }
     
     private final LookupListener lookupListener = new LookupListener() {

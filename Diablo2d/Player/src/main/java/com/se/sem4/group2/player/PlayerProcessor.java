@@ -73,29 +73,18 @@ public class PlayerProcessor implements IEntityProcessingService {
             //deacceleration
             float vec = (float) Math.sqrt(dx * dx + dy * dy);
             if (vec > 0) {
-                dx -= (dx / vec) * deacceleration * dt;
-                dy -= (dy / vec) * deacceleration * dt;
+                dx /= deacceleration;
+                dy /= deacceleration;
             }
             if (vec > maxSpeed) {
                 dx = (dx / vec) * maxSpeed;
                 dy = (dy / vec) * maxSpeed;
             }
-
+            
             //TODO: bliv enige om gameplay og fix wrap metode...
             //set position
-            x += dx * dt;
-            if (x > metaData.getDisplayWidth()) {
-                x = 0;
-            } else if (x < 0) {
-                x = metaData.getDisplayWidth();
-            }
-
-            y += dy * dt;
-            if (y > metaData.getDisplayHeight()) {
-                y = 0;
-            } else if (y < 0) {
-                y = metaData.getDisplayHeight();
-            }
+            x += dx;
+            y += dy;
 
             // Update entity
             entity.setPos(x, y);
