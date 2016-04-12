@@ -15,6 +15,7 @@ public class Transform {
     protected float x;
     protected float y;
     protected final UUID id = UUID.randomUUID();
+    protected String name;
 
     public float getX() {
         return x;
@@ -34,6 +35,19 @@ public class Transform {
 
     public String getId() {
         return this.id.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    @Override
+    public String toString () {
+        return "Transform with id: " + id + " named: " + name;
     }
     
     

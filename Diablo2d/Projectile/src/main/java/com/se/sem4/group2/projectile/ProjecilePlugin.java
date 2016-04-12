@@ -24,9 +24,9 @@ public class ProjecilePlugin implements IGamePluginService{
      
      @Override
      public void start(MetaData metaData, Map<String, Entity> world) {
-         this.world = world;
-         this.projectile = fireProjectile();
-         world.put(projectile.getId(), projectile);
+         //this.world = world;
+         //this.projectile = fireProjectile();
+         //world.put(projectile.getId(), projectile);
      }
  
      @Override
