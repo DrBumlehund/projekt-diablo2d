@@ -27,3 +27,4 @@ hs_err_pid*
 
 # Update Center #
 /Diablo2d/SilentUpdate/src/main/resources/org/netbeans/modules/autoupdate/silentupdate/resources/Bundle.properties
+/Diablo2d/Weapon/target/
