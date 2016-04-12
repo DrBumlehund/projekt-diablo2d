@@ -41,6 +41,7 @@ import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.common.services.IMapPluginService;
+import com.se.sem4.group2.common.services.IMapProcessingService;
 import com.se.sem4.group2.managers.GameInputProcessor;
 import java.awt.Polygon;
 import java.awt.Rectangle;
@@ -77,9 +78,12 @@ public class Game implements ApplicationListener {
     private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
 
+    Map<String, Texture> textureResources;
+
     @Override
     public void create() {
 
+        textureResources = new HashMap<>();
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
@@ -92,8 +96,7 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(metaData)
         );
-        
-        
+
         Lookup.Result<IGamePluginService> result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
         gamePlugins = new ArrayList<>(result.allInstances());
@@ -103,12 +106,11 @@ public class Game implements ApplicationListener {
         for (IGamePluginService iGamePlugin : getPluginServices()) {
             iGamePlugin.start(metaData, world);
         }
-        
+
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
             worldMap = iMapPlugin.start(metaData);
         }
-        
-        
+
         for (IColliderService colliderSErvices : getColliderServices()) {
             Transform transform = new Transform();
 //            transform.setName("nummer 1");
@@ -118,10 +120,10 @@ public class Game implements ApplicationListener {
             transform.setName("nummer 2");
             colliderSErvices.start(transform, new Collider(new Rectangle(10, 10, 200, 20), transform));
         }
-    
+
         Collection<? extends IColliderService> colliderServices = getColliderServices();
         System.out.println("Collider service count: " + colliderServices.size());
-    
+
     }
 
     @Override
@@ -148,23 +150,33 @@ public class Game implements ApplicationListener {
             for (Entity e : world.values()) {
                 entityProcessorService.process(metaData, world, e);
                 if (e.getType() == EntityType.PLAYER) {
-                    cam.position.set(new Vector3((float)e.getX(), (float)e.getY(), 1f));
+                    cam.position.set(new Vector3((float) e.getX(), (float) e.getY(), 1f));
                     cam.update();
                 }
             }
         }
-        
+
+        for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
+            mapProcesser.process(cam.position.x, cam.position.y, worldMap);
+        }
+
         for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
             colliderProcessingService.process();
         }
-        
+
     }
 
     private void draw() {
-        for (int x=0; x<worldMap.getMap().length; x++) {
-            for (int y=0; y<worldMap.getMap().length; y++) {
-                Tile tile = worldMap.getMap()[x][y];
+        int xMax = worldMap.getxMax();
+        int xMin = worldMap.getxMin();
+        int yMax = worldMap.getyMax();
+        int yMin = worldMap.getyMin();
+
+        for (int x = xMin; x < xMax + 1; x++) {
+            for (int y = yMin; y < yMax + 1; y++) {
+                Tile tile = worldMap.getTile(x, y);
                 Texture texture = null;
+
                 if (textureResources.containsKey(tile.toString() + tile.getSource())) {
                     texture = textureResources.get(tile.toString() + tile.getSource());
                 } else {
@@ -173,22 +185,23 @@ public class Game implements ApplicationListener {
                     textureResources.put(tile.toString() + tile.getSource(), texture);
                 }
                 batch.begin();
-                batch.draw(texture, x*texture.getWidth(), y*texture.getHeight());
+                batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                 batch.end();
+
             }
         }
-        
+
         for (Entity entity : world.values()) {
             //Gdx.gl.glClearColor(0, 0, 0, 1);
             //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             float[] shapeX = entity.getShapeX();
             float[] shapeY = entity.getShapeY();
-            
+
             sr.begin(ShapeRenderer.ShapeType.Filled);
             sr.setColor(Color.WHITE);
             sr.circle(entity.getX(), entity.getY(), entity.getRadius());
-            
+
             sr.end();
             sr.begin(ShapeRenderer.ShapeType.Line);
             sr.setColor(Color.BLACK);
@@ -196,8 +209,6 @@ public class Game implements ApplicationListener {
             sr.end();
         }
     }
-    
-    Map<String, Texture> textureResources = new HashMap<>();
 
     @Override
     public void resize(int width, int height) {
@@ -231,10 +242,14 @@ public class Game implements ApplicationListener {
         return SPILocator.locateAll(IColliderService.class);
     }
 
+    private Collection<? extends IMapProcessingService> getMapProcessingServices() {
+        return SPILocator.locateAll(IMapProcessingService.class);
+    }
+
     private Collection<? extends IColliderProcessingService> getColliderProcessingServices() {
         return SPILocator.locateAll(IColliderProcessingService.class);
     }
-    
+
     private final LookupListener lookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
@@ -242,7 +257,7 @@ public class Game implements ApplicationListener {
                 if (!gamePlugins.contains(updatedGamePlugin)) {
                     updatedGamePlugin.start(metaData, world);
                     gamePlugins.add(updatedGamePlugin);
-               }
+                }
             }
         }
     };
