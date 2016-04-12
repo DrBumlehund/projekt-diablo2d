@@ -5,6 +5,7 @@
  */
 package com.se.sem4.group2.common.data;
 
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
@@ -30,11 +31,17 @@ public class Collider {
         this.transform = transform;
     }
     
-    public boolean checkCollision (Collider collider) {
-        if (collider == this)
-            return false; // Let's not check collision against ourselfes
+    public boolean checkCollision (Collider otherCollider) {
+        //if (transform.getId() == otherCollider.getTransform().getId())
+        //    return false; // Let's not check collision against ourselfes
+        shape.getBounds().setLocation(Math.round(transform.x), Math.round(transform.y));
+        otherCollider.getShape().getBounds().setLocation(Math.round(otherCollider.getTransform().x), Math.round(otherCollider.getTransform().y));
         Area areaA = new Area(shape);
-        areaA.intersect(new Area(collider.getShape()));
+        areaA.intersect(new Area(otherCollider.getShape()));
         return !areaA.isEmpty();
+    }
+
+    public void OnCollision() {
+        // TODO: Call whatever callback we might want here
     }
 }
