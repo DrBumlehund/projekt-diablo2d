@@ -43,7 +43,7 @@ public class WorldMap {
     //private final Random random;
     private static long DEFAULT_SEED = 0;
     public final static int DEFAULT_SIZE = 64;
-    private static final int DEFAULT_BUFFERZONE = 8;
+    private static final int DEFAULT_BUFFERZONE = 3;
     private static final int DEFAULT_DISPLAY_HEIGHT = 480;
     private static final int DEFAULT_DISPLAY_WIDTH = 640;
 
@@ -75,7 +75,7 @@ public class WorldMap {
     }
 
     public void generateMap() {
-        System.err.println("GENERATING");
+        System.out.println("GENERATING");
         for (int x = xMin; x < xMax + 1; x++) {
             for (int y = yMin; y < yMax + 1; y++) {
                 addTile(x, y);
@@ -102,7 +102,7 @@ public class WorldMap {
                 noiseTile = tileTypes[4];
             }
         }
-        System.err.println(noiseTile.getSource() + " x: " + x + ", y: " + y);
+        System.out.println(noiseTile.getSource() + " x: " + x + ", y: " + y);
         return noiseTile;
     }
 

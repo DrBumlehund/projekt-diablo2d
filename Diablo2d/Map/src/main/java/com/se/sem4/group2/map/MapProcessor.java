@@ -18,42 +18,50 @@ public class MapProcessor implements IMapProcessingService {
 
     float lastX = 0;
     float lastY = 0;
+    boolean first = true;
 
     @Override
     public void process(float x, float y, WorldMap worldMap) {
-        if (calculateDistance(x, y) > worldMap.DEFAULT_SIZE) {
-            System.err.println("PROCESSING MAP");
+        if (first) {
+            lastX = x;
+            lastY = y;
+            first = false;
+        }
+
+        int def = worldMap.DEFAULT_SIZE;
+        float dist = calculateDistance(x, y);
+        if (dist > def) {
+            System.out.println("Processing");
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
             int yMax = worldMap.getyMax();
             int yMin = worldMap.getyMin();
-
-            if (x > lastX) {
+            if (x > lastX + def) {
                 int tmpX = xMax + 1; //refactor
                 for (int tmpY = yMin; tmpY < yMax + 1; tmpY++) {
                     worldMap.addTile(tmpX, tmpY);
                 }
-            }
-            if (x < lastX) {
+                lastX += def;
+            } else if (x < lastX - def) {
                 int tmpX = xMin - 1; //refactor
                 for (int tmpY = yMin; tmpY < yMax + 1; tmpY++) {
                     worldMap.addTile(tmpX, tmpY);
                 }
+                lastX -= def;
             }
-            if (y > lastY) {
+            if (y > lastY + def) {
                 int tmpY = yMax + 1;
                 for (int tmpX : worldMap.getMap().keySet()) {
                     worldMap.addTile(tmpX, tmpY);
                 }
-            }
-            if (y < lastY) {
+                lastY += def;
+            } else if (y < lastY - def) {
                 int tmpY = yMin - 1;
                 for (int tmpX : worldMap.getMap().keySet()) {
                     worldMap.addTile(tmpX, tmpY);
                 }
+                lastY -= def;
             }
-            lastX = x;
-            lastY = y;
         }
     }
 
