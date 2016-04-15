@@ -29,6 +29,9 @@ import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
+import static com.se.sem4.group2.common.data.EntityType.NPC;
+import static com.se.sem4.group2.common.data.EntityType.PLAYER;
+import static com.se.sem4.group2.common.data.EntityType.PROJECTILE;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.Transform;
@@ -219,25 +222,25 @@ public class Game implements ApplicationListener {
 
         long start = System.nanoTime();
         // Physics update
-        for (Entity entity : world.values()) {
-            // TODO: dx and dy are probably never zero. Might wanna floor them down a couple decimal places
-            //if (entity.getDx() != 0 && entity.getDy() != 0) {
-            final Collection<? extends IColliderService> colliderServices = getColliderServices();
-            for (IColliderService colliderService : colliderServices) {
-                Collider collider = colliderService.getCollider();
-                for (IColliderService colliderService2 : colliderServices) {
-                    if (colliderService2.checkCollision(collider)) {
-                        entity.setX(entity.getX() - entity.getDx());
-                        entity.setY(entity.getY() - entity.getDy());
-
-                    }
-                }
-            }
-            //}
-        }
+//        for (Entity entity : world.values()) {
+//            // TODO: dx and dy are probably never zero. Might wanna floor them down a couple decimal places
+//            //if (entity.getDx() != 0 && entity.getDy() != 0) {
+//            final Collection<? extends IColliderService> colliderServices = getColliderServices();
+//            for (IColliderService colliderService : colliderServices) {
+//                Collider collider = colliderService.getCollider();
+//                for (IColliderService colliderService2 : colliderServices) {
+//                    if (colliderService2.checkCollision(collider)) {
+//                        entity.setX(entity.getX() - entity.getDx());
+//                        entity.setY(entity.getY() - entity.getDy());
+//
+//                    }
+//                }
+//            }
+//            //}
+//        }
 
         long elapsedTime = System.nanoTime() - start;
-        System.out.println("Time to update colliders: " + elapsedTime);
+        //System.out.println("Time to update colliders: " + elapsedTime);
     }
 
     private void draw() {
@@ -261,7 +264,7 @@ public class Game implements ApplicationListener {
         for (Entity entity : world.values()) {
             //Gdx.gl.glClearColor(0, 0, 0, 1);
             //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+            if(entity.getType() == PLAYER || entity.getType() == NPC){
             float[] shapeX = entity.getShapeX();
             float[] shapeY = entity.getShapeY();
 
@@ -274,6 +277,14 @@ public class Game implements ApplicationListener {
             sr.setColor(Color.BLACK);
             sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
             sr.end();
+            }
+            
+            if(entity.getType() == PROJECTILE){
+                sr.setColor(Color.BLUE);
+		sr.begin(ShapeRenderer.ShapeType.Filled);
+		sr.circle(entity.getX() - 5, entity.getY() - 5, 5);
+		sr.end();
+            }
         }
     }
 

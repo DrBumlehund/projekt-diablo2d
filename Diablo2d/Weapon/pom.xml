@@ -6,7 +6,7 @@
         <artifactId>Diablo2d-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>Projectile</artifactId>
+    <artifactId>Weapon</artifactId>
     <packaging>nbm</packaging>
     <build>
         <plugins>

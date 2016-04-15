@@ -39,6 +39,26 @@ public class Entity extends Transform {
     private int height;
     private int width;
     private Color color;
+    private float lifeTime;
+    private float lifeTimer;
+
+    public float getLifeTimer() {
+        return lifeTimer;
+    }
+
+    public void setLifeTimer(float lifeTimer) {
+        this.lifeTimer = lifeTimer;
+    }
+    
+
+    public float getLifeTime() {
+        return lifeTime;
+    }
+
+    public void setLifeTime(float lifeTime) {
+        this.lifeTime = lifeTime;
+    }
+    
 
     public Color getColor() {
         return color;
