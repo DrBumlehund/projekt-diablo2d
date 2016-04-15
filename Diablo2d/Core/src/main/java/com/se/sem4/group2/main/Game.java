@@ -18,14 +18,14 @@ package com.se.sem4.group2.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.se.sem4.group2.common.data.Collider;
@@ -48,13 +48,14 @@ import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.InputStream;
+import com.se.sem4.group2.managers.AudioProcessor;
+import com.se.sem4.group2.managers.GameInputProcessor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.swing.plaf.metal.MetalIconFactory;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -77,6 +78,8 @@ public class Game implements ApplicationListener {
     private SpriteBatch batch;
     private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
+    private AudioProcessor aP = new AudioProcessor();
+    private Music centipede;
 
     Map<String, Texture> textureResources;
 
@@ -154,6 +157,7 @@ public class Game implements ApplicationListener {
                     cam.update();
                 }
             }
+
         }
 
         for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
@@ -182,6 +186,7 @@ public class Game implements ApplicationListener {
                 } else {
                     Pixmap pixmap = new Pixmap(tile.getImage(), 0, tile.getImage().length);
                     texture = new Texture(pixmap);
+               
                     textureResources.put(tile.toString() + tile.getSource(), texture);
                 }
                 batch.begin();
@@ -224,6 +229,7 @@ public class Game implements ApplicationListener {
 
     @Override
     public void dispose() {
+        centipede.dispose();
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {

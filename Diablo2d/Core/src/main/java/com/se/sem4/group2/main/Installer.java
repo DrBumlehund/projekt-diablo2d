@@ -46,7 +46,7 @@ class StarterThread extends Thread {
         cfg.foregroundFPS = 0;
         cfg.vSyncEnabled = false;
 
-        new LwjglApplication(new Game(), cfg);
+        new LwjglApplication(new Game(), cfg);       
     }
 
 }

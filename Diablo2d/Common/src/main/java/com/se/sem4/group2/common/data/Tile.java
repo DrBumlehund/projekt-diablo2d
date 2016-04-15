@@ -5,13 +5,6 @@
  */
 package com.se.sem4.group2.common.data;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Simon

@@ -11,17 +11,9 @@ package com.se.sem4.group2.common.data;
  */
 public class Character extends Entity{
     
-    private Weapon weapon;
+
     private boolean hostile;
     private byte[] sprite;
-
-    public Weapon getWeapon() {
-        return weapon;
-    }
-
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-    }
 
     public boolean isHostile() {
         return hostile;
