@@ -49,12 +49,9 @@ public class PlayerProcessor implements IEntityProcessingService {
         if (entity.getType().equals(PLAYER)) {
 
             //angle
-            float tmpX = mousePos.x - x;
-            float tmpY = mousePos.y - y;
-            radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
-            if (radians < 0) {
-                radians += (float) (2 * Math.PI);
-            }
+            double theta = Math.atan2(metaData.getDisplayHeight()/2 - mousePos.y, metaData.getDisplayWidth()/2 - mousePos.x);
+            theta += Math.PI;
+            radians = (float) theta;
 
             //movement
             if (metaData.getKeys().isDown(RIGHT)) {
