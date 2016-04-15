@@ -40,7 +40,7 @@ public class NpcPlugin implements IGamePluginService {
         n.setPos(rng.nextFloat() * metaData.getDisplayWidth(),
                 rng.nextFloat() * metaData.getDisplayHeight());
         n.setRadians((float) Math.PI / 2);
-        n.setMaxSpeed(100);
+        n.setMaxSpeed(5);
         n.setAcceleration(600);
         n.setDeacceleration(400);
 
