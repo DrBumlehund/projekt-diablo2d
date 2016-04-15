@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
+import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import static com.se.sem4.group2.common.data.EntityType.PROJECTILE;

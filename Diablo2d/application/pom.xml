@@ -440,6 +440,11 @@
             <artifactId>Collider</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Weapon</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
