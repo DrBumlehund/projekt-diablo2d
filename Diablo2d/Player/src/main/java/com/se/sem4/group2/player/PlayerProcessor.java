@@ -54,28 +54,28 @@ public class PlayerProcessor implements IEntityProcessingService {
             radians = (float) theta;
 
             //movement
+            dx = 0;
+            dy = 0;
             if (metaData.getKeys().isDown(RIGHT)) {
-                dx += acceleration * dt;
+                dx += maxSpeed * dt;
             }
             if (metaData.getKeys().isDown(UP)) {
-                dy += acceleration * dt;
+                dy += maxSpeed * dt;
             }
             if (metaData.getKeys().isDown(DOWN)) {
-                dy -= acceleration * dt;
+                dy -= maxSpeed * dt;
             }
             if (metaData.getKeys().isDown(LEFT)) {
-                dx -= acceleration * dt;
+                dx -= maxSpeed * dt;
             }
 
             //deacceleration
             float vec = (float) Math.sqrt(dx * dx + dy * dy);
+            
+            // normalize velocity
             if (vec > 0) {
-                dx /= deacceleration;
-                dy /= deacceleration;
-            }
-            if (vec > maxSpeed) {
-                dx = (dx / vec) * maxSpeed;
-                dy = (dy / vec) * maxSpeed;
+                dx /= vec;
+                dy /= vec;
             }
             
             //TODO: bliv enige om gameplay og fix wrap metode...
