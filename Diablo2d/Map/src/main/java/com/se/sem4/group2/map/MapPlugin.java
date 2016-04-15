@@ -5,18 +5,15 @@
  */
 package com.se.sem4.group2.map;
 
-import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
-import com.se.sem4.group2.common.services.IGamePluginService;
-import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.services.IMapPluginService;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
+import java.util.HashMap;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openide.util.lookup.ServiceProvider;
@@ -45,16 +42,17 @@ public class MapPlugin implements IMapPluginService {
     }
 
     private WorldMap createMap() {
-        WorldMap map = new WorldMap();
-        map.generateMap(12);
+        WorldMap map = new WorldMap(new Random().nextLong());
+        map.generateMap();
         injectImages(map.getMap());
         
         return map;
     }
     
-    private void injectImages (Tile[][] map) {
-        for (Tile[] tiles : map) {
-            for (Tile tile : tiles) {
+    private void injectImages (HashMap<Integer, HashMap<Integer, Tile>> map) {
+        for (Integer x : map.keySet()) {
+            for (Integer y : map.get(x).keySet()) {
+                Tile tile = map.get(x).get(y);
                 InputStream is = MapPlugin.class.getResourceAsStream(tile.getSource());
                 byte[] imageBytes = getBytesFromResource(is);
                 tile.injectSource(imageBytes);

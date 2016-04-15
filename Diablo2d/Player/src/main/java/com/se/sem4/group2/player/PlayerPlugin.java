@@ -57,19 +57,19 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setType(PLAYER);
         newPlayer.setPos(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         newPlayer.setRadians((float) Math.PI / 2);
-        newPlayer.setMaxSpeed(3);
+        newPlayer.setMaxSpeed(30f);
         newPlayer.setAcceleration(50f);
         newPlayer.setDeacceleration(1.3f);
         newPlayer.setName("Player");
-        
+
         newPlayer.setShapeX(new float[2]);
         newPlayer.setShapeY(new float[2]);
         newPlayer.setRadius(10f);
-        
+
         Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 5, 5);
         Collider collider = new Collider(shape, newPlayer);
         getColliderService().start(player, collider);
-        
+
         //Set Sprite, Weapon, Color
         
         return newPlayer;
