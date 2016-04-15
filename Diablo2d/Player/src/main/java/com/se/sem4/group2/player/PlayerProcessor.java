@@ -49,36 +49,33 @@ public class PlayerProcessor implements IEntityProcessingService {
         if (entity.getType().equals(PLAYER)) {
 
             //angle
-            float tmpX = mousePos.x - x;
-            float tmpY = mousePos.y - y;
-            radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
-            if (radians < 0) {
-                radians += (float) (2 * Math.PI);
-            }
+            double theta = Math.atan2(metaData.getDisplayHeight()/2 - mousePos.y, metaData.getDisplayWidth()/2 - mousePos.x);
+            theta += Math.PI;
+            radians = (float) theta;
 
             //movement
+            dx = 0;
+            dy = 0;
             if (metaData.getKeys().isDown(RIGHT)) {
-                dx += acceleration * dt;
+                dx += maxSpeed * dt;
             }
             if (metaData.getKeys().isDown(UP)) {
-                dy += acceleration * dt;
+                dy += maxSpeed * dt;
             }
             if (metaData.getKeys().isDown(DOWN)) {
-                dy -= acceleration * dt;
+                dy -= maxSpeed * dt;
             }
             if (metaData.getKeys().isDown(LEFT)) {
-                dx -= acceleration * dt;
+                dx -= maxSpeed * dt;
             }
 
             //deacceleration
             float vec = (float) Math.sqrt(dx * dx + dy * dy);
+            
+            // normalize velocity
             if (vec > 0) {
-                dx /= deacceleration;
-                dy /= deacceleration;
-            }
-            if (vec > maxSpeed) {
-                dx = (dx / vec) * maxSpeed;
-                dy = (dy / vec) * maxSpeed;
+                dx /= vec;
+                dy /= vec;
             }
             
             //TODO: bliv enige om gameplay og fix wrap metode...

@@ -6,6 +6,7 @@
 package com.se.sem4.group2.npc;
 
 import com.se.sem4.group2.common.data.Entity;
+import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
@@ -20,6 +21,7 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class NpcProcessor implements IEntityProcessingService {
 
+
     @Override
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
         float x = entity.getX();
@@ -28,68 +30,36 @@ public class NpcProcessor implements IEntityProcessingService {
         float dx = entity.getDx();
         float dy = entity.getDy();
         float maxSpeed = entity.getMaxSpeed();
-        float acceleration = entity.getAcceleration();
-        float deacceleration = entity.getDeacceleration();
-        float radians = entity.getRadians();
-        Point mousePos = metaData.getMousePos();
+        Entity player = null;
 
+        for (Map.Entry<String, Entity> entry : world.entrySet()) {
+            String key = entry.getKey();
+            Entity value = entry.getValue();
+            if (value.getType() == EntityType.PLAYER) {
+                player = value;
+            }
+        }
+        if (player == null) return;
         if (entity instanceof Entity) 
         if (entity.getType().equals(NPC)) {
 
-            //angle
-            float tmpX = mousePos.x - x;
-            float tmpY = mousePos.y - y;
-            radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
-            if (radians < 0) {
-                radians += (float) (2 * Math.PI);
-            }
+            float theta = (float)Math.atan2(y-player.getY(), x-player.getX());
+            theta += Math.PI;
+            entity.setRadians(theta);
 
-            //movement
-//            if (metaData.getKeys().isDown(RIGHT)) {
-//                dx += acceleration * dt;
-//            }
-//            if (metaData.getKeys().isDown(UP)) {
-//                dy += acceleration * dt;
-//            }
-//            if (metaData.getKeys().isDown(DOWN)) {
-//                dy -= acceleration * dt;
-//            }
-//            if (metaData.getKeys().isDown(LEFT)) {
-//                dx -= acceleration * dt;
-//            }
-
-            //deacceleration
-            float vec = (float) Math.sqrt(dx * dx + dy * dy);
-            if (vec > 0) {
-                dx -= (dx / vec) * deacceleration * dt;
-                dy -= (dy / vec) * deacceleration * dt;
-            }
-            if (vec > maxSpeed) {
-                dx = (dx / vec) * maxSpeed;
-                dy = (dy / vec) * maxSpeed;
-            }
-
+            dx = maxSpeed * (float)Math.cos(theta);
+            dy = maxSpeed * (float)Math.sin(theta);
             //TODO: bliv enige om gameplay og fix wrap metode...
             //set position
             x += dx * dt;
-            if (x > metaData.getDisplayWidth()) {
-                x = 0;
-            } else if (x < 0) {
-                x = metaData.getDisplayWidth();
-            }
-
             y += dy * dt;
-            if (y > metaData.getDisplayHeight()) {
-                y = 0;
-            } else if (y < 0) {
-                y = metaData.getDisplayHeight();
-            }
+
 
             // Update entity
             entity.setPos(x, y);
             entity.setDx(dx);
             entity.setDy(dy);
-            entity.setRadians(radians);
+            //entity.setRadians(radians);
             updateShape(entity);
         }
 
