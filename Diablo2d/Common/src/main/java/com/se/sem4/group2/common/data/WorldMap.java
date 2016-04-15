@@ -26,8 +26,8 @@ public class WorldMap {
     //indeholder chuncks
     
     private Tile[] tileTypes = new Tile[] {
-        new Tile("dirt.png", 1f),
-        new Tile("grass.jpg", .4f)
+        new Tile("com/se/sem4/group2/map/dirt.png", 1f),
+        new Tile("com/se/sem4/group2/map/grass.jpg", .4f)
     };
     public Tile[][] worldMap;
     private final Random random;
