@@ -38,7 +38,7 @@ public class MapPlugin implements IMapPluginService {
     private WorldMap worldMap;
     private IAssetTextureService assetManager;
     private File file = new File("");
-    private String pathToJars = (file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules");
+    private String pathToJars = (file.getAbsolutePath() + "/diablo2d/modules");
     private File modulesFolder = new File(pathToJars);
 
     @Override

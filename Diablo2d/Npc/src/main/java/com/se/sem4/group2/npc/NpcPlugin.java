@@ -7,11 +7,22 @@ package com.se.sem4.group2.npc;
 
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.Character;
+import com.se.sem4.group2.common.data.Collider;
+import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import com.se.sem4.group2.common.data.MetaData;
+import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IColliderProcessingService;
+import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IGamePluginService;
+import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -21,26 +32,49 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
 public class NpcPlugin implements IGamePluginService {
 
-    Map<String, Entity> world;
-    Entity npc;
-    Random rng = new Random();
+    private Random random;
+    private long spawnDelay = 2000;
+    private Map<String, Entity> world;
+    private List<Entity> npcs = new ArrayList<Entity>();
+    private MetaData metaData;
 
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
-
+        random = new Random(); 
+        this.metaData = metaData;
         this.world = world;
-        this.npc = createNpc(metaData);
-        world.put(npc.getId(), npc);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                createNpc();
+            }
+        }, 0, spawnDelay);        
     }
 
-    private Entity createNpc(MetaData metaData) {
+    private Entity createNpc() {
+        
+        Entity player = null;
+
+        for (Map.Entry<String, Entity> entry : world.entrySet()) {
+            String key = entry.getKey();
+            Entity value = entry.getValue();
+            if (value.getType() == EntityType.PLAYER) {
+                player = value;
+            }
+        }
+        if (player == null) return null;
+        
         Character n = new Character();
         
+        double r = Math.sqrt(Math.pow(metaData.getDisplayWidth()/2, 2) + Math.pow(metaData.getDisplayHeight()/2, 2));
+        double x = player.getX() + r * Math.cos(random.nextFloat() * 2 * Math.PI);
+        double y = player.getY() + r * Math.sin(random.nextFloat() * 2 * Math.PI);
+        
         n.setType(NPC);
-        n.setPos(rng.nextFloat() * metaData.getDisplayWidth(),
-                rng.nextFloat() * metaData.getDisplayHeight());
+        n.setPos((float) x, (float) y);
         n.setRadians((float) Math.PI / 2);
-        n.setMaxSpeed(5);
+        n.setMaxSpeed(100);
         n.setAcceleration(600);
         n.setDeacceleration(400);
 
@@ -50,13 +84,25 @@ public class NpcPlugin implements IGamePluginService {
         
         n.setHostile(true);
         //Set Sprite, Weapon, Color
+        world.put(n.getId(), n);
+
+        List<IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
+        for (IColliderService colliderService : colliderServices) {
+            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 20, 20);
+            Collider collider = new Collider(shape, n);
+            colliderService.start(player, collider);
+        }
 
         return n;
     }
 
     @Override
     public void stop(MetaData metaData) {
-        world.remove(npc.getId());
+        for (Entity entity : npcs) {
+            if (world.containsKey(entity)) {
+                world.remove(entity.getId());
+            }
+        }
     }
 
 }

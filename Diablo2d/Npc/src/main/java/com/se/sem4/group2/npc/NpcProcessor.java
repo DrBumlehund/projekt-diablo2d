@@ -9,8 +9,11 @@ import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import com.se.sem4.group2.common.data.MetaData;
+import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
+import com.se.sem4.group2.common.services.IGamePluginService;
 import java.awt.Point;
+import java.util.List;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -21,7 +24,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class NpcProcessor implements IEntityProcessingService {
 
-
     @Override
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
         float x = entity.getX();
@@ -31,7 +33,7 @@ public class NpcProcessor implements IEntityProcessingService {
         float dy = entity.getDy();
         float maxSpeed = entity.getMaxSpeed();
         Entity player = null;
-
+        
         for (Map.Entry<String, Entity> entry : world.entrySet()) {
             String key = entry.getKey();
             Entity value = entry.getValue();
@@ -39,27 +41,27 @@ public class NpcProcessor implements IEntityProcessingService {
                 player = value;
             }
         }
+        
         if (player == null) return;
         if (entity instanceof Entity) 
         if (entity.getType().equals(NPC)) {
 
             float theta = (float)Math.atan2(y-player.getY(), x-player.getX());
             theta += Math.PI;
-            entity.setRadians(theta);
 
-            dx = maxSpeed * (float)Math.cos(theta);
-            dy = maxSpeed * (float)Math.sin(theta);
-            //TODO: bliv enige om gameplay og fix wrap metode...
+            dx = maxSpeed * (float)Math.cos(theta) * dt;
+            dy = maxSpeed * (float)Math.sin(theta) * dt;
+            
             //set position
-            x += dx * dt;
-            y += dy * dt;
+            x += dx;
+            y += dy;
 
 
             // Update entity
             entity.setPos(x, y);
             entity.setDx(dx);
             entity.setDy(dy);
-            //entity.setRadians(radians);
+            entity.setRadians(theta);
             updateShape(entity);
         }
 

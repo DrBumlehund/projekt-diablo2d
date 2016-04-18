@@ -50,11 +50,11 @@ public class Collider {
     private void syncLocation(Shape shape, Transform transform) {
         if (shape instanceof Rectangle) {
             Rectangle rect = (Rectangle) shape;
-            rect.setLocation(Math.round(transform.x), Math.round(transform.y));
+            rect.setLocation(Math.round(transform.x) - (rect.width/2), Math.round(transform.y) - (rect.height/2));
         } 
         else if (shape instanceof Ellipse2D.Float) {
             Ellipse2D.Float ellipse = (Ellipse2D.Float) shape;
-            ellipse.setFrame(transform.x, transform.y, ellipse.width, ellipse.height);
+            ellipse.setFrame(transform.x - (ellipse.width/2), transform.y - (ellipse.height/2), ellipse.width, ellipse.height);
         } else {
             System.out.println("Tried to process collider with an invalid shape: " + transform.getName() + " : " + transform.getId());
         }
