@@ -28,7 +28,7 @@ public class AudioProcessor extends AssetProcessor implements IAssetAudioService
 
     @Override
     public void play(String path) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    super.music.get(path).play();
     }
 
     @Override

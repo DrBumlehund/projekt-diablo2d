@@ -24,6 +24,7 @@ import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
 import com.se.sem4.group2.main.Resolver;
@@ -64,10 +65,10 @@ public abstract class AssetProcessor implements IAssetService {
                 aM.update();
                 aM.finishLoading();
                 
-                Music kd = Gdx.audio.newMusic(Gdx.files.getFileHandle(path, Files.FileType.Local));
-                System.out.println(kd);
+                Music mus = aM.get(path);
+               
                 if(aM.isLoaded(path)){
-                music.put(path, Gdx.audio.newMusic(Gdx.files.getFileHandle(path, Files.FileType.Local)));
+                music.put(path, mus);
                 }
                 break;
             case "Sound":
@@ -81,13 +82,17 @@ public abstract class AssetProcessor implements IAssetService {
                 }
                 break;
             case "Texture":
-                aM.setLoader(Texture.class, new TextureLoader(resolver));
+                TextureLoader texL = new TextureLoader(resolver);
+                aM.setLoader(Texture.class, texL);
                 aM.load(path, Texture.class);
                 aM.update();
                 aM.finishLoading();
                 
                 if(aM.isLoaded(path)){
-                textures.put(path, new Texture(Gdx.files.getFileHandle(path, Files.FileType.Local)));
+                    Texture tex = aM.get(path);
+                //FileHandle awd = Gdx.files.getFileHandle(path, Files.FileType.Local);
+                //Texture tex = new Texture(awd);
+                textures.put(path, tex);
                 }
                 break;
             default:
@@ -95,7 +100,7 @@ public abstract class AssetProcessor implements IAssetService {
                 break;
         }   
         
-        textures.get("dkdks");
+//        textures.get("dkdks");
     }
 
 }

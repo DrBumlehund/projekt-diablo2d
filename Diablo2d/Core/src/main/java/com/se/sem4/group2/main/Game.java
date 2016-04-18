@@ -50,6 +50,7 @@ import java.io.File;
 import java.io.InputStream;
 import com.se.sem4.group2.managers.AudioProcessor;
 import com.se.sem4.group2.managers.GameInputProcessor;
+import com.se.sem4.group2.managers.TextureProcessor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -80,11 +81,16 @@ public class Game implements ApplicationListener {
     private final Lookup lookup = Lookup.getDefault();
     private AudioProcessor aP = new AudioProcessor();
     private Music centipede;
+    private TextureProcessor tP = new TextureProcessor();
 
     Map<String, Texture> textureResources;
 
     @Override
     public void create() {
+        
+        aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
+        
+        aP.play("com/se/sem4/group2/core/centipede.mp3");
 
         textureResources = new HashMap<>();
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
@@ -111,7 +117,7 @@ public class Game implements ApplicationListener {
         }
 
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
-            worldMap = iMapPlugin.start(metaData);
+            worldMap = iMapPlugin.start(metaData, tP);
         }
 
         for (IColliderService colliderSErvices : getColliderServices()) {
@@ -127,6 +133,7 @@ public class Game implements ApplicationListener {
         Collection<? extends IColliderService> colliderServices = getColliderServices();
         System.out.println("Collider service count: " + colliderServices.size());
 
+    
     }
 
     @Override
@@ -179,16 +186,17 @@ public class Game implements ApplicationListener {
         for (int x = xMin; x < xMax + 1; x++) {
             for (int y = yMin; y < yMax + 1; y++) {
                 Tile tile = worldMap.getTile(x, y);
-                Texture texture = null;
-
-                if (textureResources.containsKey(tile.toString() + tile.getSource())) {
-                    texture = textureResources.get(tile.toString() + tile.getSource());
-                } else {
-                    Pixmap pixmap = new Pixmap(tile.getImage(), 0, tile.getImage().length);
-                    texture = new Texture(pixmap);
-               
-                    textureResources.put(tile.toString() + tile.getSource(), texture);
-                }
+                //tP.load(tile.getSource(), "Texture");
+                Texture texture = tP.textures.get(tile.getSource());
+                
+//                if (textureResources.containsKey(tile.toString() + tile.getSource())) {
+//                    texture = textureResources.get(tile.toString() + tile.getSource());
+//                } else {
+//                    Pixmap pixmap = new Pixmap(tile.getImage(), 0, tile.getImage().length);
+//                    texture = new Texture(pixmap);
+//                    
+//                    textureResources.put(tile.toString() + tile.getSource(), texture);
+//                }
                 batch.begin();
                 batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                 batch.end();
