@@ -26,7 +26,7 @@ import java.util.Random;
  */
 public class WorldMap {
 
-    private static final double FEATURE_SIZE = 12;
+    public static final double FEATURE_SIZE = 12;
     //indeholder chuncks
 
     private Tile[] tileTypes = new Tile[]{
@@ -38,17 +38,29 @@ public class WorldMap {
     };
     //public Tile[][] worldMap;
 
+    public HashMap<Integer, HashMap<Integer, Tile>> getWorldMap() {
+        return worldMap;
+    }
+
+    public Tile[] getTileTypes() {
+        return tileTypes;
+    }
+
+    public OpenSimplexNoise getNoise() {
+        return noise;
+    }
+
     HashMap<Integer, HashMap<Integer, Tile>> worldMap = new HashMap<>();
 
     //private final Random random;
-    private static long DEFAULT_SEED = 0;
+    public static long DEFAULT_SEED = 0;
     public final static int DEFAULT_SIZE = 64;
-    private static final int DEFAULT_BUFFERZONE = 3;
-    private static final int DEFAULT_DISPLAY_HEIGHT = 480;
-    private static final int DEFAULT_DISPLAY_WIDTH = 640;
+    public static final int DEFAULT_BUFFERZONE = 3;
+    public static final int DEFAULT_DISPLAY_HEIGHT = 480;
+    public static final int DEFAULT_DISPLAY_WIDTH = 640;
 
-    private static final float MIN_DIRT = 0.4f;
-    private static final float MAX_WATER = -0.4f;
+    public static final float MIN_DIRT = 0.4f;
+    public static final float MAX_WATER = -0.4f;
 
     private int xMin = -DEFAULT_BUFFERZONE;
     private int yMin = -DEFAULT_BUFFERZONE;
