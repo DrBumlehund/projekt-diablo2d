@@ -33,7 +33,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class NpcPlugin implements IGamePluginService {
 
     private Random random;
-    private long spawnDelay = 2000;
+    private long spawnDelay = 20000;
     private Map<String, Entity> world;
     private List<Entity> npcs = new ArrayList<Entity>();
     private MetaData metaData;
