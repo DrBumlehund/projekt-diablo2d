@@ -19,21 +19,20 @@ package com.se.sem4.group2.main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
-import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
+import static com.se.sem4.group2.common.data.EntityType.NPC;
+import static com.se.sem4.group2.common.data.EntityType.PLAYER;
+import static com.se.sem4.group2.common.data.EntityType.PROJECTILE;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
-import com.se.sem4.group2.common.data.Transform;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IColliderProcessingService;
@@ -42,18 +41,11 @@ import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.common.services.IMapPluginService;
 import com.se.sem4.group2.common.services.IMapProcessingService;
-import com.se.sem4.group2.managers.GameInputProcessor;
-import java.awt.Polygon;
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
-import java.io.File;
-import java.io.InputStream;
 import com.se.sem4.group2.managers.AudioProcessor;
 import com.se.sem4.group2.managers.GameInputProcessor;
 import com.se.sem4.group2.managers.TextureProcessor;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,22 +64,22 @@ public class Game implements ApplicationListener {
     private IEntityProcessingService playerProcessor;
 
     private final MetaData metaData = new MetaData();
-    private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
+    private final List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private Map<String, Entity> world = new ConcurrentHashMap<>();
     private WorldMap worldMap;
     private SpriteBatch batch;
     private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
-    private AudioProcessor aP = new AudioProcessor();
+    private final AudioProcessor aP = new AudioProcessor();
     private Music centipede;
-    private TextureProcessor tP = new TextureProcessor();
+    private final TextureProcessor tP = new TextureProcessor();
 
     @Override
     public void create() {
-        
+
         aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
         aP.load("com/se/sem4/group2/core/tristram.mp3", "Music");
-        
+
         aP.play("com/se/sem4/group2/core/tristram.mp3");
 
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
@@ -115,7 +107,7 @@ public class Game implements ApplicationListener {
 
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
             worldMap = iMapPlugin.start(metaData, tP);
-        }    
+        }
     }
 
     @Override
@@ -187,14 +179,23 @@ public class Game implements ApplicationListener {
             float[] shapeY = entity.getShapeY();
 
             sr.begin(ShapeRenderer.ShapeType.Filled);
-            sr.setColor(Color.WHITE);
+            if (entity.getType() == PLAYER) {
+                sr.setColor(Color.WHITE);
+            } else if (entity.getType() == NPC) {
+                sr.setColor(Color.RED);
+            } else {
+                sr.setColor(Color.BLACK);
+            }
             sr.circle(entity.getX(), entity.getY(), entity.getRadius());
+            sr.end();
 
-            sr.end();
-            sr.begin(ShapeRenderer.ShapeType.Line);
-            sr.setColor(Color.BLACK);
-            sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
-            sr.end();
+            if (entity.getType() != PROJECTILE) {
+                sr.begin(ShapeRenderer.ShapeType.Line);
+                sr.setColor(Color.BLACK);
+                sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+                sr.end();
+            }
+
         }
     }
 

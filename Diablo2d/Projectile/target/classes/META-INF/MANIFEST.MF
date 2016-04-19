@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+OpenIDE-Module-Localizing-Bundle: com/se/sem4/group2/projectile/Bundle
+ .properties
+OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Implementation-Version: 1.0-20160419
+OpenIDE-Module-Build-Version: 201604190945
+OpenIDE-Module: com.se.sem4.group2.Projectile
+OpenIDE-Module-Public-Packages: -
+OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1
+OpenIDE-Module-Display-Category: com.se.sem4.group2
+OpenIDE-Module-Name: Projectile
+OpenIDE-Module-Short-Description: <undefined>
+OpenIDE-Module-Long-Description: <undefined>
+OpenIDE-Module-Module-Dependencies: org.netbeans.api.annotations.commo
+ n/1 > 1.26.1, com.se.sem4.group2.Common > 1.0, org.openide.util.looku
+ p > 8.32.1
+

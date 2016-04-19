@@ -22,13 +22,13 @@ hs_err_pid*
 /Diablo2d/SilentUpdate/target/
 /Diablo2d/Map/target/
 /Diablo2d/Player/target/
-/Diablo2d/Projectile/target/
+/Diablo2d/Weapon/target/
 /Diablo2d/target/
 
 # Update Center #
-
-
 /Diablo2d/SilentUpdate/src/main/resources/org/netbeans/modules/autoupdate/silentupdate/resources/Bundle.properties
-/Diablo2d/Weapon/target/
 
+
+# OS X system files… #
+.DS_Store
 

@@ -36,9 +36,27 @@ public class Entity extends Transform {
     private float[] shapeY;
     private float radius;
     private EntityType type;
-    private int height;
-    private int width;
     private Color color;
+    private float lifeTime;
+    private float lifeTimer;
+
+    public float getLifeTimer() {
+        return lifeTimer;
+    }
+
+    public void setLifeTimer(float lifeTimer) {
+        this.lifeTimer = lifeTimer;
+    }
+    
+
+    public float getLifeTime() {
+        return lifeTime;
+    }
+
+    public void setLifeTime(float lifeTime) {
+        this.lifeTime = lifeTime;
+    }
+    
 
     public Color getColor() {
         return color;
@@ -139,23 +157,4 @@ public class Entity extends Transform {
         this.dx = dx;
         this.dy = dy;
     }
-    //TODO: MAKE SHIT FOR SHAPEX,Y
-    
-    // TODO: REMOVE FOR SMARTER SHIZZLE >>>>
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
 }

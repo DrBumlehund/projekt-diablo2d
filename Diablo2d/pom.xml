@@ -76,6 +76,7 @@
         <module>Player</module>
         <module>Npc</module>
         <module>Collider</module>
+        <module>Weapon</module>
     </modules>
 
     <properties>
