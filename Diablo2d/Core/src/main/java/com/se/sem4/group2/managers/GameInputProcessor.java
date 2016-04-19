@@ -33,8 +33,6 @@ public class GameInputProcessor extends InputAdapter {
         this.metaData = metaData;
     }
 
-    // ============= MOVE SYSTEM ================ // 
-    // UNIMPLEMENTED//
     @Override
     public boolean mouseMoved(int x, int y) {
         metaData.setMousePos(x, (metaData.getDisplayHeight() - y));
