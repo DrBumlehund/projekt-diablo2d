@@ -74,8 +74,8 @@ public class PlayerProcessor implements IEntityProcessingService {
             
             // normalize velocity
             if (vec > 0) {
-                dx /= vec;
-                dy /= vec;
+                dx *= Math.abs(dx / vec);
+                dy *= Math.abs(dy / vec);
             }
             
             //TODO: bliv enige om gameplay og fix wrap metode...
