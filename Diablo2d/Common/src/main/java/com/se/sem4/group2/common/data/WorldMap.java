@@ -102,7 +102,7 @@ public class WorldMap {
                 noiseTile = tileTypes[4];
             }
         }
-        System.out.println(noiseTile.getSource() + " x: " + x + ", y: " + y);
+        //System.out.println(noiseTile.getSource() + " x: " + x + ", y: " + y);
         return noiseTile;
     }
 

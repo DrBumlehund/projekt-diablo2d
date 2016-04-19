@@ -50,6 +50,7 @@ import java.io.File;
 import java.io.InputStream;
 import com.se.sem4.group2.managers.AudioProcessor;
 import com.se.sem4.group2.managers.GameInputProcessor;
+import com.se.sem4.group2.managers.TextureProcessor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -71,7 +72,6 @@ public class Game implements ApplicationListener {
     private IEntityProcessingService playerProcessor;
 
     private final MetaData metaData = new MetaData();
-//    private final GameData md = new GameData();
     private List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private Map<String, Entity> world = new ConcurrentHashMap<>();
     private WorldMap worldMap;
@@ -80,13 +80,15 @@ public class Game implements ApplicationListener {
     private final Lookup lookup = Lookup.getDefault();
     private AudioProcessor aP = new AudioProcessor();
     private Music centipede;
-
-    Map<String, Texture> textureResources;
+    private TextureProcessor tP = new TextureProcessor();
 
     @Override
     public void create() {
+        
+        aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
+        
+        aP.play("com/se/sem4/group2/core/centipede.mp3");
 
-        textureResources = new HashMap<>();
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
@@ -111,22 +113,8 @@ public class Game implements ApplicationListener {
         }
 
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
-            worldMap = iMapPlugin.start(metaData);
-        }
-
-        for (IColliderService colliderSErvices : getColliderServices()) {
-            Transform transform = new Transform();
-//            transform.setName("nummer 1");
-//            colliderSErvices.start(transform, new Collider(new Rectangle(50,50), transform));
-            transform = new Transform();
-            transform.setX(5);
-            transform.setName("nummer 2");
-            colliderSErvices.start(transform, new Collider(new Rectangle(10, 10, 200, 20), transform));
-        }
-
-        Collection<? extends IColliderService> colliderServices = getColliderServices();
-        System.out.println("Collider service count: " + colliderServices.size());
-
+            worldMap = iMapPlugin.start(metaData, tP);
+        }    
     }
 
     @Override
@@ -171,35 +159,29 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
-        int xMax = worldMap.getxMax();
-        int xMin = worldMap.getxMin();
-        int yMax = worldMap.getyMax();
-        int yMin = worldMap.getyMin();
+        if (worldMap != null) {
+            int xMax = worldMap.getxMax();
+            int xMin = worldMap.getxMin();
+            int yMax = worldMap.getyMax();
+            int yMin = worldMap.getyMin();
 
-        for (int x = xMin; x < xMax + 1; x++) {
-            for (int y = yMin; y < yMax + 1; y++) {
-                Tile tile = worldMap.getTile(x, y);
-                Texture texture = null;
-
-                if (textureResources.containsKey(tile.toString() + tile.getSource())) {
-                    texture = textureResources.get(tile.toString() + tile.getSource());
-                } else {
-                    Pixmap pixmap = new Pixmap(tile.getImage(), 0, tile.getImage().length);
-                    texture = new Texture(pixmap);
-               
-                    textureResources.put(tile.toString() + tile.getSource(), texture);
+            for (int x = xMin; x < xMax + 1; x++) {
+                for (int y = yMin; y < yMax + 1; y++) {
+                    Tile tile = worldMap.getTile(x, y);
+                    Texture texture = tP.textures.get(tile.getSource());
+                    // TODO: No idea why texture is sometimes null
+                    if (texture == null) {
+                        System.out.println("Error: Texture was null while attempting to draw map: " + tile.getSource());
+                        continue;
+                    }
+                    batch.begin();
+                    batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
+                    batch.end();
                 }
-                batch.begin();
-                batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
-                batch.end();
-
             }
         }
 
         for (Entity entity : world.values()) {
-            //Gdx.gl.glClearColor(0, 0, 0, 1);
-            //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
             float[] shapeX = entity.getShapeX();
             float[] shapeY = entity.getShapeY();
 

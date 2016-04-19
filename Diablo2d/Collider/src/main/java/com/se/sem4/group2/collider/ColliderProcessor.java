@@ -36,7 +36,7 @@ public class ColliderProcessor implements IColliderProcessingService {
                         entity.setPos(entity.getX() - entity.getDx(), entity.getY() - entity.getDy());
                             
                         collider.getValue().OnCollision();
-                        System.out.println("Collison between " + collider.getValue().getTransform() + " and " + otherCollider.getValue().getTransform());
+                        //System.out.println("Collison between " + collider.getTransform() + " and " + otherCollider.getTransform());
                     }
                 }
             }

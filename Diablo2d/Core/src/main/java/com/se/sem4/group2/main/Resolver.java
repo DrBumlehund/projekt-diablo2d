@@ -43,7 +43,7 @@ import org.openide.util.Utilities;
 public class Resolver implements FileHandleResolver {
 
     File file = new File("");
-    String pathToJars = (file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules");
+    String pathToJars = (file.getAbsolutePath() + "/diablo2d/modules");
     File modulesFolder = new File(pathToJars);
     public File getResources(File modulesFolder, String path) throws IOException, URISyntaxException {
         for (File jarFile : modulesFolder.listFiles()) {
@@ -59,8 +59,9 @@ public class Resolver implements FileHandleResolver {
                     if (name.equals(path)) { //filter according to the path
                         System.out.println(name);
                         
-                        File file1 = writeTempFile(jar.getInputStream(zipEntry));
-                        file1.deleteOnExit();
+                        String[] extension = name.split("/");
+                        File file1 = writeTempFile(jar.getInputStream(zipEntry), extension);
+//                        file1.deleteOnExit();
                         return file1;
                     }
                 }
@@ -70,10 +71,11 @@ public class Resolver implements FileHandleResolver {
         return null;
     }
 
-    private File writeTempFile(InputStream inputStream) {
+    private File writeTempFile(InputStream inputStream, String[] extension) {
         
         try {
-            file = File.createTempFile("Diablo2dMusic", ".tmp");
+            file = File.createTempFile("Diablo2dTemp", "." + extension[extension.length-1]);
+            System.out.println(file.getPath());
             OutputStream out = new FileOutputStream(file);
             byte[] buf = new byte[1024];
             int len;
