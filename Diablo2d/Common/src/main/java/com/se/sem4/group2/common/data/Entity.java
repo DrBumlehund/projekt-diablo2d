@@ -39,6 +39,15 @@ public class Entity extends Transform {
     private int height;
     private int width;
     private Color color;
+    private String spritePath;
+
+    public String getSpritePath() {
+        return spritePath;
+    }
+
+    public void setSpritePath(String spritePath) {
+        this.spritePath = spritePath;
+    }
 
     public Color getColor() {
         return color;

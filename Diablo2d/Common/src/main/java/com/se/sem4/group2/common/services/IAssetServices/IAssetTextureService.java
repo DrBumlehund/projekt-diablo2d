@@ -11,5 +11,9 @@ package com.se.sem4.group2.common.services.IAssetServices;
  */
 public interface IAssetTextureService extends IAssetService{
     
+    public void create();
+    
+    public void render(String path);
+    
     public void draw(String path); 
 }

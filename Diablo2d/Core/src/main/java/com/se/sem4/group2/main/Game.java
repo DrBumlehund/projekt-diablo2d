@@ -110,7 +110,7 @@ public class Game implements ApplicationListener {
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.start(metaData, world);
+            iGamePlugin.start(metaData, world, tP);
         }
 
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
@@ -244,7 +244,7 @@ public class Game implements ApplicationListener {
         public void resultChanged(LookupEvent le) {
             for (IGamePluginService updatedGamePlugin : lookup.lookupAll(IGamePluginService.class)) {
                 if (!gamePlugins.contains(updatedGamePlugin)) {
-                    updatedGamePlugin.start(metaData, world);
+                    updatedGamePlugin.start(metaData, world, tP);
                     gamePlugins.add(updatedGamePlugin);
                 }
             }

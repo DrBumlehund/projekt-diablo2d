@@ -108,6 +108,7 @@ public class PlayerProcessor implements IEntityProcessingService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
+
     }
 
 }
