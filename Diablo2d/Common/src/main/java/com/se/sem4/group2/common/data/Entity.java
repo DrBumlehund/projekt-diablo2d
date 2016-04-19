@@ -38,6 +38,8 @@ public class Entity extends Transform {
     private EntityType type;
     private Color color;
     private String spritePath;
+    private float lifeTime;
+    private float lifeTimer;
 
     public String getSpritePath() {
         return spritePath;
@@ -46,8 +48,7 @@ public class Entity extends Transform {
     public void setSpritePath(String spritePath) {
         this.spritePath = spritePath;
     }
-    private float lifeTime;
-    private float lifeTimer;
+  
 
     public float getLifeTimer() {
         return lifeTimer;
