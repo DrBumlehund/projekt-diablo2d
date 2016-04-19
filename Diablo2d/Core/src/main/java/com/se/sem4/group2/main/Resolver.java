@@ -43,7 +43,7 @@ import org.openide.util.Utilities;
 public class Resolver implements FileHandleResolver {
 
     File file = new File("");
-    String pathToJars = (file.getAbsolutePath() + "/diablo2d/modules");
+    String pathToJars = (file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules");
     File modulesFolder = new File(pathToJars);
     public File getResources(File modulesFolder, String path) throws IOException, URISyntaxException {
         for (File jarFile : modulesFolder.listFiles()) {
