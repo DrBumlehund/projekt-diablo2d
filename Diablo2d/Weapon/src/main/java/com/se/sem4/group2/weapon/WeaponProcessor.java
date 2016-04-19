@@ -5,14 +5,19 @@
  */
 package com.se.sem4.group2.weapon;
 
+import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import static com.se.sem4.group2.common.data.EntityType.PROJECTILE;
 import com.se.sem4.group2.common.data.GameKeys;
 import com.se.sem4.group2.common.data.MetaData;
+import com.se.sem4.group2.common.data.Transform;
+import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
-import java.awt.Point;
+import java.awt.Rectangle;
+import java.util.Collection;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -22,6 +27,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class WeaponProcessor implements IEntityProcessingService {
+    Collection<? extends IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
     long timeStamp = 0;
     Entity player;
     
@@ -37,7 +43,7 @@ public class WeaponProcessor implements IEntityProcessingService {
 
                 if (value.getType() == PLAYER) {
                     player = value;
-                    fireProjectile(world, player, metaData);
+                    fireProjectile(world, player);
                 }
             }
         }
@@ -71,33 +77,34 @@ public class WeaponProcessor implements IEntityProcessingService {
 
     }
 
-    public void fireProjectile(Map<String, Entity> world, Entity player, MetaData metaData) {
+    public void fireProjectile(Map<String, Entity> world, Entity player) {
         Entity newProjectile = new Entity();
         newProjectile.setType(PROJECTILE);
-        newProjectile.setX(player.getX());
-        newProjectile.setY(player.getY());
-        newProjectile.setRadius(2);
-        newProjectile.setShapeX(new float[0]);
-        newProjectile.setShapeY(new float[0]);
+        newProjectile.setRadius(3);
+        newProjectile.setRadians(player.getRadians());
+        
+        //x og y bliver sat på spidsen af den streg der viser hvor player kigger hen
+        newProjectile.setX(player.getShapeX()[1]);
+        newProjectile.setY(player.getShapeY()[1]);
         newProjectile.setMaxSpeed(350);
-       
+      
         
-       
-          Point mousePos = metaData.getMousePos();
-          float tmpX = mousePos.x - player.getX();
-           float tmpY = mousePos.y - player.getY();
-        float radians = (float) -(Math.atan2(tmpX, tmpY) - 0.5 * Math.PI);
-        if (radians < 0) {
-                radians += (float) (2 * Math.PI);
-            }
-        newProjectile.setRadians(radians);
-        
-        newProjectile.setDx((float) (Math.cos(radians)*newProjectile.getMaxSpeed()));
-        newProjectile.setDy((float) (Math.sin(radians)*newProjectile.getMaxSpeed()));
+        newProjectile.setDx((float) (Math.cos(player.getRadians())*newProjectile.getMaxSpeed()));
+        newProjectile.setDy((float) (Math.sin(player.getRadians())*newProjectile.getMaxSpeed()));
         newProjectile.setLifeTime(1);
         newProjectile.setLifeTimer(0);
-        newProjectile.setWidth(2);
-        newProjectile.setHeight(2);
         world.put(newProjectile.getId(), newProjectile);
+    }
+    
+    
+    //ved ikke lige hvad der skal gøres med det her
+    public void collisionDetection(){
+            for (IColliderService collider : colliderServices) {
+            Transform transform = new Transform();
+            transform = new Transform();
+            transform.setX(5);
+            transform.setName("nummer 2");
+            collider.start(transform, new Collider(new Rectangle(10, 10, 200, 20), transform));
+        }
     }
 }

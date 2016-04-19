@@ -121,7 +121,6 @@ public class Game implements ApplicationListener {
         }
     
         Collection<? extends IColliderService> colliderServices = getColliderServices();
-        System.out.println("Collider service count: " + colliderServices.size());
     
     }
 
@@ -198,9 +197,9 @@ public class Game implements ApplicationListener {
             }
             
             if(entity.getType() == PROJECTILE){
-                sr.setColor(Color.BLUE);
+                sr.setColor(Color.BLACK);
 		sr.begin(ShapeRenderer.ShapeType.Filled);
-		sr.circle(entity.getX() - 5, entity.getY() - 5, 5);
+		sr.circle(entity.getX(), entity.getY(), entity.getRadius());
 		sr.end();
             }
         }
