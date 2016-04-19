@@ -39,7 +39,7 @@ class StarterThread extends Thread {
         LwjglApplicationConfiguration cfg
                 = new LwjglApplicationConfiguration();
         cfg.title = "Diablo ii-D";
-        cfg.width = 640;
+        cfg.width = 680;
         cfg.height = 512;
         cfg.useGL30 = false;
         cfg.resizable = false;
