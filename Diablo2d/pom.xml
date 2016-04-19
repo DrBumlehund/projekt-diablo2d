@@ -75,7 +75,6 @@
         <module>Map</module>
         <module>Player</module>
         <module>Npc</module>
-        <module>Projectile</module>
         <module>Collider</module>
     </modules>
 

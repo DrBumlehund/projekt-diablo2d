@@ -86,8 +86,9 @@ public class Game implements ApplicationListener {
     public void create() {
         
         aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
+        aP.load("com/se/sem4/group2/core/tristram.mp3", "Music");
         
-        aP.play("com/se/sem4/group2/core/centipede.mp3");
+        aP.play("com/se/sem4/group2/core/tristram.mp3");
 
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
