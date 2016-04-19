@@ -18,6 +18,8 @@ package com.se.sem4.group2.main;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import org.openide.modules.ModuleInstall;
 
 /**
@@ -26,27 +28,24 @@ import org.openide.modules.ModuleInstall;
  */
 public class Installer extends ModuleInstall {
 
+    private final int N_GUI_THREADS = 8;
+
+    ExecutorService guiPool = Executors.newFixedThreadPool(N_GUI_THREADS);
+
     @Override
     public void restored() {
-        StarterThread t1 = new StarterThread();
-        t1.run();
+        guiPool.execute(() -> {
+            LwjglApplicationConfiguration cfg
+                    = new LwjglApplicationConfiguration();
+            cfg.title = "Diablo ii-D";
+            cfg.width = 640;
+            cfg.height = 512;
+            cfg.useGL30 = false;
+            cfg.resizable = false;
+            cfg.foregroundFPS = 0;
+            cfg.vSyncEnabled = false;
+
+            new LwjglApplication(new Game(), cfg);
+        });
     }
-}
-
-class StarterThread extends Thread {
-
-    public void run() {
-        LwjglApplicationConfiguration cfg
-                = new LwjglApplicationConfiguration();
-        cfg.title = "Diablo ii-D";
-        cfg.width = 680;
-        cfg.height = 512;
-        cfg.useGL30 = false;
-        cfg.resizable = false;
-        cfg.foregroundFPS = 0;
-        cfg.vSyncEnabled = false;
-
-        new LwjglApplication(new Game(), cfg);       
-    }
-
 }
