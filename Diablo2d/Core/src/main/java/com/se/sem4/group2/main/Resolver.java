@@ -35,7 +35,6 @@ import com.badlogic.gdx.files.FileHandle;
 import java.net.MalformedURLException;
 import org.openide.util.Utilities;
 
-
 /**
  *
  * @author casperbeese
@@ -43,8 +42,20 @@ import org.openide.util.Utilities;
 public class Resolver implements FileHandleResolver {
 
     File file = new File("");
-    String pathToJars = (file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules");
-    File modulesFolder = new File(pathToJars);
+
+    String pathToJars;
+    File modulesFolder;
+
+    public Resolver() {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            pathToJars = (file.getAbsolutePath() + "/diablo2d/modules");
+        } else {
+            pathToJars = (file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules");
+        }
+        modulesFolder = new File(pathToJars);
+
+    }
+
     public File getResources(File modulesFolder, String path) throws IOException, URISyntaxException {
         for (File jarFile : modulesFolder.listFiles()) {
             if (jarFile.getName().contains(".jar")) {  // Run with JAR file
@@ -52,13 +63,13 @@ public class Resolver implements FileHandleResolver {
 
                 Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
                 while (entries.hasMoreElements()) {
-                    
+
                     final String name = entries.nextElement().getName();
-                    
+
                     ZipEntry zipEntry = jar.getEntry(name);
                     if (name.equals(path)) { //filter according to the path
                         System.out.println(name);
-                        
+
                         String[] extension = name.split("/");
                         File file1 = writeTempFile(jar.getInputStream(zipEntry), extension);
 //                        file1.deleteOnExit();
@@ -72,9 +83,9 @@ public class Resolver implements FileHandleResolver {
     }
 
     private File writeTempFile(InputStream inputStream, String[] extension) {
-        
+
         try {
-            file = File.createTempFile("Diablo2dTemp", "." + extension[extension.length-1]);
+            file = File.createTempFile("Diablo2dTemp", "." + extension[extension.length - 1]);
             System.out.println(file.getPath());
             OutputStream out = new FileOutputStream(file);
             byte[] buf = new byte[1024];
@@ -102,8 +113,7 @@ public class Resolver implements FileHandleResolver {
         }
         return null;
     }
-    
-  
+
     //TODO: remove
     @Override
     public String toString() {
