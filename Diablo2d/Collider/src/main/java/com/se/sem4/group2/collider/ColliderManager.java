@@ -6,6 +6,7 @@
 package com.se.sem4.group2.collider;
 
 import com.se.sem4.group2.common.data.Collider;
+import com.se.sem4.group2.common.data.Transform;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -18,24 +19,28 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ColliderManager {
 
     private static ColliderManager colliderManager;
-    private Map<Integer, Collider> colliders = new ConcurrentHashMap<>();
-    
+    private Map<String, Collider> colliders = new ConcurrentHashMap<>();
+
     public static ColliderManager getInstance() {
         if (colliderManager == null) {
             colliderManager = new ColliderManager();
         }
         return colliderManager;
     }
-    
-    public void AddCollider (Collider collider) {
-        colliders.put(colliders.size(), collider);
+
+    public void AddCollider(Collider collider) {
+        colliders.put(collider.getTransform().getId(), collider);
     }
-    
-    public void RemoveCollider (Integer key) {
+
+    public void RemoveCollider(String key) {
+        if (!colliders.containsKey(key)) {
+            return;
+        }
         colliders.remove(key);
+//        System.out.println("Removed colider with key: " + key);
     }
-    
-    public Map<Integer, Collider> GetColliders () {
+
+    public Map<String, Collider> GetColliders() {
         return colliders;
     }
 }
