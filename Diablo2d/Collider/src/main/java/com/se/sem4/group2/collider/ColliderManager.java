@@ -8,6 +8,8 @@ package com.se.sem4.group2.collider;
 import com.se.sem4.group2.common.data.Collider;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -16,7 +18,7 @@ import java.util.List;
 public class ColliderManager {
 
     private static ColliderManager colliderManager;
-    private List<Collider> colliders = new ArrayList<>();
+    private Map<Integer, Collider> colliders = new ConcurrentHashMap<>();
     
     public static ColliderManager getInstance() {
         if (colliderManager == null) {
@@ -26,14 +28,14 @@ public class ColliderManager {
     }
     
     public void AddCollider (Collider collider) {
-        colliders.add(collider);
+        colliders.put(colliders.size(), collider);
     }
     
-    public void RemoveCollider (Collider collider) {
-        colliders.remove(collider);
+    public void RemoveCollider (Integer key) {
+        colliders.remove(key);
     }
     
-    public List<Collider> GetColliders () {
+    public Map<Integer, Collider> GetColliders () {
         return colliders;
     }
 }

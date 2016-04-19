@@ -30,11 +30,11 @@ public class WorldMap {
     //indeholder chuncks
 
     private Tile[] tileTypes = new Tile[]{
-        new Tile("dirt.png", 1f),
-        new Tile("water.png", 1f),
-        new Tile("grass.png", 1.4f),
-        new Tile("grass1.png", 1.4f),
-        new Tile("grass2.png", 1.4f)
+        new Tile("com/se/sem4/group2/map/dirt.png", 1f),
+        new Tile("com/se/sem4/group2/map/water.png", 1f),
+        new Tile("com/se/sem4/group2/map/grass.png", 1.4f),
+        new Tile("com/se/sem4/group2/map/grass1.png", 1.4f),
+        new Tile("com/se/sem4/group2/map/grass2.png", 1.4f)
     };
     //public Tile[][] worldMap;
 
@@ -102,7 +102,7 @@ public class WorldMap {
                 noiseTile = tileTypes[4];
             }
         }
-        System.out.println(noiseTile.getSource() + " x: " + x + ", y: " + y);
+        //System.out.println(noiseTile.getSource() + " x: " + x + ", y: " + y);
         return noiseTile;
     }
 

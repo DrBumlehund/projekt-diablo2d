@@ -31,7 +31,7 @@ public class MapProcessor implements IMapProcessingService {
         int def = worldMap.DEFAULT_SIZE;
         float dist = calculateDistance(x, y);
         if (dist > def) {
-            System.out.println("Processing");
+            //System.out.println("Processing");
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
             int yMax = worldMap.getyMax();
