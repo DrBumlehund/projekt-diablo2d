@@ -36,6 +36,7 @@ import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IAIProcessingService;
 import com.se.sem4.group2.common.services.IColliderProcessingService;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
@@ -154,6 +155,12 @@ public class Game implements ApplicationListener {
         for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
             colliderProcessingService.process();
         }
+        
+        for (IAIProcessingService service : getAIProcessingServices()) {
+            for (Entity e : world.values()) {
+                service.process(metaData, world, worldMap);
+            }
+        }
 
     }
 
@@ -257,4 +264,8 @@ public class Game implements ApplicationListener {
             }
         }
     };
+
+    private Iterable<IAIProcessingService> getAIProcessingServices() {
+        return SPILocator.locateAll(IAIProcessingService.class);
+    }
 }
