@@ -17,6 +17,10 @@
 package com.se.sem4.group2.common.data;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -40,12 +44,14 @@ public class Entity extends Transform {
     private float lifeTime;
     private float lifeTimer;
 
-    public float getLifeTimer() {
-        return lifeTimer;
-    }
+    private List<Point> path = new ArrayList<Point>();
 
-    public void setLifeTimer(float lifeTimer) {
-        this.lifeTimer = lifeTimer;
+    public List<Point> getPath() {
+        return path;
+    }
+    
+    public void setPath(List<Point> path){
+        this.path = path;
     }
     
 
@@ -56,6 +62,16 @@ public class Entity extends Transform {
     public void setLifeTime(float lifeTime) {
         this.lifeTime = lifeTime;
     }
+
+    public float getLifeTimer() {
+        return lifeTimer;
+    }
+
+    public void setLifeTimer(float lifeTimer) {
+        this.lifeTimer = lifeTimer;
+    }
+    
+    
     
 
     public Color getColor() {
