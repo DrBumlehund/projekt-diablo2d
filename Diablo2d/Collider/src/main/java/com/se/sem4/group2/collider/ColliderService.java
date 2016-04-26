@@ -6,12 +6,8 @@
 package com.se.sem4.group2.collider;
 
 import com.se.sem4.group2.common.data.Collider;
-import com.se.sem4.group2.common.data.Entity;
-import com.se.sem4.group2.common.data.EntityType;
 import com.se.sem4.group2.common.data.Transform;
 import com.se.sem4.group2.common.services.IColliderService;
-import java.util.ArrayList;
-import java.util.List;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -27,8 +23,8 @@ public class ColliderService implements IColliderService {
     }
 
     @Override
-    public void stop() {
-        // TODO: Do we need to unload anything
+    public void stop(Transform transform) {
+        ColliderManager.getInstance().RemoveCollider(transform.getId());
     }
     
 }

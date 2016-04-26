@@ -16,6 +16,7 @@ public class Transform {
     protected float y;
     protected final UUID id = UUID.randomUUID();
     protected String name;
+    protected boolean colided;
 
     public float getX() {
         return x;
@@ -49,6 +50,15 @@ public class Transform {
     public String toString () {
         return "Transform with id: " + id + " named: " + name;
     }
+
+    public boolean isColided() {
+        return colided;
+    }
+
+    public void setColided(boolean colided) {
+        this.colided = colided;
+    }
+    
     
     
 }

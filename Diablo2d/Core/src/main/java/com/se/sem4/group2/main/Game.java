@@ -19,6 +19,7 @@ package com.se.sem4.group2.main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -42,6 +43,7 @@ import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.common.services.IMapPluginService;
 import com.se.sem4.group2.common.services.IMapProcessingService;
 import com.se.sem4.group2.managers.AudioProcessor;
+import com.se.sem4.group2.managers.GameControllerInputProcessor;
 import com.se.sem4.group2.managers.GameInputProcessor;
 import com.se.sem4.group2.managers.TextureProcessor;
 import java.util.ArrayList;
@@ -94,6 +96,10 @@ public class Game implements ApplicationListener {
         Gdx.input.setInputProcessor(
                 new GameInputProcessor(metaData)
         );
+//        //TODO: FIX CONTROLLER LISTENER ... 
+//        Controllers.addListener(
+//                new GameControllerInputProcessor(metaData)
+//        );
 
         Lookup.Result<IGamePluginService> result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
