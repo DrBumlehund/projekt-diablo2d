@@ -21,6 +21,11 @@ public class ColliderManager {
     private static ColliderManager colliderManager;
     private Map<String, Collider> colliders = new ConcurrentHashMap<>();
 
+    /**
+     * Singletonpatern for the ColiderManager
+     *
+     * @return the ColiderManager instance
+     */
     public static ColliderManager getInstance() {
         if (colliderManager == null) {
             colliderManager = new ColliderManager();
@@ -37,7 +42,6 @@ public class ColliderManager {
             return;
         }
         colliders.remove(key);
-//        System.out.println("Removed colider with key: " + key);
     }
 
     public Map<String, Collider> GetColliders() {

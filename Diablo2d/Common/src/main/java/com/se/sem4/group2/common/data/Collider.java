@@ -38,6 +38,11 @@ public class Collider {
     public boolean checkCollision(Collider otherCollider) {
         //if (transform.getId() == otherCollider.getTransform().getId())
         //    return false; // Let's not check collision against ourselfes
+        //XXX:  Gør at transforms af samme type ikke colider, 
+        //      og dermed ikke sætter sig fast... /thomas
+        if (otherCollider.getTransform().getType() == this.transform.getType()) {
+            return false;
+        }
         syncLocation(shape, transform);
         syncLocation(otherCollider.shape, otherCollider.getTransform());
         Area areaA = new Area(shape);
@@ -45,8 +50,10 @@ public class Collider {
         return !areaA.isEmpty();
     }
 
-    public void OnCollision() {
+    public void OnCollision(Collider otherColider) {
         transform.setColided(true);
+        Transform ot = otherColider.getTransform();
+        ot.takeDamage(transform.doDamage());
     }
 
     private void syncLocation(Shape shape, Transform transform) {

@@ -35,7 +35,6 @@ public class Entity extends Transform {
     private float[] shapeX;
     private float[] shapeY;
     private float radius;
-    private EntityType type;
     private Color color;
     private float lifeTime;
     private float lifeTimer;
@@ -47,7 +46,6 @@ public class Entity extends Transform {
     public void setLifeTimer(float lifeTimer) {
         this.lifeTimer = lifeTimer;
     }
-    
 
     public float getLifeTime() {
         return lifeTime;
@@ -56,7 +54,6 @@ public class Entity extends Transform {
     public void setLifeTime(float lifeTime) {
         this.lifeTime = lifeTime;
     }
-    
 
     public Color getColor() {
         return color;
@@ -105,7 +102,7 @@ public class Entity extends Transform {
     public void setShapeY(float[] shapeY) {
         this.shapeY = shapeY;
     }
-    
+
     public float getDx() {
         return dx;
     }
@@ -137,14 +134,6 @@ public class Entity extends Transform {
 
     public void setMaxSpeed(float speed) {
         this.maxSpeed = speed;
-    }
-
-    public EntityType getType() {
-        return type;
-    }
-
-    public void setType(EntityType type) {
-        this.type = type;
     }
 
     public void setPos(float x, float y) {

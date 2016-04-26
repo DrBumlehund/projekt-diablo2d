@@ -51,6 +51,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import static javafx.scene.text.Font.font;
+import static javafx.scene.text.Font.font;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -176,6 +178,8 @@ public class Game implements ApplicationListener {
                     batch.begin();
                     batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                     batch.end();
+                    
+                    
                 }
             }
         }
