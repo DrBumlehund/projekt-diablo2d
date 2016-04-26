@@ -26,10 +26,11 @@ hs_err_pid*
 /Diablo2d/target/
 /Diablo2d/mavenproject1/AI/target/
 
+
+
 # Update Center #
 /Diablo2d/SilentUpdate/src/main/resources/org/netbeans/modules/autoupdate/silentupdate/resources/Bundle.properties
 
 
 # OS X system files… #
 .DS_Store
-

@@ -66,12 +66,14 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setShapeY(new float[2]);
         newPlayer.setRadius(10f);
 
+        newPlayer.setMaxHealth(100);
+        newPlayer.setMaxDamage(-1);  // Player is a Wizard and therefore
+        newPlayer.setMinDamage(-1);  // can't do melee damage.
+
         Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 20, 20);
         Collider collider = new Collider(shape, newPlayer);
         getColliderService().start(player, collider);
 
-        //Set Sprite, Weapon, Color
-        
         return newPlayer;
     }
 

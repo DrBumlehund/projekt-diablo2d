@@ -31,16 +31,16 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
 public class NpcPlugin implements IGamePluginService {
-
+    
     private Random random;
     private long spawnDelay = 20000;
     private Map<String, Entity> world;
     private List<Entity> npcs = new ArrayList<Entity>();
     private MetaData metaData;
-
+    
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
-        random = new Random(); 
+        random = new Random();        
         this.metaData = metaData;
         this.world = world;
         Timer timer = new Timer();
@@ -51,11 +51,11 @@ public class NpcPlugin implements IGamePluginService {
             }
         }, 0, spawnDelay);        
     }
-
+    
     private Entity createNpc() {
         
         Entity player = null;
-
+        
         for (Map.Entry<String, Entity> entry : world.entrySet()) {
             String key = entry.getKey();
             Entity value = entry.getValue();
@@ -63,39 +63,45 @@ public class NpcPlugin implements IGamePluginService {
                 player = value;
             }
         }
-        if (player == null) return null;
+        if (player == null) {
+            return null;
+        }
         
-        Character n = new Character();
+        Character npc = new Character();
         
-        double r = Math.sqrt(Math.pow(metaData.getDisplayWidth()/2, 2) + Math.pow(metaData.getDisplayHeight()/2, 2));
+        double r = Math.sqrt(Math.pow(metaData.getDisplayWidth() / 2, 2) + Math.pow(metaData.getDisplayHeight() / 2, 2));
         double x = player.getX() + r * Math.cos(random.nextFloat() * 2 * Math.PI);
         double y = player.getY() + r * Math.sin(random.nextFloat() * 2 * Math.PI);
         
-        n.setType(NPC);
-        n.setPos((float) x, (float) y);
-        n.setRadians((float) Math.PI / 2);
-        n.setMaxSpeed(100);
-        n.setAcceleration(600);
-        n.setDeacceleration(400);
-
-        n.setShapeX(new float[2]);
-        n.setShapeY(new float[2]);
-        n.setRadius(10f);
+        npc.setType(NPC);
+        npc.setPos((float) x, (float) y);
+        npc.setRadians((float) Math.PI / 2);
+        npc.setMaxSpeed(100);
+        npc.setAcceleration(600);
+        npc.setDeacceleration(400);
         
-        n.setHostile(true);
+        npc.setShapeX(new float[2]);
+        npc.setShapeY(new float[2]);
+        npc.setRadius(10f);
+        
+        npc.setMaxHealth(1000); // npc's have a lot of health,
+        npc.setMaxDamage(10);   // but they don't do a lot og damage.
+        npc.setMinDamage(5);
+        
+        npc.setHostile(true);
         //Set Sprite, Weapon, Color
-        world.put(n.getId(), n);
-
+        world.put(npc.getId(), npc);
+        
         List<IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
         for (IColliderService colliderService : colliderServices) {
             Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 20, 20);
-            Collider collider = new Collider(shape, n);
+            Collider collider = new Collider(shape, npc);
             colliderService.start(player, collider);
         }
-
-        return n;
+        
+        return npc;
     }
-
+    
     @Override
     public void stop(MetaData metaData) {
         for (Entity entity : npcs) {
@@ -104,5 +110,5 @@ public class NpcPlugin implements IGamePluginService {
             }
         }
     }
-
+    
 }
