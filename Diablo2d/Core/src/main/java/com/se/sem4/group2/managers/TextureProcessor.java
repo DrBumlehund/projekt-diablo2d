@@ -22,6 +22,7 @@ package com.se.sem4.group2.managers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.openide.util.lookup.ServiceProvider;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
@@ -34,6 +35,7 @@ import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 public class TextureProcessor extends AssetProcessor implements IAssetTextureService{
     
     private SpriteBatch batch;
+    private Sprite sprite;
 
     @Override
     public void create(){
@@ -41,12 +43,20 @@ public class TextureProcessor extends AssetProcessor implements IAssetTextureSer
     }
 
     @Override
-    public void render(String path){
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.
+    public void render(String path, float x, float y, float radians){
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.
         batch.begin();
-        System.out.println(path);
+        //System.out.println(path);
         Texture tex = super.textures.get(path);
-        batch.draw(tex, tex.getWidth(), tex.getHeight());
+        sprite = new Sprite(tex);
+        sprite.setCenter(x, y);
+        sprite.setSize(32, 32);
+        sprite.rotate((float)(radians*(180/Math.PI)));
+        sprite.setPosition(x, y);
+
+        sprite.draw(batch);
+        
+        //batch.draw(tex, x, y);
         // Drawing goes here!
         batch.end();
     }

@@ -14,6 +14,7 @@ import com.se.sem4.group2.common.data.GameKeys;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Transform;
 import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import java.awt.Rectangle;
@@ -32,7 +33,7 @@ public class WeaponProcessor implements IEntityProcessingService {
     Entity player;
     
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager) {
 
         
         if (metaData.getKeys().isDown(GameKeys.SPACE) && System.currentTimeMillis()-timeStamp > 200) {

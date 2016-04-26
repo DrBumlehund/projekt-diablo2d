@@ -71,7 +71,7 @@ public class Game implements ApplicationListener {
     private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
     private final AudioProcessor aP = new AudioProcessor();
-    private Music centipede;
+//    private Music centipede;
     private final TextureProcessor tP = new TextureProcessor();
 
     @Override
@@ -108,6 +108,7 @@ public class Game implements ApplicationListener {
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
             worldMap = iMapPlugin.start(metaData, tP);
         }
+
     }
 
     @Override
@@ -129,16 +130,16 @@ public class Game implements ApplicationListener {
     }
 
     private void update() {
+
         // Process entities
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
-                entityProcessorService.process(metaData, world, e);
+                entityProcessorService.process(metaData, world, e, tP);
                 if (e.getType() == EntityType.PLAYER) {
                     cam.position.set(new Vector3((float) e.getX(), (float) e.getY(), 1f));
                     cam.update();
                 }
             }
-
         }
 
         for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
@@ -152,6 +153,7 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
+
         if (worldMap != null) {
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
@@ -175,11 +177,13 @@ public class Game implements ApplicationListener {
         }
 
         for (Entity entity : world.values()) {
+
             float[] shapeX = entity.getShapeX();
             float[] shapeY = entity.getShapeY();
 
             sr.begin(ShapeRenderer.ShapeType.Filled);
             if (entity.getType() == PLAYER) {
+                tP.render(entity.getSpritePath(), entity.getX(), entity.getY(), entity.getRadians());
                 sr.setColor(Color.WHITE);
             } else if (entity.getType() == NPC) {
                 sr.setColor(Color.RED);
@@ -213,7 +217,7 @@ public class Game implements ApplicationListener {
 
     @Override
     public void dispose() {
-        centipede.dispose();
+//        centipede.dispose();
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {

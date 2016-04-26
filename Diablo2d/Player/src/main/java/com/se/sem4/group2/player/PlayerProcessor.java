@@ -21,6 +21,7 @@ import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import static com.se.sem4.group2.common.data.GameKeys.*;
+import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import java.awt.Point;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
@@ -31,9 +32,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class PlayerProcessor implements IEntityProcessingService {
+    
+    private IAssetTextureService assetManager;
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager) {
         float x = entity.getX();
         float y = entity.getY();
         float dt = metaData.getDelta();
@@ -44,6 +47,8 @@ public class PlayerProcessor implements IEntityProcessingService {
         float deacceleration = entity.getDeacceleration();
         float radians = entity.getRadians();
         Point mousePos = metaData.getMousePos();
+        this.assetManager = assetManager;
+        
 
         if (entity instanceof Entity) 
         if (entity.getType().equals(PLAYER)) {
@@ -84,6 +89,7 @@ public class PlayerProcessor implements IEntityProcessingService {
             y += dy;
 
             // Update entity
+            
             entity.setPos(x, y);
             entity.setDx(dx);
             entity.setDy(dy);
@@ -94,6 +100,8 @@ public class PlayerProcessor implements IEntityProcessingService {
     }
 
     private void updateShape(Entity entity) {
+        
+        
         float[] shapex = entity.getShapeX();
         float[] shapey = entity.getShapeY();
         float x = entity.getX();

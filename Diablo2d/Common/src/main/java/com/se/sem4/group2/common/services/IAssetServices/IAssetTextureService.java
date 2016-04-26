@@ -13,7 +13,7 @@ public interface IAssetTextureService extends IAssetService{
     
     public void create();
     
-    public void render(String path);
+    public void render(String path, float x, float y, float radians);
     
     public void draw(String path); 
 }

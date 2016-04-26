@@ -62,10 +62,6 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setAcceleration(50f);
         newPlayer.setDeacceleration(1.3f);
         newPlayer.setName("Player");
-        newPlayer.setSpritePath("com/se/sem4/group2/player/Wizard.png");
-        assetManager.create();
-        assetManager.load(newPlayer.getSpritePath(), "Texture");
-        assetManager.render(newPlayer.getSpritePath());
         newPlayer.setShapeX(new float[2]);
         newPlayer.setShapeY(new float[2]);
         newPlayer.setRadius(10f);
@@ -75,6 +71,10 @@ public class PlayerPlugin implements IGamePluginService {
         getColliderService().start(player, collider);
 
         //Set Sprite, Weapon, Color
+        newPlayer.setSpritePath("com/se/sem4/group2/player/Wizard.png");
+        assetManager.create();
+        assetManager.load(newPlayer.getSpritePath(), "Texture");
+        assetManager.render(newPlayer.getSpritePath(), metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2, newPlayer.getRadians());
         
         return newPlayer;
     }
