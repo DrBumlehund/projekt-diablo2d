@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.se.sem4.group2</groupId>
@@ -373,6 +373,10 @@
                     <groupId>org.netbeans.modules</groupId>
                     <artifactId>org-netbeans-core</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.netbeans.api</groupId>
+                    <artifactId>org-openide-windows</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -395,11 +399,11 @@
             <scope>test</scope>
         </dependency>
         -->
-        <dependency>
+        <!--        <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>
             <version>RELEASE81</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.netbeans.modules</groupId>
             <artifactId>org-netbeans-core-windows</artifactId>
@@ -481,7 +485,7 @@
                                 <id>extra</id>
                                 <goals>
                                     <goal>autoupdate</goal>
-<!--                                    <goal>webstart-app</goal>
+                                    <!--                                    <goal>webstart-app</goal>
                                     <goal>build-installers</goal>-->
                                 </goals>
                             </execution>

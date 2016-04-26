@@ -16,6 +16,7 @@ public interface IColliderService {
         
     public void start(Transform transform, Collider collider);
     
-    public void stop();
+    public void stop(Transform transform);
+    
        
 }

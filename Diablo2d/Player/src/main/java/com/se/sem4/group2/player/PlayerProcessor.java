@@ -45,50 +45,51 @@ public class PlayerProcessor implements IEntityProcessingService {
         float radians = entity.getRadians();
         Point mousePos = metaData.getMousePos();
 
-        if (entity instanceof Entity) 
-        if (entity.getType().equals(PLAYER)) {
+        if (entity instanceof Entity) {
+            if (entity.getType().equals(PLAYER)) {
 
-            //angle
-            double theta = Math.atan2(metaData.getDisplayHeight()/2 - mousePos.y, metaData.getDisplayWidth()/2 - mousePos.x);
-            theta += Math.PI;
-            radians = (float) theta;
+                //angle
+                double theta = Math.atan2(metaData.getDisplayHeight() / 2 - mousePos.y, metaData.getDisplayWidth() / 2 - mousePos.x);
+                theta += Math.PI;
+                radians = (float) theta;
 
-            //movement
-            dx = 0;
-            dy = 0;
-            if (metaData.getKeys().isDown(RIGHT)) {
-                dx += maxSpeed * dt;
-            }
-            if (metaData.getKeys().isDown(UP)) {
-                dy += maxSpeed * dt;
-            }
-            if (metaData.getKeys().isDown(DOWN)) {
-                dy -= maxSpeed * dt;
-            }
-            if (metaData.getKeys().isDown(LEFT)) {
-                dx -= maxSpeed * dt;
-            }
+                //movement
+                dx = 0;
+                dy = 0;
+                if (metaData.getKeys().isDown(RIGHT)) {
+                    dx += maxSpeed * dt;
+                }
+                if (metaData.getKeys().isDown(UP)) {
+                    dy += maxSpeed * dt;
+                }
+                if (metaData.getKeys().isDown(DOWN)) {
+                    dy -= maxSpeed * dt;
+                }
+                if (metaData.getKeys().isDown(LEFT)) {
+                    dx -= maxSpeed * dt;
+                }
 
-            //deacceleration
-            float vec = (float) Math.sqrt(dx * dx + dy * dy);
-            
-            // normalize velocity
-            if (vec > 0) {
-                dx *= Math.abs(dx / vec);
-                dy *= Math.abs(dy / vec);
-            }
-            
-            //TODO: bliv enige om gameplay og fix wrap metode...
-            //set position
-            x += dx;
-            y += dy;
+                //deacceleration
+                float vec = (float) Math.sqrt(dx * dx + dy * dy);
 
-            // Update entity
-            entity.setPos(x, y);
-            entity.setDx(dx);
-            entity.setDy(dy);
-            entity.setRadians(radians);
-            updateShape(entity);
+                // normalize velocity
+                if (vec > 0) {
+                    dx *= Math.abs(dx / vec);
+                    dy *= Math.abs(dy / vec);
+                }
+
+                
+                //set position
+                x += dx;
+                y += dy;
+
+                // Update entity
+                entity.setPos(x, y);
+                entity.setDx(dx);
+                entity.setDy(dy);
+                entity.setRadians(radians);
+                updateShape(entity);
+            }
         }
 
     }
