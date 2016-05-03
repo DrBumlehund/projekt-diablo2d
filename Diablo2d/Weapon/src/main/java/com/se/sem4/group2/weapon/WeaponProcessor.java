@@ -125,15 +125,15 @@ public class WeaponProcessor implements IEntityProcessingService {
         bullet.setY((float) (player.getY() + Math.cos(player.getRadians()) * offset));
         bullet.setMaxSpeed(350);
 
-        fireball.setMaxHealth(1); // Fireballs needs to die in first hit.
-        fireball.setMaxDamage(250);
-        fireball.setMinDamage(150);
+        bullet.setMaxHealth(1); // Fireballs needs to die in first hit.
+        bullet.setMaxDamage(250);
+        bullet.setMinDamage(150);
 
 
         Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
-        Collider collider = new Collider(shape, fireball);
+        Collider collider = new Collider(shape, bullet);
 
-        getColliderService().start(fireball, collider);
+        getColliderService().start(bullet, collider);
 
     }
 
