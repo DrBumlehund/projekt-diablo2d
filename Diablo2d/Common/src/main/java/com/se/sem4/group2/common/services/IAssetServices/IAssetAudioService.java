@@ -11,7 +11,9 @@ package com.se.sem4.group2.common.services.IAssetServices;
  */
 public interface IAssetAudioService extends IAssetService{
     
-    public void play(String path);
+    public void playMusic(String path);
+    
+    public void playSound(String path);
     
     public void pause(String path);
     

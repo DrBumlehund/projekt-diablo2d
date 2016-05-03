@@ -82,7 +82,7 @@ public class Game implements ApplicationListener {
         aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
         aP.load("com/se/sem4/group2/core/tristram.mp3", "Music");
 
-        aP.play("com/se/sem4/group2/core/tristram.mp3");
+        //aP.playMusic("com/se/sem4/group2/core/tristram.mp3");
 
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
@@ -140,7 +140,7 @@ public class Game implements ApplicationListener {
         // Process entities
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
-                entityProcessorService.process(metaData, world, e, tP);
+                entityProcessorService.process(metaData, world, e, tP, aP);
                 if (e.getType() == EntityType.PLAYER) {
                     cam.position.set(new Vector3((float) e.getX(), (float) e.getY(), 1f));
                     cam.update();
@@ -173,6 +173,7 @@ public class Game implements ApplicationListener {
                     // TODO: No idea why texture is sometimes null
                     if (texture == null) {
                         System.out.println("Error: Texture was null while attempting to draw map: " + tile.getSource());
+                        tP.load(tile.getSource(), "Texture");
                         continue;
                     }
                     batch.begin();
@@ -189,17 +190,21 @@ public class Game implements ApplicationListener {
 
             sr.begin(ShapeRenderer.ShapeType.Filled);
             if (entity.getType() == PLAYER) {
-                tP.render(entity.getSpritePath(), entity.getX(), entity.getY(), entity.getRadians());
-                sr.setColor(Color.WHITE);
+                //tP.render(entity.getSpritePath(), entity.getDx() + (metaData.getDisplayWidth() / 2), entity.getDy() + (metaData.getDisplayHeight() / 2), entity.getRadians());
+                tP.render(entity.getSpritePath(), entity, metaData);
+                //sr.setColor(Color.WHITE);
             } else if (entity.getType() == NPC) {
                 sr.setColor(Color.RED);
+                sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             } else {
-                sr.setColor(Color.BLACK);
+               // sr.setColor(Color.BLACK);
+                tP.render(entity.getSpritePath(), entity, metaData);
+               // sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             }
-            sr.circle(entity.getX(), entity.getY(), entity.getRadius());
+
             sr.end();
 
-            if (entity.getType() != PROJECTILE) {
+            if (entity.getType() == NPC) {
                 sr.begin(ShapeRenderer.ShapeType.Line);
                 sr.setColor(Color.BLACK);
                 sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
@@ -211,6 +216,8 @@ public class Game implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
+        metaData.setDisplayWidth(width);
+        metaData.setDisplayHeight(height);
     }
 
     @Override

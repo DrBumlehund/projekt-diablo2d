@@ -128,7 +128,7 @@ public class MapPlugin implements IMapPluginService {
     }
 
     private WorldMap createMap() throws IOException, URISyntaxException {
-        WorldMap map = new WorldMap(new Random().nextLong());
+        WorldMap map = new WorldMap(new Random().nextLong(), metaData.getDisplayWidth(), metaData.getDisplayHeight());
         map.generateMap();
         loadImages(map.getMap());
         

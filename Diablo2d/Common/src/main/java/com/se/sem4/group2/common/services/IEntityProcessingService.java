@@ -16,6 +16,7 @@
  */
 package com.se.sem4.group2.common.services;
 import com.se.sem4.group2.common.data.*;
+import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import java.util.Map;
 
@@ -26,6 +27,6 @@ import java.util.Map;
  */
 public interface IEntityProcessingService {
     
-    public void process(MetaData metaData, Map<String, Entity> world,  Entity entity, IAssetTextureService assetManager);
+    public void process(MetaData metaData, Map<String, Entity> world,  Entity entity, IAssetTextureService textureManager, IAssetAudioService soundManager);
 
 }

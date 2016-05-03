@@ -21,6 +21,7 @@ import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import static com.se.sem4.group2.common.data.GameKeys.*;
+import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import java.awt.Point;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class PlayerProcessor implements IEntityProcessingService {
     private IAssetTextureService assetManager;
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager, IAssetAudioService soundManager) {
         float x = entity.getX();
         float y = entity.getY();
         float dt = metaData.getDelta();
@@ -88,11 +89,14 @@ public class PlayerProcessor implements IEntityProcessingService {
                 x += dx;
                 y += dy;
 
+                assetManager.render(entity.getSpritePath(), entity, metaData);
+                
                 // Update entity
                 entity.setPos(x, y);
                 entity.setDx(dx);
                 entity.setDy(dy);
                 entity.setRadians(radians);
+                
                 updateShape(entity);
             }
         }
