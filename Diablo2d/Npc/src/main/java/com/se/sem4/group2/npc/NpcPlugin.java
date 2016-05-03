@@ -73,33 +73,33 @@ public class NpcPlugin implements IGamePluginService {
         double x = player.getX() + r * Math.cos(random.nextFloat() * 2 * Math.PI);
         double y = player.getY() + r * Math.sin(random.nextFloat() * 2 * Math.PI);
         
-        npc.setType(NPC);
-        npc.setPos((float) x, (float) y);
-        npc.setRadians((float) Math.PI / 2);
-        npc.setMaxSpeed(100);
-        npc.setAcceleration(600);
-        npc.setDeacceleration(400);
+        n.setType(NPC);
+        n.setPos((float) x, (float) y);
+        n.setRadians((float) Math.PI / 2);
+        n.setMaxSpeed(100);
+        n.setAcceleration(600);
+        n.setDeacceleration(400);
         
-        npc.setShapeX(new float[2]);
-        npc.setShapeY(new float[2]);
-        npc.setRadius(10f);
+        n.setShapeX(new float[2]);
+        n.setShapeY(new float[2]);
+        n.setRadius(10f);
         
-        npc.setMaxHealth(1000); // npc's have a lot of health,
-        npc.setMaxDamage(10);   // but they don't do a lot og damage.
-        npc.setMinDamage(5);
+        n.setMaxHealth(1000); // npc's have a lot of health,
+        n.setMaxDamage(10);   // but they don't do a lot og damage.
+        n.setMinDamage(5);
         
-        npc.setHostile(true);
+        //n.setHostile(true);
         //Set Sprite, Weapon, Color
-        world.put(npc.getId(), npc);
+        world.put(n.getId(), n);
         
         List<IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
         for (IColliderService colliderService : colliderServices) {
             Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 20, 20);
-            Collider collider = new Collider(shape, npc);
+            Collider collider = new Collider(shape, n);
             colliderService.start(player, collider);
         }
         
-        return npc;
+        return n;
     }
     
     @Override

@@ -30,7 +30,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class NpcProcessor implements IEntityProcessingService {
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager, IAssetAudioService soundManager) {
         if (entity instanceof Entity) {
             if (entity.getType().equals(NPC)) {
 
