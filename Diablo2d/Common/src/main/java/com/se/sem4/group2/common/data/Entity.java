@@ -40,10 +40,23 @@ public class Entity extends Transform {
     private float[] shapeY;
     private float radius;
     private Color color;
+    private String spritePath;
     private float lifeTime;
     private float lifeTimer;
 
     private List<Point> path = new ArrayList<Point>();
+    public String getSpritePath() {
+        return spritePath;
+    }
+
+    public void setSpritePath(String spritePath) {
+        this.spritePath = spritePath;
+    }
+  
+
+    public float getLifeTimer() {
+        return lifeTimer;
+    }
 
     public List<Point> getPath() {
         return path;

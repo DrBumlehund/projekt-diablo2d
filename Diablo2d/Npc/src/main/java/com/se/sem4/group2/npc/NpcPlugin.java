@@ -6,12 +6,12 @@
 package com.se.sem4.group2.npc;
 
 import com.se.sem4.group2.common.data.Entity;
-import com.se.sem4.group2.common.data.Character;
 import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import com.se.sem4.group2.common.services.IColliderProcessingService;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IGamePluginService;
@@ -39,8 +39,8 @@ public class NpcPlugin implements IGamePluginService {
     private MetaData metaData;
     
     @Override
-    public void start(MetaData metaData, Map<String, Entity> world) {
-        random = new Random();        
+    public void start(MetaData metaData, Map<String, Entity> world, IAssetTextureService assetmanager) {
+        random = new Random(); 
         this.metaData = metaData;
         this.world = world;
         Timer timer = new Timer();
@@ -67,7 +67,7 @@ public class NpcPlugin implements IGamePluginService {
             return null;
         }
         
-        Character npc = new Character();
+        Entity n = new Entity();
         
         double r = Math.sqrt(Math.pow(metaData.getDisplayWidth() / 2, 2) + Math.pow(metaData.getDisplayHeight() / 2, 2));
         double x = player.getX() + r * Math.cos(random.nextFloat() * 2 * Math.PI);

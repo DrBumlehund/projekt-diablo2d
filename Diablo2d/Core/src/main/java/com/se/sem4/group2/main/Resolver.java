@@ -72,7 +72,7 @@ public class Resolver implements FileHandleResolver {
 
                         String[] extension = name.split("/");
                         File file1 = writeTempFile(jar.getInputStream(zipEntry), extension);
-//                        file1.deleteOnExit();
+                        file1.deleteOnExit();
                         return file1;
                     }
                 }
@@ -121,28 +121,3 @@ public class Resolver implements FileHandleResolver {
     }
 
 }
-//        try {
-//            // getResource("", new File())
-//            //System.out.println("Resolve: " + arg0);
-//
-//            URL url = new URL("jar:file:" + pathToJars);
-//
-//            //URL url = getResource("/com/se/sem4/group2/core", new File(file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Map.jar"));
-//            if (url == null) {
-//                // error - missing folder
-//            } else {
-//                try {
-//                    File dir = Utilities.toFile(url.toURI());
-//                    for (File nextFile : dir.listFiles()) {
-//                        // Do something with nextFile
-//                        FileHandle music = new FileHandle(nextFile);
-//                    }
-//                } catch (URISyntaxException ex) {
-//                    Exceptions.printStackTrace(ex);
-//                }
-//            }
-//            return null;
-//        } catch (MalformedURLException ex) {
-//            Exceptions.printStackTrace(ex);
-//        }
-//        return null;
