@@ -9,9 +9,9 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * Transform was intended to be a leight weight version of the Entity
- * only containing information about positions, but it exploded .. :-/
- * 
+ * Transform was intended to be a leight weight version of the Entity only
+ * containing information about positions, but it exploded .. :-/
+ *
  * @author Simon
  */
 //TODO: remove shit above...
@@ -33,6 +33,7 @@ public class Transform {
     //      har flyttet ned for at kunne tilgå den i colideren, så npc'er
     //      ikke dræber hinanden. /thomas
     protected EntityType type;
+    protected boolean initialized;
 
     public float getX() {
         return x;
@@ -96,8 +97,11 @@ public class Transform {
     }
 
     public void setMaxHealth(int maxHealth) {
-        this.maxHealth = maxHealth;
-        this.health = maxHealth;
+        if (!initialized) {             // makes sure that maxhealth and 
+            this.maxHealth = maxHealth; // health is only set once.
+            this.health = maxHealth;
+            initialized = true;
+        }
     }
 
     public int getHealth() {
@@ -137,13 +141,14 @@ public class Transform {
     /**
      * called to get the current health percentage from this transform.
      *
+     * @param width of the health bar.
      * @return int health percentage.
      */
-    public int getHealthPercentage() {
-        if (health > 0) {
-            return (health / maxHealth) * 100;
-        }
-        return 0;
+    public float getHealthPercentage(float width) {
+        if (health > 0) {                       // checks if health is above 0 
+            return health * width / maxHealth;  // to make sure that negative 
+        }                                       // "health %" is not returned
+        return 0f;
     }
 
     public EntityType getType() {
