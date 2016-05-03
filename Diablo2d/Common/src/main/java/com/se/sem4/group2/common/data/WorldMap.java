@@ -77,6 +77,7 @@ public class WorldMap {
     public WorldMap(long seed) {
         this(seed, DEFAULT_DISPLAY_WIDTH, DEFAULT_DISPLAY_HEIGHT);
     }
+    
 
     public WorldMap(long seed, int width, int height) {
         //random = new Random(seed);

@@ -38,7 +38,7 @@ public class MapPlugin implements IMapPluginService {
     private WorldMap worldMap;
     private IAssetTextureService assetManager;
     private File file = new File("");
-    private String pathToJars = (file.getAbsolutePath() + "/diablo2d/modules");
+    private String pathToJars = (file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules");
     private File modulesFolder = new File(pathToJars);
 
     @Override
@@ -47,13 +47,10 @@ public class MapPlugin implements IMapPluginService {
         this.assetManager = assetManager;
         try {
             this.worldMap = createMap();
-        } catch (IOException ex) {
-            Logger.getLogger(MapPlugin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
+        } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(MapPlugin.class.getName()).log(Level.SEVERE, null, ex);
         }
         return this.worldMap;
-
     }
 
         public void generateMap() {
@@ -131,7 +128,7 @@ public class MapPlugin implements IMapPluginService {
     }
 
     private WorldMap createMap() throws IOException, URISyntaxException {
-        WorldMap map = new WorldMap(new Random().nextLong());
+        WorldMap map = new WorldMap(new Random().nextLong(), metaData.getDisplayWidth(), metaData.getDisplayHeight());
         map.generateMap();
         loadImages(map.getMap());
         
@@ -143,55 +140,8 @@ public class MapPlugin implements IMapPluginService {
             for (Integer y : map.get(x).keySet()) {
                 Tile tile = map.get(x).get(y);
                 assetManager.load(tile.getSource(), "Texture");
-                
-//                InputStream is = MapPlugin.class.getResourceAsStream(tile.getSource());
-//                byte[] imageBytes = getResources(modulesFolder, tile.getSource());
-//                tile.injectSource(imageBytes);
             }
         }
-    }
-
-    private byte[] getBytesFromResource(InputStream is) {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        int nRead;
-        byte[] data = new byte[16384];
-
-        try {
-            while ((nRead = is.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
-            }
-
-            buffer.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(MapPlugin.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return buffer.toByteArray();
-    }
-
-    public byte[] getResources(File modulesFolder, String path) throws IOException, URISyntaxException {
-        for (File jarFile : modulesFolder.listFiles()) {
-            if (jarFile.getName().contains(".jar")) {  // Run with JAR file
-                JarFile jar = new JarFile(jarFile);
-
-                Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-                while (entries.hasMoreElements()) {
-
-                    final String name = entries.nextElement().getName();
-
-                    ZipEntry zipEntry = jar.getEntry(name);
-                    if (name.equals(path)) { //filter according to the path
-                        System.out.println(name);
-
-                        return getBytesFromResource(jar.getInputStream(zipEntry));
-                    }
-                }
-                jar.close();
-            }
-        }
-
-        return null;
     }
 
     private void unloadMap() {

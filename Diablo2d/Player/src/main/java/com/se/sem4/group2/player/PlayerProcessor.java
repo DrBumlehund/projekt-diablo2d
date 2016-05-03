@@ -21,6 +21,8 @@ import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import static com.se.sem4.group2.common.data.GameKeys.*;
+import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
+import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IColliderService;
 import java.awt.Point;
@@ -33,9 +35,11 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class PlayerProcessor implements IEntityProcessingService {
+    
+    private IAssetTextureService assetManager;
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager, IAssetAudioService soundManager) {
         float x = entity.getX();
         float y = entity.getY();
         float dt = metaData.getDelta();
@@ -46,6 +50,8 @@ public class PlayerProcessor implements IEntityProcessingService {
         float deacceleration = entity.getDeacceleration();
         float radians = entity.getRadians();
         Point mousePos = metaData.getMousePos();
+        this.assetManager = assetManager;
+        
 
         if (entity instanceof Entity) {
             if (entity.getType().equals(PLAYER)) {
@@ -90,11 +96,14 @@ public class PlayerProcessor implements IEntityProcessingService {
                 x += dx;
                 y += dy;
 
+                assetManager.render(entity.getSpritePath(), entity, metaData);
+                
                 // Update entity
                 entity.setPos(x, y);
                 entity.setDx(dx);
                 entity.setDy(dy);
                 entity.setRadians(radians);
+                
                 updateShape(entity);
             }
         }
@@ -102,6 +111,8 @@ public class PlayerProcessor implements IEntityProcessingService {
     }
 
     private void updateShape(Entity entity) {
+        
+        
         float[] shapex = entity.getShapeX();
         float[] shapey = entity.getShapeY();
         float x = entity.getX();
@@ -116,6 +127,7 @@ public class PlayerProcessor implements IEntityProcessingService {
 
         entity.setShapeX(shapex);
         entity.setShapeY(shapey);
+
     }
 
     private IColliderService getColliderService() {
