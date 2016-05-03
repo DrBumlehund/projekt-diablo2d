@@ -158,7 +158,7 @@ public class Game implements ApplicationListener {
         for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
             colliderProcessingService.process();
         }
-        
+
         for (IAIProcessingService service : getAIProcessingServices()) {
             for (Entity e : world.values()) {
                 service.process(metaData, world, worldMap);
@@ -188,8 +188,7 @@ public class Game implements ApplicationListener {
                     batch.begin();
                     batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                     batch.end();
-                    
-                    
+
                 }
             }
         }
@@ -219,6 +218,23 @@ public class Game implements ApplicationListener {
                 sr.begin(ShapeRenderer.ShapeType.Line);
                 sr.setColor(Color.BLACK);
                 sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+                sr.end();
+
+                // Health bars.
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                float width = /*25f*/ entity.getMaxHealth() * 0.07f;
+                float height = 2f;
+                float x = entity.getX() - width / 2;
+                float y = entity.getY() + (entity.getRadius() + 10f);
+                // healthbar border.
+                sr.setColor(Color.BLACK);
+                sr.rect(x - 1, y - 1, width + 2, height + 2);
+                // health bar background
+                sr.setColor(Color.RED);
+                sr.rect(x, y, width, height);
+                // Health overlay.
+                sr.setColor(Color.GREEN);
+                sr.rect(x, y, entity.getHealthPercentage(width), height);
                 sr.end();
             }
 
