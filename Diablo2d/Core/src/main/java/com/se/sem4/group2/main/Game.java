@@ -31,7 +31,6 @@ import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
-import static com.se.sem4.group2.common.data.EntityType.PROJECTILE;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
@@ -57,6 +56,9 @@ import static javafx.scene.text.Font.font;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
+import static com.se.sem4.group2.common.data.EntityType.SPELL;
+import static javafx.scene.text.Font.font;
+import static javafx.scene.text.Font.font;
 
 public class Game implements ApplicationListener {
 
@@ -76,8 +78,8 @@ public class Game implements ApplicationListener {
     private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
     private final AudioProcessor aP = new AudioProcessor();
-//    private Music centipede;
     private final TextureProcessor tP = new TextureProcessor();
+    
 
     @Override
     public void create() {
@@ -86,7 +88,6 @@ public class Game implements ApplicationListener {
         aP.load("com/se/sem4/group2/core/tristram.mp3", "Music");
 
         //aP.playMusic("com/se/sem4/group2/core/tristram.mp3");
-
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
@@ -130,6 +131,7 @@ public class Game implements ApplicationListener {
         metaData.setDelta(Gdx.graphics.getDeltaTime());
         sr.setProjectionMatrix(cam.combined);
         batch.setProjectionMatrix(cam.combined);
+        metaData.setCamFloatArray(cam.combined.getValues());
 
         update();
 
@@ -207,22 +209,24 @@ public class Game implements ApplicationListener {
                 sr.setColor(Color.RED);
                 sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             } else {
-               // sr.setColor(Color.BLACK);
+//                sr.setColor(Color.BLACK);
                 tP.render(entity.getSpritePath(), entity, metaData);
-               // sr.circle(entity.getX(), entity.getY(), entity.getRadius());
+//                sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             }
 
             sr.end();
 
-            if (entity.getType() == NPC) {
-                sr.begin(ShapeRenderer.ShapeType.Line);
-                sr.setColor(Color.BLACK);
-                sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
-                sr.end();
+            if (entity.getType() != SPELL) {
+                if (entity.getType() == NPC) {
+                    sr.begin(ShapeRenderer.ShapeType.Line);
+                    sr.setColor(Color.BLACK);
+                    sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+                    sr.end();
+                }
 
                 // Health bars.
                 sr.begin(ShapeRenderer.ShapeType.Filled);
-                float width = /*25f*/ entity.getMaxHealth() * 0.07f;
+                float width = 25f/* entity.getMaxHealth() * 0.07f*/;
                 float height = 2f;
                 float x = entity.getX() - width / 2;
                 float y = entity.getY() + (entity.getRadius() + 10f);

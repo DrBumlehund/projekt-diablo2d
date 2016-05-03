@@ -16,7 +16,7 @@ import com.se.sem4.group2.common.data.MetaData;
  */
 public interface IAssetTextureService extends IAssetService{
     
-    public void create();
+    public void create(MetaData metaData);
     
     public void render(String path, Entity entity, MetaData metaData);
     

@@ -21,6 +21,7 @@ import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import static com.se.sem4.group2.common.data.GameKeys.*;
+import com.se.sem4.group2.common.data.SpellType;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import com.se.sem4.group2.common.data.util.SPILocator;
@@ -35,7 +36,7 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class PlayerProcessor implements IEntityProcessingService {
-    
+
     private IAssetTextureService assetManager;
 
     @Override
@@ -51,11 +52,10 @@ public class PlayerProcessor implements IEntityProcessingService {
         float radians = entity.getRadians();
         Point mousePos = metaData.getMousePos();
         this.assetManager = assetManager;
-        
 
         if (entity instanceof Entity) {
             if (entity.getType().equals(PLAYER)) {
-                
+
                 // Removes player if the entity is dead.
                 if (entity.isDead()) {
                     world.remove(entity.getId());
@@ -83,6 +83,17 @@ public class PlayerProcessor implements IEntityProcessingService {
                     dx -= maxSpeed * dt;
                 }
 
+                // changing activeSpell
+                if (metaData.getKeys().isDown(NUM_1)) {
+                    entity.setActiveSpell(SpellType.FIREBALL);
+                }
+                if (metaData.getKeys().isDown(NUM_2)) {
+                    entity.setActiveSpell(SpellType.ICEBOLT);
+                }
+                if (metaData.getKeys().isDown(NUM_3)) {
+                    entity.setActiveSpell(SpellType.CHARGEDBOLT);
+                }
+
                 //deacceleration
                 float vec = (float) Math.sqrt(dx * dx + dy * dy);
 
@@ -97,13 +108,13 @@ public class PlayerProcessor implements IEntityProcessingService {
                 y += dy;
 
                 assetManager.render(entity.getSpritePath(), entity, metaData);
-                
+
                 // Update entity
                 entity.setPos(x, y);
                 entity.setDx(dx);
                 entity.setDy(dy);
                 entity.setRadians(radians);
-                
+
                 updateShape(entity);
             }
         }
@@ -111,8 +122,7 @@ public class PlayerProcessor implements IEntityProcessingService {
     }
 
     private void updateShape(Entity entity) {
-        
-        
+
         float[] shapex = entity.getShapeX();
         float[] shapey = entity.getShapeY();
         float x = entity.getX();
@@ -133,5 +143,5 @@ public class PlayerProcessor implements IEntityProcessingService {
     private IColliderService getColliderService() {
         return SPILocator.locateFirst(IColliderService.class);
     }
-    
+
 }

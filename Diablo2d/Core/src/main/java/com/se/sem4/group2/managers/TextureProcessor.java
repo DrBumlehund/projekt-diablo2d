@@ -19,10 +19,10 @@ package com.se.sem4.group2.managers;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
 import com.se.sem4.group2.common.data.Entity;
 import org.openide.util.lookup.ServiceProvider;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
-import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 
 /**
@@ -34,15 +34,20 @@ public class TextureProcessor extends AssetProcessor implements IAssetTextureSer
 
     private SpriteBatch batch;
     private Sprite sprite;
+    private Matrix4 mx4;
 
     @Override
-    public void create() {
+    public void create(MetaData metaData) {
         batch = new SpriteBatch();
+//        mx4 = new Matrix4(metaData.getCamFloatArray());
+//        batch.setProjectionMatrix(mx4);
     }
 
     @Override
     public void render(String path, Entity entity, MetaData metaData) {
         //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.
+        mx4 = new Matrix4(metaData.getCamFloatArray());
+        batch.setProjectionMatrix(mx4);
         batch.begin();
         //System.out.println(path);
         Texture tex = super.textures.get(path);
@@ -52,9 +57,9 @@ public class TextureProcessor extends AssetProcessor implements IAssetTextureSer
         sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
         sprite.rotate((float) (entity.getRadians() * (180 / Math.PI)));
 //        if (entity.getType() == PLAYER) {
-            sprite.setCenter(entity.getDx() + (metaData.getDisplayWidth() / 2), entity.getDy() + (metaData.getDisplayHeight()/ 2));
+//            sprite.setCenter(entity.getDx() + (metaData.getDisplayWidth() / 2), entity.getDy() + (metaData.getDisplayHeight()/ 2));
 //        } else {
-//            sprite.setCenter(entity.getX(), entity.getY());
+            sprite.setCenter(entity.getX(), entity.getY());
 //        }
 
         //sprite.setPosition(x, y);

@@ -21,6 +21,7 @@ import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
+import com.se.sem4.group2.common.data.SpellType;
 import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import java.awt.Shape;
@@ -65,14 +66,20 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setShapeX(new float[2]);
         newPlayer.setShapeY(new float[2]);
         newPlayer.setRadius(16f);
-
+        
+        newPlayer.setMaxDamage(-1);
+        newPlayer.setMinDamage(-1);
+        newPlayer.setMaxHealth(100);
+        
+        newPlayer.setActiveSpell(SpellType.FIREBALL);
+        
         Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, newPlayer.getRadius() * 2, newPlayer.getRadius() * 2);
         Collider collider = new Collider(shape, newPlayer);
         getColliderService().start(player, collider);
 
         //Set Sprite, Weapon, Color
         newPlayer.setSpritePath("com/se/sem4/group2/player/Wizard.png");
-        assetManager.create();
+        assetManager.create(metaData);
         assetManager.load(newPlayer.getSpritePath(), "Texture");
         // assetManager.render(newPlayer.getSpritePath(), metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2, newPlayer.getRadians());
 
