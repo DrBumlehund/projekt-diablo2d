@@ -17,6 +17,10 @@
 package com.se.sem4.group2.common.data;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.*;
 
 /**
  *
@@ -35,12 +39,12 @@ public class Entity extends Transform {
     private float[] shapeX;
     private float[] shapeY;
     private float radius;
-    private EntityType type;
     private Color color;
     private String spritePath;
     private float lifeTime;
     private float lifeTimer;
 
+    private List<Point> path = new ArrayList<Point>();
     public String getSpritePath() {
         return spritePath;
     }
@@ -54,10 +58,13 @@ public class Entity extends Transform {
         return lifeTimer;
     }
 
-    public void setLifeTimer(float lifeTimer) {
-        this.lifeTimer = lifeTimer;
+    public List<Point> getPath() {
+        return path;
     }
     
+    public void setPath(List<Point> path){
+        this.path = path;
+    }
 
     public float getLifeTime() {
         return lifeTime;
@@ -66,6 +73,16 @@ public class Entity extends Transform {
     public void setLifeTime(float lifeTime) {
         this.lifeTime = lifeTime;
     }
+
+    public float getLifeTimer() {
+        return lifeTimer;
+    }
+
+    public void setLifeTimer(float lifeTimer) {
+        this.lifeTimer = lifeTimer;
+    }
+    
+    
     
 
     public Color getColor() {
@@ -115,7 +132,7 @@ public class Entity extends Transform {
     public void setShapeY(float[] shapeY) {
         this.shapeY = shapeY;
     }
-    
+
     public float getDx() {
         return dx;
     }
@@ -147,14 +164,6 @@ public class Entity extends Transform {
 
     public void setMaxSpeed(float speed) {
         this.maxSpeed = speed;
-    }
-
-    public EntityType getType() {
-        return type;
-    }
-
-    public void setType(EntityType type) {
-        this.type = type;
     }
 
     public void setPos(float x, float y) {

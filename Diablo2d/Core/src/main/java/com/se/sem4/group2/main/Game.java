@@ -19,7 +19,7 @@ package com.se.sem4.group2.main;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.controllers.Controllers;
+//import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -36,6 +36,7 @@ import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IAIProcessingService;
 import com.se.sem4.group2.common.services.IColliderProcessingService;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
@@ -51,6 +52,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import static javafx.scene.text.Font.font;
+import static javafx.scene.text.Font.font;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
@@ -155,6 +158,12 @@ public class Game implements ApplicationListener {
         for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
             colliderProcessingService.process();
         }
+        
+        for (IAIProcessingService service : getAIProcessingServices()) {
+            for (Entity e : world.values()) {
+                service.process(metaData, world, worldMap);
+            }
+        }
 
     }
 
@@ -179,6 +188,8 @@ public class Game implements ApplicationListener {
                     batch.begin();
                     batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                     batch.end();
+                    
+                    
                 }
             }
         }
@@ -268,4 +279,8 @@ public class Game implements ApplicationListener {
             }
         }
     };
+
+    private Iterable<IAIProcessingService> getAIProcessingServices() {
+        return SPILocator.locateAll(IAIProcessingService.class);
+    }
 }

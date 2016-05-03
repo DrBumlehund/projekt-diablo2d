@@ -23,6 +23,8 @@ import com.se.sem4.group2.common.services.IEntityProcessingService;
 import static com.se.sem4.group2.common.data.GameKeys.*;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
+import com.se.sem4.group2.common.data.util.SPILocator;
+import com.se.sem4.group2.common.services.IColliderService;
 import java.awt.Point;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
@@ -53,6 +55,12 @@ public class PlayerProcessor implements IEntityProcessingService {
 
         if (entity instanceof Entity) {
             if (entity.getType().equals(PLAYER)) {
+                
+                // Removes player if the entity is dead.
+                if (entity.isDead()) {
+                    world.remove(entity.getId());
+                    getColliderService().stop(entity);
+                }
 
                 //angle
                 double theta = Math.atan2(metaData.getDisplayHeight() / 2 - mousePos.y, metaData.getDisplayWidth() / 2 - mousePos.x);
@@ -84,7 +92,6 @@ public class PlayerProcessor implements IEntityProcessingService {
                     dy *= Math.abs(dy / vec);
                 }
 
-                
                 //set position
                 x += dx;
                 y += dy;
@@ -123,4 +130,8 @@ public class PlayerProcessor implements IEntityProcessingService {
 
     }
 
+    private IColliderService getColliderService() {
+        return SPILocator.locateFirst(IColliderService.class);
+    }
+    
 }

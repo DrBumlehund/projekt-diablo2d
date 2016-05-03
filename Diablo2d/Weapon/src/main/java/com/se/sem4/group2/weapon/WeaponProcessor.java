@@ -64,7 +64,7 @@ public class WeaponProcessor implements IEntityProcessingService {
         if (entity.getType() == EntityType.PROJECTILE) {
 
             // Removes the bullet if certain conditions is met.
-            if (entity.getLifeTime() < entity.getLifeTimer() || entity.isColided()) {
+            if (entity.getLifeTime() < entity.getLifeTimer() || entity.isColided() || entity.isDead()) {
                 world.remove(entity.getId());
                 getColliderService().stop(entity);
             }
@@ -125,17 +125,15 @@ public class WeaponProcessor implements IEntityProcessingService {
         bullet.setY((float) (player.getY() + Math.cos(player.getRadians()) * offset));
         bullet.setMaxSpeed(350);
 
-        bullet.setDx((float) (Math.cos(player.getRadians()) * bullet.getMaxSpeed()));
-        bullet.setDy((float) (Math.sin(player.getRadians()) * bullet.getMaxSpeed()));
+        fireball.setMaxHealth(1); // Fireballs needs to die in first hit.
+        fireball.setMaxDamage(250);
+        fireball.setMinDamage(150);
 
-        bullet.setLifeTime(2);
-        bullet.setLifeTimer(0);
-        world.put(bullet.getId(), bullet);
 
         Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
-        Collider collider = new Collider(shape, bullet);
+        Collider collider = new Collider(shape, fireball);
 
-        getColliderService().start(bullet, collider);
+        getColliderService().start(fireball, collider);
 
     }
 
