@@ -27,8 +27,13 @@ import org.openide.util.lookup.ServiceProvider;
 public class AudioProcessor extends AssetProcessor implements IAssetAudioService {
 
     @Override
-    public void play(String path) {
-    super.music.get(path).play();
+    public void playMusic(String path) {
+        super.music.get(path).play();
+    }
+
+    @Override
+    public void playSound(String path) {
+        super.sounds.get(path).play();
     }
 
     @Override
@@ -46,5 +51,4 @@ public class AudioProcessor extends AssetProcessor implements IAssetAudioService
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
 }

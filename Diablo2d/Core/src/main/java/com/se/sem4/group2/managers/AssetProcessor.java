@@ -77,8 +77,10 @@ public abstract class AssetProcessor implements IAssetService {
                 aM.update();
                 aM.finishLoading();
                 
+                Sound snd = aM.get(path);
+                
                 if(aM.isLoaded(path)){
-                sounds.put(path, Gdx.audio.newSound(Gdx.files.getFileHandle(path, Files.FileType.Local)));
+                sounds.put(path, snd);
                 }
                 break;
             case "Texture":

@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (C) 2016 casperbeese
  *
@@ -16,22 +14,64 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.se.sem4.group2.managers;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Matrix4;
+import com.se.sem4.group2.common.data.Entity;
 import org.openide.util.lookup.ServiceProvider;
 import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
+import com.se.sem4.group2.common.data.MetaData;
 
 /**
  *
  * @author casperbeese
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService.class)
-public class TextureProcessor extends AssetProcessor implements IAssetTextureService{
+public class TextureProcessor extends AssetProcessor implements IAssetTextureService {
+
+    private SpriteBatch batch;
+    private Sprite sprite;
+    private Matrix4 mx4;
+
+    @Override
+    public void create(MetaData metaData) {
+        batch = new SpriteBatch();
+//        mx4 = new Matrix4(metaData.getCamFloatArray());
+//        batch.setProjectionMatrix(mx4);
+    }
+
+    @Override
+    public void render(String path, Entity entity, MetaData metaData) {
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // This cryptic line clears the screen.
+        mx4 = new Matrix4(metaData.getCamFloatArray());
+        batch.setProjectionMatrix(mx4);
+        batch.begin();
+        //System.out.println(path);
+        Texture tex = super.textures.get(path);
+        sprite = new Sprite(tex);
+        sprite.setSize((int) entity.getRadius() * 2, (int) entity.getRadius() * 2);
+
+        sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+        sprite.rotate((float) (entity.getRadians() * (180 / Math.PI)));
+//        if (entity.getType() == PLAYER) {
+//            sprite.setCenter(entity.getDx() + (metaData.getDisplayWidth() / 2), entity.getDy() + (metaData.getDisplayHeight()/ 2));
+//        } else {
+            sprite.setCenter(entity.getX(), entity.getY());
+//        }
+
+        //sprite.setPosition(x, y);
+        sprite.draw(batch);
+
+        //batch.draw(tex, x, y);
+        // Drawing goes here!
+        batch.end();
+    }
 
     @Override
     public void draw(String path) {
     }
 
-    
 }

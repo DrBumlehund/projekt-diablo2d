@@ -20,7 +20,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.*;
 
 /**
  *
@@ -40,16 +39,30 @@ public class Entity extends Transform {
     private float[] shapeY;
     private float radius;
     private Color color;
+    private String spritePath;
     private float lifeTime;
     private float lifeTimer;
+    private SpellType activeSpell;
 
-    private List<Point> path = new ArrayList<Point>();
+    private List<Point> path = new ArrayList<>();
+
+    public String getSpritePath() {
+        return spritePath;
+    }
+
+    public void setSpritePath(String spritePath) {
+        this.spritePath = spritePath;
+    }
+
+    public float getLifeTimer() {
+        return lifeTimer;
+    }
 
     public List<Point> getPath() {
         return path;
     }
-    
-    public void setPath(List<Point> path){
+
+    public void setPath(List<Point> path) {
         this.path = path;
     }
 
@@ -61,16 +74,9 @@ public class Entity extends Transform {
         this.lifeTime = lifeTime;
     }
 
-    public float getLifeTimer() {
-        return lifeTimer;
-    }
-
     public void setLifeTimer(float lifeTimer) {
         this.lifeTimer = lifeTimer;
     }
-    
-    
-    
 
     public Color getColor() {
         return color;
@@ -162,5 +168,13 @@ public class Entity extends Transform {
         //ved ikke om det er nødvendigt ... men wth ... :D
         this.dx = dx;
         this.dy = dy;
+    }
+
+    public SpellType getActiveSpell() {
+        return activeSpell;
+    }
+
+    public void setActiveSpell(SpellType activeSpell) {
+        this.activeSpell = activeSpell;
     }
 }

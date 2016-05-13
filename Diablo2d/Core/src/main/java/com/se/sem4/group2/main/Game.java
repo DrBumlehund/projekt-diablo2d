@@ -31,7 +31,6 @@ import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
-import static com.se.sem4.group2.common.data.EntityType.PROJECTILE;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
@@ -57,6 +56,9 @@ import static javafx.scene.text.Font.font;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
+import static com.se.sem4.group2.common.data.EntityType.SPELL;
+import static javafx.scene.text.Font.font;
+import static javafx.scene.text.Font.font;
 
 public class Game implements ApplicationListener {
 
@@ -76,8 +78,8 @@ public class Game implements ApplicationListener {
     private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
     private final AudioProcessor aP = new AudioProcessor();
-    private Music centipede;
     private final TextureProcessor tP = new TextureProcessor();
+    
 
     @Override
     public void create() {
@@ -85,8 +87,7 @@ public class Game implements ApplicationListener {
         aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
         aP.load("com/se/sem4/group2/core/tristram.mp3", "Music");
 
-        aP.play("com/se/sem4/group2/core/tristram.mp3");
-
+        //aP.playMusic("com/se/sem4/group2/core/tristram.mp3");
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
@@ -111,12 +112,13 @@ public class Game implements ApplicationListener {
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.start(metaData, world);
+            iGamePlugin.start(metaData, world, tP);
         }
 
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
             worldMap = iMapPlugin.start(metaData, tP);
         }
+
     }
 
     @Override
@@ -129,6 +131,7 @@ public class Game implements ApplicationListener {
         metaData.setDelta(Gdx.graphics.getDeltaTime());
         sr.setProjectionMatrix(cam.combined);
         batch.setProjectionMatrix(cam.combined);
+        metaData.setCamFloatArray(cam.combined.getValues());
 
         update();
 
@@ -138,16 +141,16 @@ public class Game implements ApplicationListener {
     }
 
     private void update() {
+
         // Process entities
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
-                entityProcessorService.process(metaData, world, e);
+                entityProcessorService.process(metaData, world, e, tP, aP);
                 if (e.getType() == EntityType.PLAYER) {
                     cam.position.set(new Vector3((float) e.getX(), (float) e.getY(), 1f));
                     cam.update();
                 }
             }
-
         }
 
         for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
@@ -157,7 +160,7 @@ public class Game implements ApplicationListener {
         for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
             colliderProcessingService.process();
         }
-        
+
         for (IAIProcessingService service : getAIProcessingServices()) {
             for (Entity e : world.values()) {
                 service.process(metaData, world, worldMap);
@@ -167,6 +170,7 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
+
         if (worldMap != null) {
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
@@ -180,36 +184,61 @@ public class Game implements ApplicationListener {
                     // TODO: No idea why texture is sometimes null
                     if (texture == null) {
                         System.out.println("Error: Texture was null while attempting to draw map: " + tile.getSource());
+                        tP.load(tile.getSource(), "Texture");
                         continue;
                     }
                     batch.begin();
                     batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                     batch.end();
-                    
-                    
+
                 }
             }
         }
 
         for (Entity entity : world.values()) {
+
             float[] shapeX = entity.getShapeX();
             float[] shapeY = entity.getShapeY();
 
             sr.begin(ShapeRenderer.ShapeType.Filled);
             if (entity.getType() == PLAYER) {
-                sr.setColor(Color.WHITE);
+                //tP.render(entity.getSpritePath(), entity.getDx() + (metaData.getDisplayWidth() / 2), entity.getDy() + (metaData.getDisplayHeight() / 2), entity.getRadians());
+                tP.render(entity.getSpritePath(), entity, metaData);
+                //sr.setColor(Color.WHITE);
             } else if (entity.getType() == NPC) {
                 sr.setColor(Color.RED);
+                sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             } else {
-                sr.setColor(Color.BLACK);
+//                sr.setColor(Color.BLACK);
+                tP.render(entity.getSpritePath(), entity, metaData);
+//                sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             }
-            sr.circle(entity.getX(), entity.getY(), entity.getRadius());
+
             sr.end();
 
-            if (entity.getType() != PROJECTILE) {
-                sr.begin(ShapeRenderer.ShapeType.Line);
+            if (entity.getType() != SPELL) {
+                if (entity.getType() == NPC) {
+                    sr.begin(ShapeRenderer.ShapeType.Line);
+                    sr.setColor(Color.BLACK);
+                    sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+                    sr.end();
+                }
+
+                // Health bars.
+                sr.begin(ShapeRenderer.ShapeType.Filled);
+                float width = 25f/* entity.getMaxHealth() * 0.07f*/;
+                float height = 2f;
+                float x = entity.getX() - width / 2;
+                float y = entity.getY() + (entity.getRadius() + 10f);
+                // healthbar border.
                 sr.setColor(Color.BLACK);
-                sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
+                sr.rect(x - 1, y - 1, width + 2, height + 2);
+                // health bar background
+                sr.setColor(Color.RED);
+                sr.rect(x, y, width, height);
+                // Health overlay.
+                sr.setColor(Color.GREEN);
+                sr.rect(x, y, entity.getHealthPercentage(width), height);
                 sr.end();
             }
 
@@ -218,6 +247,8 @@ public class Game implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
+        metaData.setDisplayWidth(width);
+        metaData.setDisplayHeight(height);
     }
 
     @Override
@@ -230,7 +261,7 @@ public class Game implements ApplicationListener {
 
     @Override
     public void dispose() {
-        centipede.dispose();
+//        centipede.dispose();
     }
 
     private Collection<? extends IGamePluginService> getPluginServices() {
@@ -262,7 +293,7 @@ public class Game implements ApplicationListener {
         public void resultChanged(LookupEvent le) {
             for (IGamePluginService updatedGamePlugin : lookup.lookupAll(IGamePluginService.class)) {
                 if (!gamePlugins.contains(updatedGamePlugin)) {
-                    updatedGamePlugin.start(metaData, world);
+                    updatedGamePlugin.start(metaData, world, tP);
                     gamePlugins.add(updatedGamePlugin);
                 }
             }
