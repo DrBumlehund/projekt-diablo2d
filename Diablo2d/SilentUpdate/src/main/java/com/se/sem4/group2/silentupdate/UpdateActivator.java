@@ -1,4 +1,4 @@
-package org.netbeans.modules.autoupdate.silentupdate;
+package com.se.sem4.group2.silentupdate;
 
 /**
  *
