@@ -30,4 +30,9 @@ public class Tile {
     public String getSource() {
         return source;
     }
+
+    public float getSpeedModifier() {
+        return speedModifier;
+    }
+    
 }

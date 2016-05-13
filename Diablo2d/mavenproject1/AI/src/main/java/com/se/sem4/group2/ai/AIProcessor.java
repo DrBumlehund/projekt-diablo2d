@@ -9,6 +9,7 @@ import com.se.sem4.group2.common.data.Entity;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
+import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.services.IAIProcessingService;
 import java.awt.Point;
@@ -23,12 +24,31 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = com.se.sem4.group2.common.services.IAIProcessingService.class)
 public class AIProcessor implements IAIProcessingService {
 
-    public static DStarLite pf = new DStarLite();
-
+    private DStarLite pf = new DStarLite();
     private Point goal;
+    private Point boundsX = new Point(0,0);
+    private Point boundsY = new Point(0,0);
 
     @Override
     public void process(MetaData metaData, Map<String, Entity> world, WorldMap worldMap) {
+        for (int x=worldMap.getxMin(); x<worldMap.getxMax(); x++) {
+            if (x >= boundsX.x && x <= boundsX.y)
+                continue; // We already loaded this data
+            for (int y=worldMap.getxMin(); y<worldMap.getxMax(); y++) {
+                if (y >= boundsY.x && y <= boundsY.y)
+                    continue; // We already loaded this data
+                Tile tile = worldMap.getTile(x, y);
+                if (tile == null)
+                    continue;
+                for (int i=1; i<64; i++) {
+                    pf.updateCell(x*64 + i, y*64 + i, tile.getSpeedModifier());
+                }
+            }
+        }
+        
+        boundsX = new Point(Math.min(boundsX.x, worldMap.getxMin()), Math.max(boundsX.y, worldMap.getxMax()));
+        boundsY = new Point(Math.min(boundsY.x, worldMap.getyMin()), Math.max(boundsY.y, worldMap.getyMax()));
+        
         for (Entity player : world.values()) {
             if (player.getType() == PLAYER) {
                 Point playerPos = new Point((int) player.getX(), (int) player.getY());
@@ -40,7 +60,8 @@ public class AIProcessor implements IAIProcessingService {
 
         for (Entity npc : world.values()) {
             if (npc.getType() == NPC) {
-                pf.init((int) npc.getX(), (int) npc.getY(), (int) goal.x, (int) goal.y);
+                pf.updateStart((int) npc.getX(), (int) npc.getY());
+                pf.updateGoal((int) goal.x, (int) goal.y);
                 pf.replan();
                 npc.setPath(pf.getPathPoint());
             }

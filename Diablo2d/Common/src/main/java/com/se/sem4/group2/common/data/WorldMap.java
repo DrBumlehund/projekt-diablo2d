@@ -31,7 +31,7 @@ public class WorldMap {
 
     private Tile[] tileTypes = new Tile[]{
         new Tile("com/se/sem4/group2/map/dirt.png", 1f),
-        new Tile("com/se/sem4/group2/map/water.png", 1f),
+        new Tile("com/se/sem4/group2/map/water.png", -1f),
         new Tile("com/se/sem4/group2/map/grass.png", 1.4f),
         new Tile("com/se/sem4/group2/map/grass1.png", 1.4f),
         new Tile("com/se/sem4/group2/map/grass2.png", 1.4f)
@@ -58,6 +58,7 @@ public class WorldMap {
     public static final int DEFAULT_BUFFERZONE = 3;
     public static final int DEFAULT_DISPLAY_HEIGHT = 480;
     public static final int DEFAULT_DISPLAY_WIDTH = 640;
+    public static final int TILE_SIZE = 64;
 
     public static final float MIN_DIRT = 0.4f;
     public static final float MAX_WATER = -0.4f;
@@ -124,6 +125,13 @@ public class WorldMap {
             return tmp.get(y);
         }
         return null;
+    }
+    
+    public Tile getTileByPosition (int x, int y) {
+        x = x / TILE_SIZE;
+        y = y / TILE_SIZE;
+        
+        return getTile (x, y);
     }
 
     public void addTile(int x, int y) {
