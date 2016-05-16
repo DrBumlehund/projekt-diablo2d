@@ -14,6 +14,7 @@ import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import java.awt.geom.Ellipse2D;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -77,14 +78,15 @@ public class NpcPlugin implements IGamePluginService {
         n.setAcceleration(600);
         n.setDeacceleration(400);
         
-        n.setShapeX(new float[2]);
-        n.setShapeY(new float[2]);
         n.setRadius(10f);
         
         n.setMaxHealth(1000); // npc's have a lot of health,
         n.setMaxDamage(10);   // but they don't do a lot og damage.
         n.setMinDamage(5);
         
+        String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Npc.jar!/assets/images/snowman.png");
+        
+        n.setTexturePath(path);
         //n.setHostile(true);
         //Set Sprite, Weapon, Color
         world.put(n.getId(), n);
@@ -93,7 +95,7 @@ public class NpcPlugin implements IGamePluginService {
         for (IColliderService colliderService : colliderServices) {
             Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 20, 20);
             Collider collider = new Collider(shape, n);
-            colliderService.start(player, collider);
+            colliderService.start(n, collider);
         }
         
         return n;

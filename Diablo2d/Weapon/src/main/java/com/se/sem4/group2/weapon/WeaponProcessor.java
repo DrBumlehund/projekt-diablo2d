@@ -13,15 +13,15 @@ import com.se.sem4.group2.common.data.GameKeys;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.SpellType;
 import com.se.sem4.group2.common.data.util.SPILocator;
-
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import java.awt.geom.Ellipse2D;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Random;
 import org.openide.util.lookup.ServiceProvider;
 import static com.se.sem4.group2.common.data.EntityType.SPELL;
+import java.io.File;
+import java.util.List;
 
 /**
  *
@@ -51,7 +51,7 @@ public class WeaponProcessor implements IEntityProcessingService {
                 if (value.getType() == PLAYER) {
                     player = value;
                     activeSpell = player.getActiveSpell();
-                    fireSpell(activeSpell);
+                    fireSpell(world, player);
                 }
             }
         }
@@ -61,7 +61,10 @@ public class WeaponProcessor implements IEntityProcessingService {
             // Removes the bullet if certain conditions is met.
             if (entity.getLifeTime() < entity.getLifeTimer() || entity.isColided() || entity.isDead()) {
                 world.remove(entity.getId());
-                getColliderService().stop(entity);
+                for (IColliderService coliderService : getColliderServices()) {
+                    coliderService.stop(entity);
+                }
+
             }
 
             float x = entity.getX();
@@ -100,7 +103,6 @@ public class WeaponProcessor implements IEntityProcessingService {
 //        textureManager.load("com/se/sem4/group2/weapon/chargedbolt.png", "Texture");
 //
 //    }
-
 //    private void randomSoundPlayer(IAssetAudioService soundManager, SpellType activeSpell) {
 //
 //        Random rng = new Random();
@@ -150,117 +152,62 @@ public class WeaponProcessor implements IEntityProcessingService {
 //        }
 //        soundManager.playSound(path);
 //    }
+    
+    public void fireSpell(Map<String, Entity> world, Entity player) {
+        Entity spell = new Entity();
+        spell.setType(SPELL);
+        spell.setName("Fireball");
+        spell.setRadius(RADIUS);
+        spell.setRadians(player.getRadians());
+        spell.setTexturePath("com/se/sem4/group2/weapon/fireball.png");
 
-    private void fireSpell(SpellType activeSpell) {
-        switch (activeSpell) {
+        float offset = player.getRadius() + 2 + RADIUS;
+        spell.setX((float) (player.getX() + Math.cos(player.getRadians()) * offset));
+        spell.setY((float) (player.getY() + Math.sin(player.getRadians()) * offset));
+
+        
+
+        String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Weapon.jar!/assets/images/");
+        switch (player.getActiveSpell()) {
+            default:
+                // default fires a fireball... (no break;)
             case FIREBALL:
-                createFireball(world, player);
+                path += "fireball.png";
+                spell.setMaxSpeed(350);
+                spell.setMaxDamage(250);
+                spell.setMinDamage(150);
                 break;
             case ICEBOLT:
-                createIcebolt(world, player);
+                path += "icebolt.png";
+                spell.setMaxSpeed(450);
+                spell.setMaxDamage(150);
+                spell.setMinDamage(75);
                 break;
             case CHARGEDBOLT:
-                createChargedbolt(world, player);
+                path += "chargedbolt.png";
+                spell.setMaxSpeed((float) (player.getMaxSpeed() * Math.random() + player.getMaxSpeed()));
+                spell.setMaxDamage(1100);
+                spell.setMinDamage(70);
                 break;
-            default:
-                break;
+        }
+        
+        spell.setDx((float) (Math.cos(player.getRadians()) * spell.getMaxSpeed()));
+        spell.setDy((float) (Math.sin(player.getRadians()) * spell.getMaxSpeed()));
+        
+        spell.setMaxHealth(1); // spells needs to die in first hit.
+        spell.setTexturePath(path);
+        spell.setLifeTime(2);
+        spell.setLifeTimer(0);
+        world.put(spell.getId(), spell);
+
+        for (IColliderService colliderService : getColliderServices()) {
+            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
+            Collider collider = new Collider(shape, spell);
+            colliderService.start(spell, collider);
         }
     }
 
-    public void createFireball(Map<String, Entity> world, Entity player) {
-        Entity fireball = new Entity();
-        fireball.setType(SPELL);
-        fireball.setName("Fireball");
-        fireball.setRadius(RADIUS);
-        fireball.setRadians(player.getRadians());
-        fireball.setSpritePath("com/se/sem4/group2/weapon/fireball.png");
-
-        float offset = player.getRadius() + 2 + RADIUS;
-        fireball.setX((float) (player.getX() + Math.cos(player.getRadians()) * offset));
-        fireball.setY((float) (player.getY() + Math.sin(player.getRadians()) * offset));
-        fireball.setMaxSpeed(350);
-
-        fireball.setDx((float) (Math.cos(player.getRadians()) * fireball.getMaxSpeed()));
-        fireball.setDy((float) (Math.sin(player.getRadians()) * fireball.getMaxSpeed()));
-
-        fireball.setMaxHealth(1); // Fireballs needs to die in first hit.
-        fireball.setMaxDamage(250);
-        fireball.setMinDamage(150);
-
-        fireball.setLifeTime(2);
-        fireball.setLifeTimer(0);
-        world.put(fireball.getId(), fireball);
-
-        Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
-        Collider collider = new Collider(shape, fireball);
-
-        getColliderService().start(fireball, collider);
-    }
-
-    public void createIcebolt(Map<String, Entity> world, Entity player) {
-        Entity fireball = new Entity();
-        fireball.setType(SPELL);
-        fireball.setName("Frostbolt");
-        fireball.setRadius(RADIUS);
-        fireball.setRadians(player.getRadians());
-        fireball.setSpritePath("com/se/sem4/group2/weapon/icebolt.png");
-
-        float offset = player.getRadius() + 2 + RADIUS;
-        fireball.setX((float) (player.getX() + Math.cos(player.getRadians()) * offset));
-        fireball.setY((float) (player.getY() + Math.sin(player.getRadians()) * offset));
-        fireball.setMaxSpeed(450);
-
-        fireball.setDx((float) (Math.cos(player.getRadians()) * fireball.getMaxSpeed()));
-        fireball.setDy((float) (Math.sin(player.getRadians()) * fireball.getMaxSpeed()));
-
-        fireball.setMaxHealth(1); // Fireballs needs to die in first hit.
-        fireball.setMaxDamage(150);
-        fireball.setMinDamage(75);
-
-        fireball.setLifeTime(2);
-        fireball.setLifeTimer(0);
-        world.put(fireball.getId(), fireball);
-
-        Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
-        Collider collider = new Collider(shape, fireball);
-
-        getColliderService().start(fireball, collider);
-
-    }
-
-    public void createChargedbolt(Map<String, Entity> world, Entity player) {
-
-        Entity fireball = new Entity();
-        fireball.setType(SPELL);
-        fireball.setName("Arcanebolt");
-        fireball.setRadius(RADIUS);
-        fireball.setRadians(player.getRadians());
-        fireball.setSpritePath("com/se/sem4/group2/weapon/chargedbolt.png");
-
-        float offset = player.getRadius() + 2 + RADIUS;
-        fireball.setX((float) (player.getX() + Math.cos(player.getRadians()) * offset));
-        fireball.setY((float) (player.getY() + Math.sin(player.getRadians()) * offset));
-
-        fireball.setMaxSpeed((float) (player.getMaxSpeed() * Math.random() + player.getMaxSpeed()));
-
-        fireball.setDx((float) (Math.cos(player.getRadians()) * fireball.getMaxSpeed()));
-        fireball.setDy((float) (Math.sin(player.getRadians()) * fireball.getMaxSpeed()));
-
-        fireball.setMaxHealth(1); // Fireballs needs to die in first hit.
-        fireball.setMaxDamage(1100);
-        fireball.setMinDamage(70);
-
-        fireball.setLifeTime(2);
-        fireball.setLifeTimer(0);
-        world.put(fireball.getId(), fireball);
-
-        Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
-        Collider collider = new Collider(shape, fireball);
-
-        getColliderService().start(fireball, collider);
-    }
-
-    private IColliderService getColliderService() {
-        return SPILocator.locateFirst(IColliderService.class);
+    private List<IColliderService> getColliderServices() {
+        return SPILocator.locateAll(IColliderService.class);
     }
 }

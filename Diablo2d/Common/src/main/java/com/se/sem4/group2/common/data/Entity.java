@@ -34,24 +34,21 @@ public class Entity extends Transform {
     private float maxSpeed;
     private float acceleration;
     private float deacceleration;
-    // TODO: Don't use shapex and shapey
-    private float[] shapeX;
-    private float[] shapeY;
     private float radius;
     private Color color;
-    private String spritePath;
+    private String texturePath;
     private float lifeTime;
     private float lifeTimer;
     private SpellType activeSpell;
 
     private List<Point> path = new ArrayList<>();
 
-    public String getSpritePath() {
-        return spritePath;
+    public String getTexturePath() {
+        return texturePath;
     }
 
-    public void setSpritePath(String spritePath) {
-        this.spritePath = spritePath;
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
     }
 
     public float getLifeTimer() {
@@ -108,22 +105,6 @@ public class Entity extends Transform {
 
     public void setRadius(float radius) {
         this.radius = radius;
-    }
-
-    public float[] getShapeX() {
-        return shapeX;
-    }
-
-    public void setShapeX(float[] shapeX) {
-        this.shapeX = shapeX;
-    }
-
-    public float[] getShapeY() {
-        return shapeY;
-    }
-
-    public void setShapeY(float[] shapeY) {
-        this.shapeY = shapeY;
     }
 
     public float getDx() {

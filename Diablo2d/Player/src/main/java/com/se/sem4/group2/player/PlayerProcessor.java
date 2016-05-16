@@ -112,31 +112,11 @@ public class PlayerProcessor implements IEntityProcessingService {
                 entity.setDy(dy);
                 entity.setRadians(radians);
 
-                updateShape(entity);
+                
             }
         }
 
     }
-
-    private void updateShape(Entity entity) {
-
-        float[] shapex = entity.getShapeX();
-        float[] shapey = entity.getShapeY();
-        float x = entity.getX();
-        float y = entity.getY();
-        float radians = entity.getRadians();
-
-        shapex[0] = (float) (x);
-        shapey[0] = (float) (y);
-
-        shapex[1] = (float) (x + Math.cos(radians) * entity.getRadius());
-        shapey[1] = (float) (y + Math.sin(radians) * entity.getRadius());
-
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
-
-    }
-
     private IColliderService getColliderService() {
         return SPILocator.locateFirst(IColliderService.class);
     }

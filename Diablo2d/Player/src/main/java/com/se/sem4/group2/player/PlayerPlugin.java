@@ -27,6 +27,8 @@ import java.awt.geom.Ellipse2D;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 import com.se.sem4.group2.common.services.IColliderService;
+import java.io.File;
+import java.util.List;
 
 /**
  *
@@ -59,23 +61,25 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setAcceleration(50f);
         newPlayer.setDeacceleration(1.3f);
         newPlayer.setName("Player");
-        newPlayer.setShapeX(new float[2]);
-        newPlayer.setShapeY(new float[2]);
         newPlayer.setRadius(16f);
-        
+
         newPlayer.setMaxDamage(-1);
         newPlayer.setMinDamage(-1);
         newPlayer.setMaxHealth(100);
-        
+
         newPlayer.setActiveSpell(SpellType.FIREBALL);
-        
-        Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, newPlayer.getRadius() * 2, newPlayer.getRadius() * 2);
-        Collider collider = new Collider(shape, newPlayer);
-        getColliderService().start(player, collider);
+
+        List<IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
+        for (IColliderService colliderService : colliderServices) {
+            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, newPlayer.getRadius(), newPlayer.getRadius());
+            Collider collider = new Collider(shape, newPlayer);
+            colliderService.start(newPlayer, collider);
+        }
 
         //Set Sprite, Weapon, Color
-        newPlayer.setSpritePath("com/se/sem4/group2/player/Wizard.png");
-        
+        String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
+
+        newPlayer.setTexturePath(path);
         return newPlayer;
     }
 

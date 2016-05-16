@@ -29,15 +29,6 @@ public class MetaData {
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
     private Point mousePos = new Point();
-    private float[] camFloatArray = new float[16];
-
-    public float[] getCamFloatArray() {
-        return camFloatArray;
-    }
-
-    public void setCamFloatArray(float[] camFloatArray) {
-        this.camFloatArray = camFloatArray;
-    }
 
     public Point getMousePos() {
         return mousePos;
