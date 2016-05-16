@@ -23,11 +23,7 @@ import com.se.sem4.group2.common.services.IGamePluginService;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.SpellType;
 import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
-import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Collection;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 import com.se.sem4.group2.common.services.IColliderService;
@@ -47,13 +43,13 @@ public class PlayerPlugin implements IGamePluginService {
     }
 
     @Override
-    public void start(MetaData metaData, Map<String, Entity> world, IAssetTextureService assetManager) {
+    public void start(MetaData metaData, Map<String, Entity> world) {
         this.world = world;
-        player = createPlayer(metaData, assetManager);
+        player = createPlayer(metaData);
         world.put(player.getId(), player);
     }
 
-    private Entity createPlayer(MetaData metaData, IAssetTextureService assetManager) {
+    private Entity createPlayer(MetaData metaData) {
         Entity newPlayer = new Entity();
 
         newPlayer.setType(PLAYER);
@@ -79,10 +75,7 @@ public class PlayerPlugin implements IGamePluginService {
 
         //Set Sprite, Weapon, Color
         newPlayer.setSpritePath("com/se/sem4/group2/player/Wizard.png");
-        assetManager.create(metaData);
-        assetManager.load(newPlayer.getSpritePath(), "Texture");
-        // assetManager.render(newPlayer.getSpritePath(), metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2, newPlayer.getRadians());
-
+        
         return newPlayer;
     }
 
@@ -94,5 +87,4 @@ public class PlayerPlugin implements IGamePluginService {
     private IColliderService getColliderService() {
         return SPILocator.locateFirst(IColliderService.class);
     }
-
 }

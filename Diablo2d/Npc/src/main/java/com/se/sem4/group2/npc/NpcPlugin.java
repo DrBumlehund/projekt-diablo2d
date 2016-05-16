@@ -11,8 +11,6 @@ import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
-import com.se.sem4.group2.common.services.IColliderProcessingService;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import java.awt.geom.Ellipse2D;
@@ -22,7 +20,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -39,7 +36,7 @@ public class NpcPlugin implements IGamePluginService {
     private MetaData metaData;
     
     @Override
-    public void start(MetaData metaData, Map<String, Entity> world, IAssetTextureService assetmanager) {
+    public void start(MetaData metaData, Map<String, Entity> world) {
         random = new Random(); 
         this.metaData = metaData;
         this.world = world;

@@ -18,7 +18,6 @@ package com.se.sem4.group2.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 //import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -42,23 +41,16 @@ import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.common.services.IMapPluginService;
 import com.se.sem4.group2.common.services.IMapProcessingService;
-import com.se.sem4.group2.managers.AudioProcessor;
-import com.se.sem4.group2.managers.GameControllerInputProcessor;
 import com.se.sem4.group2.managers.GameInputProcessor;
-import com.se.sem4.group2.managers.TextureProcessor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import static javafx.scene.text.Font.font;
-import static javafx.scene.text.Font.font;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import static com.se.sem4.group2.common.data.EntityType.SPELL;
-import static javafx.scene.text.Font.font;
-import static javafx.scene.text.Font.font;
 
 public class Game implements ApplicationListener {
 
@@ -77,15 +69,10 @@ public class Game implements ApplicationListener {
     private SpriteBatch batch;
     private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
-    private final AudioProcessor aP = new AudioProcessor();
-    private final TextureProcessor tP = new TextureProcessor();
-    
+    Lookup.Result<IGamePluginService> result;
 
     @Override
     public void create() {
-
-        aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
-        aP.load("com/se/sem4/group2/core/tristram.mp3", "Music");
 
         //aP.playMusic("com/se/sem4/group2/core/tristram.mp3");
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
@@ -105,18 +92,18 @@ public class Game implements ApplicationListener {
 //                new GameControllerInputProcessor(metaData)
 //        );
 
-        Lookup.Result<IGamePluginService> result = lookup.lookupResult(IGamePluginService.class);
+        result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
         gamePlugins = new ArrayList<>(result.allInstances());
         result.allItems();
 
         // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.start(metaData, world, tP);
+            iGamePlugin.start(metaData, world);
         }
 
         for (IMapPluginService iMapPlugin : getMapPluginServices()) {
-            worldMap = iMapPlugin.start(metaData, tP);
+            worldMap = iMapPlugin.start(metaData);
         }
 
     }
@@ -145,7 +132,7 @@ public class Game implements ApplicationListener {
         // Process entities
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
             for (Entity e : world.values()) {
-                entityProcessorService.process(metaData, world, e, tP, aP);
+                entityProcessorService.process(metaData, world, e);
                 if (e.getType() == EntityType.PLAYER) {
                     cam.position.set(new Vector3((float) e.getX(), (float) e.getY(), 1f));
                     cam.update();
@@ -180,15 +167,15 @@ public class Game implements ApplicationListener {
             for (int x = xMin; x < xMax + 1; x++) {
                 for (int y = yMin; y < yMax + 1; y++) {
                     Tile tile = worldMap.getTile(x, y);
-                    Texture texture = tP.textures.get(tile.getSource());
+                    Texture texture = null;
                     // TODO: No idea why texture is sometimes null
                     if (texture == null) {
                         System.out.println("Error: Texture was null while attempting to draw map: " + tile.getSource());
-                        tP.load(tile.getSource(), "Texture");
+//                        tP.load(tile.getSource(), "Texture");
                         continue;
                     }
                     batch.begin();
-                    batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
+//                    batch.draw(texture, x * texture.getWidth(), y * texture.getHeight());
                     batch.end();
 
                 }
@@ -203,14 +190,14 @@ public class Game implements ApplicationListener {
             sr.begin(ShapeRenderer.ShapeType.Filled);
             if (entity.getType() == PLAYER) {
                 //tP.render(entity.getSpritePath(), entity.getDx() + (metaData.getDisplayWidth() / 2), entity.getDy() + (metaData.getDisplayHeight() / 2), entity.getRadians());
-                tP.render(entity.getSpritePath(), entity, metaData);
+//                tP.render(entity.getSpritePath(), entity, metaData);
                 //sr.setColor(Color.WHITE);
             } else if (entity.getType() == NPC) {
                 sr.setColor(Color.RED);
                 sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             } else {
 //                sr.setColor(Color.BLACK);
-                tP.render(entity.getSpritePath(), entity, metaData);
+//                tP.render(entity.getSpritePath(), entity, metaData);
 //                sr.circle(entity.getX(), entity.getY(), entity.getRadius());
             }
 
@@ -291,13 +278,26 @@ public class Game implements ApplicationListener {
     private final LookupListener lookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
-            for (IGamePluginService updatedGamePlugin : lookup.lookupAll(IGamePluginService.class)) {
-                if (!gamePlugins.contains(updatedGamePlugin)) {
-                    updatedGamePlugin.start(metaData, world, tP);
-                    gamePlugins.add(updatedGamePlugin);
+
+            Collection<? extends IGamePluginService> updated = result.allInstances();
+
+            for (IGamePluginService us : updated) {
+                // Newly installed modules
+                if (!gamePlugins.contains(us)) {
+                    us.start(metaData, world);
+                    gamePlugins.add(us);
+                }
+            }
+
+            // Stop and remove module
+            for (IGamePluginService gs : gamePlugins) {
+                if (!updated.contains(gs)) {
+                    gs.stop(metaData);
+                    gamePlugins.remove(gs);
                 }
             }
         }
+
     };
 
     private Iterable<IAIProcessingService> getAIProcessingServices() {

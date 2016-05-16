@@ -13,8 +13,7 @@ import com.se.sem4.group2.common.data.GameKeys;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.SpellType;
 import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
+
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import java.awt.geom.Ellipse2D;
@@ -35,20 +34,13 @@ public class WeaponProcessor implements IEntityProcessingService {
     private Collection<? extends IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
     private long timeStamp = 0;
     private Entity player;
-    private Boolean first = true;
     private SpellType activeSpell;
     private Map<String, Entity> world;
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService textureManager, IAssetAudioService soundManager) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
 
         this.world = world;
-
-        if (first) {
-            loadSounds(soundManager);
-            loadTextures(textureManager);
-            first = false;
-        }
 
         if (metaData.getKeys().isDown(GameKeys.SPACE) && System.currentTimeMillis() - timeStamp > 200) {
 
@@ -60,7 +52,6 @@ public class WeaponProcessor implements IEntityProcessingService {
                     player = value;
                     activeSpell = player.getActiveSpell();
                     fireSpell(activeSpell);
-                    randomSoundPlayer(soundManager, activeSpell);
                 }
             }
         }
@@ -89,76 +80,76 @@ public class WeaponProcessor implements IEntityProcessingService {
 
     }
 
-    private void loadSounds(IAssetAudioService soundManager) {
-        soundManager.load("com/se/sem4/group2/weapon/fireball1.wav", "Sound");
-        soundManager.load("com/se/sem4/group2/weapon/fireball2.wav", "Sound");
-        soundManager.load("com/se/sem4/group2/weapon/fireball3.wav", "Sound");
+//    private void loadSounds(IAssetAudioService soundManager) {
+//        soundManager.load("com/se/sem4/group2/weapon/fireball1.wav", "Sound");
+//        soundManager.load("com/se/sem4/group2/weapon/fireball2.wav", "Sound");
+//        soundManager.load("com/se/sem4/group2/weapon/fireball3.wav", "Sound");
+//
+//        soundManager.load("com/se/sem4/group2/weapon/icebolt1.wav", "Sound");
+//        soundManager.load("com/se/sem4/group2/weapon/icebolt2.wav", "Sound");
+//        soundManager.load("com/se/sem4/group2/weapon/icebolt3.wav", "Sound");
+//
+//        soundManager.load("com/se/sem4/group2/weapon/chargedbolt1.wav", "Sound");
+//        soundManager.load("com/se/sem4/group2/weapon/chargedbolt2.wav", "Sound");
+//        soundManager.load("com/se/sem4/group2/weapon/chargedbolt3.wav", "Sound");
+//    }
+//
+//    private void loadTextures(IAssetTextureService textureManager) {
+//        textureManager.load("com/se/sem4/group2/weapon/fireball.png", "Texture");
+//        textureManager.load("com/se/sem4/group2/weapon/icebolt.png", "Texture");
+//        textureManager.load("com/se/sem4/group2/weapon/chargedbolt.png", "Texture");
+//
+//    }
 
-        soundManager.load("com/se/sem4/group2/weapon/icebolt1.wav", "Sound");
-        soundManager.load("com/se/sem4/group2/weapon/icebolt2.wav", "Sound");
-        soundManager.load("com/se/sem4/group2/weapon/icebolt3.wav", "Sound");
-
-        soundManager.load("com/se/sem4/group2/weapon/chargedbolt1.wav", "Sound");
-        soundManager.load("com/se/sem4/group2/weapon/chargedbolt2.wav", "Sound");
-        soundManager.load("com/se/sem4/group2/weapon/chargedbolt3.wav", "Sound");
-    }
-
-    private void loadTextures(IAssetTextureService textureManager) {
-        textureManager.load("com/se/sem4/group2/weapon/fireball.png", "Texture");
-        textureManager.load("com/se/sem4/group2/weapon/icebolt.png", "Texture");
-        textureManager.load("com/se/sem4/group2/weapon/chargedbolt.png", "Texture");
-
-    }
-
-    private void randomSoundPlayer(IAssetAudioService soundManager, SpellType activeSpell) {
-
-        Random rng = new Random();
-        int rnd = rng.nextInt(3);
-        String path;
-
-        switch (activeSpell) {
-            default:
-                switch (rnd) {
-                    case 0:
-                        path = "com/se/sem4/group2/weapon/fireball1.wav";
-                        break;
-                    case 1:
-                        path = "com/se/sem4/group2/weapon/fireball2.wav";
-                        break;
-                    default:
-                        path = "com/se/sem4/group2/weapon/fireball3.wav";
-                        break;
-                }
-                break;
-            case ICEBOLT:
-                switch (rnd) {
-                    case 0:
-                        path = "com/se/sem4/group2/weapon/icebolt1.wav";
-                        break;
-                    case 1:
-                        path = "com/se/sem4/group2/weapon/icebolt2.wav";
-                        break;
-                    default:
-                        path = "com/se/sem4/group2/weapon/icebolt3.wav";
-                        break;
-                }
-                break;
-            case CHARGEDBOLT:
-                switch (rnd) {
-                    case 0:
-                        path = "com/se/sem4/group2/weapon/chargedbolt1.wav";
-                        break;
-                    case 1:
-                        path = "com/se/sem4/group2/weapon/chargedbolt2.wav";
-                        break;
-                    default:
-                        path = "com/se/sem4/group2/weapon/chargedbolt3.wav";
-                        break;
-                }
-                break;
-        }
-        soundManager.playSound(path);
-    }
+//    private void randomSoundPlayer(IAssetAudioService soundManager, SpellType activeSpell) {
+//
+//        Random rng = new Random();
+//        int rnd = rng.nextInt(3);
+//        String path;
+//
+//        switch (activeSpell) {
+//            default:
+//                switch (rnd) {
+//                    case 0:
+//                        path = "com/se/sem4/group2/weapon/fireball1.wav";
+//                        break;
+//                    case 1:
+//                        path = "com/se/sem4/group2/weapon/fireball2.wav";
+//                        break;
+//                    default:
+//                        path = "com/se/sem4/group2/weapon/fireball3.wav";
+//                        break;
+//                }
+//                break;
+//            case ICEBOLT:
+//                switch (rnd) {
+//                    case 0:
+//                        path = "com/se/sem4/group2/weapon/icebolt1.wav";
+//                        break;
+//                    case 1:
+//                        path = "com/se/sem4/group2/weapon/icebolt2.wav";
+//                        break;
+//                    default:
+//                        path = "com/se/sem4/group2/weapon/icebolt3.wav";
+//                        break;
+//                }
+//                break;
+//            case CHARGEDBOLT:
+//                switch (rnd) {
+//                    case 0:
+//                        path = "com/se/sem4/group2/weapon/chargedbolt1.wav";
+//                        break;
+//                    case 1:
+//                        path = "com/se/sem4/group2/weapon/chargedbolt2.wav";
+//                        break;
+//                    default:
+//                        path = "com/se/sem4/group2/weapon/chargedbolt3.wav";
+//                        break;
+//                }
+//                break;
+//        }
+//        soundManager.playSound(path);
+//    }
 
     private void fireSpell(SpellType activeSpell) {
         switch (activeSpell) {

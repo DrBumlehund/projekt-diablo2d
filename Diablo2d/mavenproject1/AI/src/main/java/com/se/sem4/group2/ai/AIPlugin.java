@@ -8,7 +8,6 @@ package com.se.sem4.group2.ai;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -20,7 +19,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class AIPlugin implements IGamePluginService {
 
     @Override
-    public void start(MetaData metaData, Map<String, Entity> world, IAssetTextureService assetManager) {
+    public void start(MetaData metaData, Map<String, Entity> world) {
         // TODO: start a new thread and slowly process the entities in "world".
         // TODO: add worldmap as a parameter on this start method
     }

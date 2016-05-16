@@ -9,23 +9,15 @@ import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.services.IMapPluginService;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Random;
 import java.net.URISyntaxException;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.zip.ZipEntry;
 import org.openide.util.lookup.ServiceProvider;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetService;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
-import java.util.ServiceLoader;
+
 
 /**
  *
@@ -36,15 +28,15 @@ public class MapPlugin implements IMapPluginService {
 
     private MetaData metaData;
     private WorldMap worldMap;
-    private IAssetTextureService assetManager;
+    
     private File file = new File("");
     private String pathToJars = (file.getAbsolutePath() + "/target/diablo2d/diablo2d/modules");
     private File modulesFolder = new File(pathToJars);
 
     @Override
-    public WorldMap start(MetaData metaData, IAssetTextureService assetManager) {
+    public WorldMap start(MetaData metaData) {
         this.metaData = metaData;
-        this.assetManager = assetManager;
+        
         try {
             this.worldMap = createMap();
         } catch (IOException | URISyntaxException ex) {
@@ -139,7 +131,7 @@ public class MapPlugin implements IMapPluginService {
         for (Integer x : map.keySet()) {
             for (Integer y : map.get(x).keySet()) {
                 Tile tile = map.get(x).get(y);
-                assetManager.load(tile.getSource(), "Texture");
+//TODO:                assetManager.load(tile.getSource(), "Texture");
             }
         }
     }

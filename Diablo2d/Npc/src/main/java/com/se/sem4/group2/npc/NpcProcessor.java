@@ -8,18 +8,13 @@ package com.se.sem4.group2.npc;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
-import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
-import com.se.sem4.group2.common.services.IGamePluginService;
 import java.awt.Point;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -30,7 +25,7 @@ import org.openide.util.lookup.ServiceProvider;
 public class NpcProcessor implements IEntityProcessingService {
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager, IAssetAudioService soundManager) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
         if (entity instanceof Entity) {
             if (entity.getType().equals(NPC)) {
 
