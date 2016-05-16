@@ -29,6 +29,8 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class NpcProcessor implements IEntityProcessingService {
 
+    private int divisor = 64;
+
     @Override
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager, IAssetAudioService soundManager) {
         if (entity instanceof Entity) {
@@ -65,7 +67,9 @@ public class NpcProcessor implements IEntityProcessingService {
                         theta += Math.PI;
 
                         if (path.size() > 0) {
-                            Point target = path.get(2);
+                            Point target = path.get(0);
+                            target.x = target.x * 64;
+                            target.y = target.y * 64;
 
                             float direction = (float) Math.atan2(y - target.getY(), x - target.getX());
                             direction += Math.PI;
@@ -86,8 +90,8 @@ public class NpcProcessor implements IEntityProcessingService {
                              */
                             if ((int) x == target.x && (int) y == target.y) {
                                 path.remove(0);
-                                path.remove(1);
-                                path.remove(2);
+//                                path.remove(1);
+//                                path.remove(2);
                             }
 
                             entity.setPos(x, y);
