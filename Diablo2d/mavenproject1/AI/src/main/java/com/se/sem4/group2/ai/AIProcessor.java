@@ -13,6 +13,7 @@ import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.services.IAIProcessingService;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
@@ -28,27 +29,10 @@ public class AIProcessor implements IAIProcessingService {
     private Point goal;
     private Point boundsX = new Point(0,0);
     private Point boundsY = new Point(0,0);
+    private int divisor = 64;
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, WorldMap worldMap) {
-        for (int x=worldMap.getxMin(); x<worldMap.getxMax(); x++) {
-            if (x >= boundsX.x && x <= boundsX.y)
-                continue; // We already loaded this data
-            for (int y=worldMap.getxMin(); y<worldMap.getxMax(); y++) {
-                if (y >= boundsY.x && y <= boundsY.y)
-                    continue; // We already loaded this data
-                Tile tile = worldMap.getTile(x, y);
-                if (tile == null)
-                    continue;
-                for (int i=1; i<64; i++) {
-                    pf.updateCell(x*64 + i, y*64 + i, tile.getSpeedModifier());
-                }
-            }
-        }
-        
-        boundsX = new Point(Math.min(boundsX.x, worldMap.getxMin()), Math.max(boundsX.y, worldMap.getxMax()));
-        boundsY = new Point(Math.min(boundsY.x, worldMap.getyMin()), Math.max(boundsY.y, worldMap.getyMax()));
-        
+    public void process(MetaData metaData, Map<String, Entity> world, WorldMap worldMap) {        
         for (Entity player : world.values()) {
             if (player.getType() == PLAYER) {
                 Point playerPos = new Point((int) player.getX(), (int) player.getY());
@@ -58,27 +42,49 @@ public class AIProcessor implements IAIProcessingService {
             }
         }
 
+        updateCellHash(worldMap);
+        
         for (Entity npc : world.values()) {
             if (npc.getType() == NPC) {
-                pf.updateStart((int) npc.getX(), (int) npc.getY());
-                pf.updateGoal((int) goal.x, (int) goal.y);
-                pf.replan();
-                npc.setPath(pf.getPathPoint());
+                // TODO: divide by map divisor
+//                pf.updateStart((int) npc.getX(), (int) npc.getY());
+//                pf.updateGoal((int) goal.x, (int) goal.y);
+//                pf.init((int) npc.getX(), (int) npc.getX(), (int) goal.x, (int) goal.y);
+
+                //pf.replan();
+                final List<Point> pathPoint = pf.getPathPoint();
+                pathPoint.clear();
+                pathPoint.add(new Point(goal.x/64, goal.y/64));
+                npc.setPath(pathPoint);
             }
         }
-
-//                List<Point> path = entity.getPath();
-        //path.clear();
-//                Point v = new Point((int)player.getX(), (int)player.getY());
-//                Point e = new Point((int)entity.getX(), (int)entity.getY());
-//                
-//                Point direction = new Point(v.x - e.x, v.y - e.y);
-//                double length = Math.sqrt((double)(direction.x * direction.x) + (double)(direction.y * direction.y));
-//                direction.x = (int)(direction.x / length);
-//                direction.y = (int)(direction.y / length);
-//                
-//                int stoppingDistance = 5;
-//                Point r = new Point(v.x - (stoppingDistance * direction.x), v.y - (stoppingDistance * direction.y));
-//                path.add(v);
     }
+
+    private void updateCellHash(WorldMap worldMap) {
+        for (int x=worldMap.getxMin(); x<worldMap.getxMax(); x++) {
+            if (x >= boundsX.x && x <= boundsX.y)
+                continue; // We already loaded this data
+            for (int y=worldMap.getyMin(); y<worldMap.getyMax(); y++) {
+                if (y >= boundsY.x && y <= boundsY.y)
+                    continue; // We already loaded this data
+                Tile tile = worldMap.getTile(x, y);
+                if (tile == null) {
+                    System.out.println("Didn't find a tile when updating cell hash!");
+                    continue;
+                }
+                
+                final float speedModifier = tile.getSpeedModifier();
+                pf.updateCell(x,y, speedModifier);
+//                for (int i=0; i<64/divisor; i++) {
+//                    final float speedModifier = tile.getSpeedModifier();
+//                    pf.updateCell(x + i, y + i, speedModifier);
+//                }
+            }
+        }
+        
+        boundsX = new Point(Math.min(boundsX.x, worldMap.getxMin()), Math.max(boundsX.y, worldMap.getxMax()));
+        boundsY = new Point(Math.min(boundsY.x, worldMap.getyMin()), Math.max(boundsY.y, worldMap.getyMax()));
+    }
+    
+    
 }
