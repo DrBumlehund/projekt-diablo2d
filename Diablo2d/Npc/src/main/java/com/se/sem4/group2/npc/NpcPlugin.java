@@ -91,12 +91,12 @@ public class NpcPlugin implements IGamePluginService {
         //Set Sprite, Weapon, Color
         world.put(n.getId(), n);
         
-        List<IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
-        for (IColliderService colliderService : colliderServices) {
-            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 20, 20);
-            Collider collider = new Collider(shape, n);
-            colliderService.start(n, collider);
-        }
+//        List<IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
+//        for (IColliderService colliderService : colliderServices) {
+//            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 20, 20);
+//            Collider collider = new Collider(shape, n);
+//            colliderService.start(n, collider);
+//        }
         
         return n;
     }

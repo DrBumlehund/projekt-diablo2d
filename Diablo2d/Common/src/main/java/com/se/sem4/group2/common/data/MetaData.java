@@ -24,6 +24,7 @@ import java.awt.Point;
  */
 public class MetaData {
 
+    private WorldMap worldMap;
     private float delta;
     private int displayWidth;
     private int displayHeight;
@@ -64,6 +65,14 @@ public class MetaData {
 
     public float getDelta() {
         return delta;
+    }
+
+    public WorldMap getWorldMap() {
+        return worldMap;
+    }
+
+    public void setWorldMap(WorldMap worldMap) {
+        this.worldMap = worldMap;
     }
 
 }

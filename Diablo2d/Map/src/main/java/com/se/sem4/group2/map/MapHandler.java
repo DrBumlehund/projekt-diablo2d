@@ -10,8 +10,8 @@ import com.se.sem4.group2.common.data.OpenSimplexNoise;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import java.io.File;
-import java.util.HashMap;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -21,12 +21,12 @@ public class MapHandler {
 
     MetaData metaData;
     private WorldMap worldMap;
-    Random r;
+    Random rng;
     OpenSimplexNoise noise;
 
     private MapHandler() {
-        r = new Random();
-        setNoiseSeed(r.nextLong());
+        rng = new Random();
+        setNoiseSeed(rng.nextLong());
     }
 
     private void setNoiseSeed(long seed) {
@@ -52,12 +52,9 @@ public class MapHandler {
         new Tile(path + "grass2.png", 1.4f)
     };
 
-    protected void setMetaData(MetaData metaData) {
+    protected void initialize(MetaData metaData) {
         this.metaData = metaData;
-    }
-
-    public void setWorldMap(WorldMap worldMap) {
-        this.worldMap = worldMap;
+        this.worldMap = metaData.getWorldMap();
     }
 
     protected WorldMap createMap() {
@@ -107,7 +104,7 @@ public class MapHandler {
         if (worldMap.getWorldMap().get(x) != null) {
             worldMap.getWorldMap().get(x).put(y, tile);
         } else {
-            worldMap.getWorldMap().put(x, new HashMap<>());
+            worldMap.getWorldMap().put(x, new ConcurrentHashMap<>());
             worldMap.getWorldMap().get(x).put(y, tile);
         }
     }
@@ -120,7 +117,7 @@ public class MapHandler {
         } else if (value <= WorldMap.MAX_WATER) { // WATER
             noiseTile = tileTypes[1];
         } else { // GRASS
-            int rnd = r.nextInt(3);
+            int rnd = rng.nextInt(3);
             switch (rnd) {
                 case 0:
                     noiseTile = tileTypes[2];
@@ -135,10 +132,6 @@ public class MapHandler {
         }
 //        System.out.println(noiseTile.getSource() + " x: " + x + ", y: " + y);
         return noiseTile;
-    }
-
-    protected void unloadMap() {
-        worldMap.clearMap();
     }
 
 }

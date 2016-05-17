@@ -200,11 +200,11 @@ public class WeaponProcessor implements IEntityProcessingService {
         spell.setLifeTimer(0);
         world.put(spell.getId(), spell);
 
-        for (IColliderService colliderService : getColliderServices()) {
-            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
-            Collider collider = new Collider(shape, spell);
-            colliderService.start(spell, collider);
-        }
+//        for (IColliderService colliderService : getColliderServices()) {
+//            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
+//            Collider collider = new Collider(shape, spell);
+//            colliderService.start(spell, collider);
+//        }
     }
 
     private List<IColliderService> getColliderServices() {

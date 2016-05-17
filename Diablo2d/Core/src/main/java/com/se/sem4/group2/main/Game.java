@@ -54,17 +54,15 @@ import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import static com.se.sem4.group2.common.data.EntityType.SPELL;
 import com.se.sem4.group2.managers.JarFileResolver;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Game implements ApplicationListener {
 
     private OrthographicCamera cam;
-
     private ShapeRenderer sr;
-
     private final MetaData metaData = new MetaData();
     private final List<IEntityProcessingService> entityProcessors = new ArrayList<>();
     private Map<String, Entity> world = new ConcurrentHashMap<>();
-    private WorldMap worldMap;
     private SpriteBatch batch;
     private List<IGamePluginService> gamePlugins;
     private List<IMapPluginService> mapPlugins;
@@ -72,12 +70,12 @@ public class Game implements ApplicationListener {
     Lookup.Result<IGamePluginService> result;
     Lookup.Result<IMapPluginService> result2;
 
-    private AssetManager assMan;
+    private AssetManager am;
 
     @Override
     public void create() {
 
-        assMan = new AssetManager(new JarFileResolver());
+        am = new AssetManager(new JarFileResolver());
 
         //aP.playMusic("com/se/sem4/group2/core/tristram.mp3");
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
@@ -99,23 +97,21 @@ public class Game implements ApplicationListener {
 //        );
         result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
-        gamePlugins = new ArrayList<>(result.allInstances());
+        gamePlugins = new CopyOnWriteArrayList<>(result.allInstances());
         result.allItems();
 
         result2 = lookup.lookupResult(IMapPluginService.class);
         result2.addLookupListener(lookupListener);
-        mapPlugins = new ArrayList<>(result2.allInstances());
+        mapPlugins = new CopyOnWriteArrayList<>(result2.allInstances());
         result2.allItems();
 
         // Lookup all Game Plugins using ServiceLoader
-        for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.start(metaData, world);
-        }
-
-        for (IMapPluginService mapPlugin : getMapPluginServices()) {
-            worldMap = mapPlugin.start(metaData);
-        }
-
+//        for (IGamePluginService iGamePlugin : getPluginServices()) {
+//            iGamePlugin.start(metaData, world);
+//        }
+//        for (IMapPluginService mapPlugin : getMapPluginServices()) {
+//            worldMap = mapPlugin.start(metaData);
+//        }
     }
 
     @Override
@@ -126,12 +122,8 @@ public class Game implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         metaData.setDelta(Gdx.graphics.getDeltaTime());
-        sr.setProjectionMatrix(cam.combined);
-        batch.setProjectionMatrix(cam.combined);
 
         update();
-
-        cam.update();
 
         draw();
 
@@ -139,28 +131,24 @@ public class Game implements ApplicationListener {
     }
 
     private void update() {
-
         // Process entities
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
-            for (Entity e : world.values()) {
-                entityProcessorService.process(metaData, world, e);
-                if (e.getType() == EntityType.PLAYER) {
-                    cam.position.set(new Vector3((float) e.getX(), (float) e.getY(), 1f));
-                }
+            for (Entity entity : world.values()) {
+                entityProcessorService.process(metaData, world, entity);
             }
         }
+        cam.update();
 
         for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
-            mapProcesser.process(cam.position.x, cam.position.y, worldMap);
+            mapProcesser.process(cam.position.x, cam.position.y, metaData.getWorldMap());
         }
 
-        for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
-            colliderProcessingService.process();
-        }
-
+//        for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
+//            colliderProcessingService.process();
+//        }
         for (IAIProcessingService service : getAIProcessingServices()) {
             for (Entity e : world.values()) {
-                service.process(metaData, world, worldMap);
+                service.process(metaData, world, metaData.getWorldMap());
             }
         }
 
@@ -168,6 +156,7 @@ public class Game implements ApplicationListener {
 
     private void draw() {
 
+        //batch.setProjectionMatrix(cam.combined);
         drawMap();
 
         drawEntities();
@@ -175,24 +164,23 @@ public class Game implements ApplicationListener {
     }
 
     private void drawMap() {
-        if (worldMap != null) {
+        if (metaData.getWorldMap() != null) {
+            WorldMap worldMap = metaData.getWorldMap();
+
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
             int yMax = worldMap.getyMax();
             int yMin = worldMap.getyMin();
 
-            if (worldMap.getMap().isEmpty()) {
-                worldMap = null;
-                return;
-            }
-
             for (int x = xMin; x < xMax + 1; x++) {
                 for (int y = yMin; y < yMax + 1; y++) {
                     Tile tile = worldMap.getTile(x, y);
-
+                    if (tile == null) {
+                        return;
+                    }
                     loadTexture(tile.getSource());
 
-                    Texture texture = assMan.get(tile.getSource(), Texture.class);
+                    Texture texture = am.get(tile.getSource(), Texture.class);
                     if (texture == null) {
                         System.out.println("Error: Texture was null while attempting to draw map: " + tile.getSource());
                         loadTexture(tile.getSource());
@@ -204,22 +192,28 @@ public class Game implements ApplicationListener {
 
                 }
             }
-        } else {
-            // if worldmap is null (if the map hasn't been loaded yet.)
-            for (IMapPluginService mapPlugin : getMapPluginServices()) {
-                worldMap = mapPlugin.start(metaData);
+
+            if (worldMap.getMap().isEmpty()) {
+                System.out.println("MAP EMPTY!");
+                metaData.setWorldMap(null);
             }
         }
     }
 
     private void drawEntities() {
         for (Entity entity : world.values()) {
+
+            if (entity.getType() == EntityType.PLAYER) {
+                cam.position.set(new Vector3((float) entity.getX(), (float) entity.getY(), 1f));
+                System.out.println("Cam position changed to " + cam.projection.toString());
+            }
+
             loadTexture(entity.getTexturePath());
 
             batch.setProjectionMatrix(cam.combined);
             batch.begin();
             //System.out.println(path);
-            Texture tex = assMan.get(entity.getTexturePath(), Texture.class);
+            Texture tex = am.get(entity.getTexturePath(), Texture.class);
             Sprite sprite = new Sprite(tex);
             sprite.setSize((int) entity.getRadius() * 2, (int) entity.getRadius() * 2);
 
@@ -255,23 +249,23 @@ public class Game implements ApplicationListener {
     }
 
     private void loadTexture(String path) {
-        if (!assMan.isLoaded(path)) {
-            assMan.load(path, Texture.class);
-            assMan.finishLoading();
+        if (!am.isLoaded(path)) {
+            am.load(path, Texture.class);
+            am.finishLoading();
         }
     }
 
     private void loadSound(String path) {
-        if (!assMan.isLoaded(path)) {
-            assMan.load(path, Sound.class);
-            assMan.finishLoading();
+        if (!am.isLoaded(path)) {
+            am.load(path, Sound.class);
+            am.finishLoading();
         }
     }
 
     private void loadMusic(String path) {
-        if (!assMan.isLoaded(path)) {
-            assMan.load(path, Music.class);
-            assMan.finishLoading();
+        if (!am.isLoaded(path)) {
+            am.load(path, Music.class);
+            am.finishLoading();
         }
     }
 
@@ -291,32 +285,31 @@ public class Game implements ApplicationListener {
 
     @Override
     public void dispose() {
-//        centipede.dispose();
+        // Disposes all assets.
+        am.dispose();
     }
 
-    private Collection<? extends IGamePluginService> getPluginServices() {
-        return SPILocator.locateAll(IGamePluginService.class);
-    }
-
-    private Collection<? extends IMapPluginService> getMapPluginServices() {
-        return SPILocator.locateAll(IMapPluginService.class);
-    }
-
+//    private Collection<? extends IGamePluginService> getPluginServices() {
+//        return SPILocator.locateAll(IGamePluginService.class);
+//    }
+//    private Collection<? extends IMapPluginService> getMapPluginServices() {
+//        return SPILocator.locateAll(IMapPluginService.class);
+//    }
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
         return SPILocator.locateAll(IEntityProcessingService.class);
     }
-
-    private Collection<? extends IColliderService> getColliderServices() {
-        return SPILocator.locateAll(IColliderService.class);
-    }
+//
+//    private Collection<? extends IColliderService> getColliderServices() {
+//        return SPILocator.locateAll(IColliderService.class);
+//    }
 
     private Collection<? extends IMapProcessingService> getMapProcessingServices() {
         return SPILocator.locateAll(IMapProcessingService.class);
     }
-
-    private Collection<? extends IColliderProcessingService> getColliderProcessingServices() {
-        return SPILocator.locateAll(IColliderProcessingService.class);
-    }
+//
+//    private Collection<? extends IColliderProcessingService> getColliderProcessingServices() {
+//        return SPILocator.locateAll(IColliderProcessingService.class);
+//    }
 
     private Iterable<IAIProcessingService> getAIProcessingServices() {
         return SPILocator.locateAll(IAIProcessingService.class);
@@ -344,25 +337,23 @@ public class Game implements ApplicationListener {
                 }
             }
 
-            Collection<? extends IMapPluginService> updated2 = result2.allInstances();
-
-            for (IMapPluginService us : updated2) {
-                // Newly installed modules
-                if (!mapPlugins.contains(us)) {
-                    us.start(metaData);
-                    mapPlugins.add(us);
-                }
-            }
-
-            // Stop and remove module
-            for (IMapPluginService gs : mapPlugins) {
-                if (!updated2.contains(gs)) {
-                    gs.stop(metaData);
-                    mapPlugins.remove(gs);
-                }
-            }
+//            Collection<? extends IMapPluginService> updated2 = result2.allInstances();
+//
+//            for (IMapPluginService us : updated2) {
+//                // Newly installed modules
+//                if (!mapPlugins.contains(us)) {
+//                    us.start(metaData);
+//                    mapPlugins.add(us);
+//                }
+//                // Stop and remove module
+//                for (IMapPluginService gs : mapPlugins) {
+//                    if (!updated2.contains(gs)) {
+//                        gs.stop(metaData);
+//                        mapPlugins.remove(gs);
+//                    }
+//                }
+//
+//            }
         }
-
     };
-
 }

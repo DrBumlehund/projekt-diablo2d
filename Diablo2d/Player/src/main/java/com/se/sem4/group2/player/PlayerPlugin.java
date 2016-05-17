@@ -39,16 +39,12 @@ public class PlayerPlugin implements IGamePluginService {
 
     private Map<String, Entity> world;
     private Entity player;
-    //private IAssetTextureService assetManager;
-
-    public PlayerPlugin() {
-    }
 
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
         this.world = world;
-        player = createPlayer(metaData);
-        world.put(player.getId(), player);
+        this.player = createPlayer(metaData);
+        world.put(this.player.getId(), this.player);
     }
 
     private Entity createPlayer(MetaData metaData) {
@@ -69,12 +65,11 @@ public class PlayerPlugin implements IGamePluginService {
 
         newPlayer.setActiveSpell(SpellType.FIREBALL);
 
-        List<IColliderService> colliderServices = SPILocator.locateAll(IColliderService.class);
-        for (IColliderService colliderService : colliderServices) {
-            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, newPlayer.getRadius(), newPlayer.getRadius());
-            Collider collider = new Collider(shape, newPlayer);
-            colliderService.start(newPlayer, collider);
-        }
+//        for (IColliderService colliderService : getColliderServices()) {
+//            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, newPlayer.getRadius(), newPlayer.getRadius());
+//            Collider collider = new Collider(shape, newPlayer);
+//            colliderService.start(newPlayer, collider);
+//        }
 
         //Set Sprite, Weapon, Color
         String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
@@ -85,10 +80,14 @@ public class PlayerPlugin implements IGamePluginService {
 
     @Override
     public void stop(MetaData metaData) {
-        world.remove(player.getId());
+        if (this.world != null) {
+            this.world.remove(player.getId());
+        } else {
+            System.out.println("Player doesn't exist");
+        }
     }
 
-    private IColliderService getColliderService() {
-        return SPILocator.locateFirst(IColliderService.class);
+    private List<IColliderService> getColliderServices() {
+        return SPILocator.locateAll(IColliderService.class);
     }
 }

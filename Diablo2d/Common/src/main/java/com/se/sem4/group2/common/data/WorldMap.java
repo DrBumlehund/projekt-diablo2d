@@ -17,6 +17,7 @@
 package com.se.sem4.group2.common.data;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -26,11 +27,11 @@ public class WorldMap {
 
     public static final double FEATURE_SIZE = 12;
 
-    public HashMap<Integer, HashMap<Integer, Tile>> getWorldMap() {
+    public ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Tile>> getWorldMap() {
         return worldMap;
     }
 
-    private final HashMap<Integer, HashMap<Integer, Tile>> worldMap;
+    private final ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Tile>> worldMap;
 
     //private final Random random;
     public static long DEFAULT_SEED = 0;
@@ -47,8 +48,9 @@ public class WorldMap {
     private int yMax;
 
     public WorldMap(int width, int height) {
+        this.worldMap = new ConcurrentHashMap<>();
         //random = new Random(seed);
-        worldMap = new HashMap<>();
+
         this.xMin = -DEFAULT_BUFFERZONE;
         this.yMin = -DEFAULT_BUFFERZONE;
         this.xMax = width / DEFAULT_TILE_SIZE + DEFAULT_BUFFERZONE;
@@ -57,7 +59,7 @@ public class WorldMap {
 
     public Tile getTile(int x, int y) {
         if (x >= xMin && x <= xMax && y >= yMin && y <= yMax) {
-            HashMap<Integer, Tile> yAxis = worldMap.get(x);
+            ConcurrentHashMap<Integer, Tile> yAxis = worldMap.get(x);
             return yAxis.get(y);
         }
         return null;
@@ -70,7 +72,7 @@ public class WorldMap {
         return getTile(x, y);
     }
 
-    public HashMap<Integer, HashMap<Integer, Tile>> getMap() {
+    public ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Tile>> getMap() {
         return worldMap;
     }
 
@@ -115,5 +117,5 @@ public class WorldMap {
         yMin = tmp;
         worldMap.clear();
     }
-    
+
 }
