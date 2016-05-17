@@ -16,14 +16,12 @@
  */
 package com.se.sem4.group2.player;
 
-import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.SpellType;
 import com.se.sem4.group2.common.data.util.SPILocator;
-import java.awt.geom.Ellipse2D;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 import com.se.sem4.group2.common.services.IColliderService;
@@ -43,8 +41,8 @@ public class PlayerPlugin implements IGamePluginService {
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
         this.world = world;
-        this.player = createPlayer(metaData);
-        world.put(this.player.getId(), this.player);
+        player = createPlayer(metaData);
+        world.put(player.getId(), player);
     }
 
     private Entity createPlayer(MetaData metaData) {
@@ -65,12 +63,6 @@ public class PlayerPlugin implements IGamePluginService {
 
         newPlayer.setActiveSpell(SpellType.FIREBALL);
 
-//        for (IColliderService colliderService : getColliderServices()) {
-//            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, newPlayer.getRadius(), newPlayer.getRadius());
-//            Collider collider = new Collider(shape, newPlayer);
-//            colliderService.start(newPlayer, collider);
-//        }
-
         //Set Sprite, Weapon, Color
         String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
 
@@ -80,14 +72,10 @@ public class PlayerPlugin implements IGamePluginService {
 
     @Override
     public void stop(MetaData metaData) {
-        if (this.world != null) {
-            this.world.remove(player.getId());
+        if (world != null) {
+            world.remove(player.getId());
         } else {
-            System.out.println("Player doesn't exist");
+            System.out.println("World is null in PlayerPlugin");
         }
-    }
-
-    private List<IColliderService> getColliderServices() {
-        return SPILocator.locateAll(IColliderService.class);
     }
 }

@@ -8,8 +8,10 @@ package com.se.sem4.group2.collider;
 import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
 import java.awt.geom.Ellipse2D;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -36,7 +38,7 @@ public class ColliderHandler {
         colliders.put(collider.getTransform().getId(), collider);
     }
 
-    protected void RemoveCollider(String key) {
+    protected void removeCollider(String key) {
         if (!colliders.containsKey(key)) {
             return;
         }
@@ -54,6 +56,14 @@ public class ColliderHandler {
             }
         }
         return true;
+    }
+
+    protected void removeExcessColliders(Map<String, Entity> world) {
+        for (Collider col : colliders.values()) {
+            if(!world.containsKey(col.getTransform().getId())){
+                removeCollider(col.getTransform().getId());
+            }
+        }
     }
 
     protected void addCollidersToEntities(Map<String, Entity> world) {

@@ -19,7 +19,9 @@ package com.se.sem4.group2.common.data;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -27,7 +29,7 @@ import java.util.List;
  */
 public class Entity extends Transform {
 
-    //TODO: Tilføj sprite/billede/form...
+
     private float dx;
     private float dy;
     private float radians;
@@ -40,8 +42,9 @@ public class Entity extends Transform {
     private float lifeTime;
     private float lifeTimer;
     private SpellType activeSpell;
+    private List<String> soundPaths = new CopyOnWriteArrayList<>();
 
-    private List<Point> path = new ArrayList<>();
+    private List<Point> path = new CopyOnWriteArrayList<>();
 
     public String getTexturePath() {
         return texturePath;
@@ -157,5 +160,14 @@ public class Entity extends Transform {
 
     public void setActiveSpell(SpellType activeSpell) {
         this.activeSpell = activeSpell;
+    }
+
+    public List<String> getSoundPaths() {
+        return soundPaths;
+    }
+
+    public void setSoundPaths(String[] soundPaths) {
+        this.soundPaths = new ArrayList<>();
+        this.soundPaths.addAll(Arrays.asList(soundPaths));
     }
 }

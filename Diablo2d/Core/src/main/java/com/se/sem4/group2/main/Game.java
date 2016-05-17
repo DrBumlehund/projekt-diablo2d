@@ -20,7 +20,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.backends.lwjgl.audio.Ogg.Sound;
+import com.badlogic.gdx.audio.Sound;
 //import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,11 +37,8 @@ import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
 import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IAIProcessingService;
-import com.se.sem4.group2.common.services.IColliderProcessingService;
-import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
-import com.se.sem4.group2.common.services.IMapPluginService;
 import com.se.sem4.group2.common.services.IMapProcessingService;
 import com.se.sem4.group2.managers.GameInputProcessor;
 import java.util.ArrayList;
@@ -53,100 +50,79 @@ import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import static com.se.sem4.group2.common.data.EntityType.SPELL;
+import com.se.sem4.group2.common.data.GameEvent;
 import com.se.sem4.group2.managers.JarFileResolver;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Game implements ApplicationListener {
 
     private OrthographicCamera cam;
     private ShapeRenderer sr;
-    private final MetaData metaData = new MetaData();
-    private final List<IEntityProcessingService> entityProcessors = new ArrayList<>();
-    private Map<String, Entity> world = new ConcurrentHashMap<>();
     private SpriteBatch batch;
-    private List<IGamePluginService> gamePlugins;
-    private List<IMapPluginService> mapPlugins;
     private final Lookup lookup = Lookup.getDefault();
+    private final MetaData metaData = new MetaData();
+    private Map<String, Entity> world = new ConcurrentHashMap<>();
+    private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
     Lookup.Result<IGamePluginService> result;
-    Lookup.Result<IMapPluginService> result2;
+    Random rng = new Random();
 
-    private AssetManager am;
+    // Assetmanager stuff:
+    private final JarFileResolver jfr = new JarFileResolver();
+    private final AssetManager am = new AssetManager(jfr);
 
     @Override
     public void create() {
-
-        am = new AssetManager(new JarFileResolver());
-
-        //aP.playMusic("com/se/sem4/group2/core/tristram.mp3");
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
         cam = new OrthographicCamera(metaData.getDisplayWidth(), metaData.getDisplayHeight());
+        cam.translate(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         cam.update();
 
         sr = new ShapeRenderer();
         batch = new SpriteBatch();
 
-        Gdx.input.setInputProcessor(
-                new GameInputProcessor(metaData)
-        );
-
-        //TODO: FIX CONTROLLER LISTENER ... 
-//        Controllers.addListener(
-//                new GameControllerInputProcessor(metaData)
-//        );
+        Gdx.input.setInputProcessor(new GameInputProcessor(metaData));
+        
         result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
-        gamePlugins = new CopyOnWriteArrayList<>(result.allInstances());
         result.allItems();
-
-        result2 = lookup.lookupResult(IMapPluginService.class);
-        result2.addLookupListener(lookupListener);
-        mapPlugins = new CopyOnWriteArrayList<>(result2.allInstances());
-        result2.allItems();
-
-        // Lookup all Game Plugins using ServiceLoader
-//        for (IGamePluginService iGamePlugin : getPluginServices()) {
-//            iGamePlugin.start(metaData, world);
-//        }
-//        for (IMapPluginService mapPlugin : getMapPluginServices()) {
-//            worldMap = mapPlugin.start(metaData);
-//        }
     }
 
     @Override
     public void render() {
-
         // clear screen to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        batch.setProjectionMatrix(cam.combined);
+        sr.setProjectionMatrix(cam.combined);
 
         metaData.setDelta(Gdx.graphics.getDeltaTime());
-
-        update();
-
-        draw();
-
         metaData.getKeys().update();
+        
+        update();
+        draw();
+        playSounds();
     }
 
     private void update() {
         // Process entities
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
+//            System.out.println(entityProcessorService.getClass());
             for (Entity entity : world.values()) {
                 entityProcessorService.process(metaData, world, entity);
             }
         }
-        cam.update();
 
         for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
+//            System.out.println(mapProcesser.getClass());
             mapProcesser.process(cam.position.x, cam.position.y, metaData.getWorldMap());
         }
 
-//        for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
-//            colliderProcessingService.process();
-//        }
         for (IAIProcessingService service : getAIProcessingServices()) {
+//            System.out.println(service.getClass());
             for (Entity e : world.values()) {
                 service.process(metaData, world, metaData.getWorldMap());
             }
@@ -155,12 +131,9 @@ public class Game implements ApplicationListener {
     }
 
     private void draw() {
-
         //batch.setProjectionMatrix(cam.combined);
         drawMap();
-
         drawEntities();
-
     }
 
     private void drawMap() {
@@ -205,8 +178,8 @@ public class Game implements ApplicationListener {
 
             if (entity.getType() == EntityType.PLAYER) {
                 cam.position.set(new Vector3((float) entity.getX(), (float) entity.getY(), 1f));
-                System.out.println("Cam position changed to " + cam.projection.toString());
             }
+            cam.update();
 
             loadTexture(entity.getTexturePath());
 
@@ -245,6 +218,26 @@ public class Game implements ApplicationListener {
                 sr.end();
             }
 
+        }
+    }
+
+    private void playSounds() {
+        List<GameEvent> soundEvents = metaData.getGameEvents();
+        if (!soundEvents.isEmpty()) {
+            for (Entity entity : world.values()) {
+                if (!entity.getSoundPaths().isEmpty()) {
+                    for (GameEvent ge : soundEvents) {
+                        int index = rng.nextInt(entity.getSoundPaths().size());
+                        String path = entity.getSoundPaths().get(index);
+                        loadSound(path);
+
+                        Sound sound = am.get(path, Sound.class);
+                        sound.play();
+
+                        soundEvents.remove(ge);
+                    }
+                }
+            }
         }
     }
 
@@ -289,30 +282,16 @@ public class Game implements ApplicationListener {
         am.dispose();
     }
 
-//    private Collection<? extends IGamePluginService> getPluginServices() {
-//        return SPILocator.locateAll(IGamePluginService.class);
-//    }
-//    private Collection<? extends IMapPluginService> getMapPluginServices() {
-//        return SPILocator.locateAll(IMapPluginService.class);
-//    }
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return SPILocator.locateAll(IEntityProcessingService.class);
+        return lookup.lookupAll(IEntityProcessingService.class);
     }
-//
-//    private Collection<? extends IColliderService> getColliderServices() {
-//        return SPILocator.locateAll(IColliderService.class);
-//    }
 
     private Collection<? extends IMapProcessingService> getMapProcessingServices() {
-        return SPILocator.locateAll(IMapProcessingService.class);
+        return lookup.lookupAll(IMapProcessingService.class);
     }
-//
-//    private Collection<? extends IColliderProcessingService> getColliderProcessingServices() {
-//        return SPILocator.locateAll(IColliderProcessingService.class);
-//    }
 
-    private Iterable<IAIProcessingService> getAIProcessingServices() {
-        return SPILocator.locateAll(IAIProcessingService.class);
+    private Collection<? extends IAIProcessingService> getAIProcessingServices() {
+        return lookup.lookupAll(IAIProcessingService.class);
     }
 
     private final LookupListener lookupListener = new LookupListener() {
@@ -336,24 +315,6 @@ public class Game implements ApplicationListener {
                     gamePlugins.remove(gs);
                 }
             }
-
-//            Collection<? extends IMapPluginService> updated2 = result2.allInstances();
-//
-//            for (IMapPluginService us : updated2) {
-//                // Newly installed modules
-//                if (!mapPlugins.contains(us)) {
-//                    us.start(metaData);
-//                    mapPlugins.add(us);
-//                }
-//                // Stop and remove module
-//                for (IMapPluginService gs : mapPlugins) {
-//                    if (!updated2.contains(gs)) {
-//                        gs.stop(metaData);
-//                        mapPlugins.remove(gs);
-//                    }
-//                }
-//
-//            }
         }
     };
 }

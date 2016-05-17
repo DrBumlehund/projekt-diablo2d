@@ -22,7 +22,11 @@ public class ColliderProcessor implements IEntityProcessingService {
     @Override
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
         // Adds Colliders to new entities.
+        ColliderHandler.getInstance().removeExcessColliders(world);
+        
         ColliderHandler.getInstance().addCollidersToEntities(world);
+        
+        
         
         Map<String, Collider> colliders = ColliderHandler.getInstance().GetColliders();
         for (Map.Entry<String, Collider> collider : colliders.entrySet()) {

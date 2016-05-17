@@ -327,7 +327,7 @@ public final class UpdateHandler {
     static Installer doVerify(InstallSupport support, Validator validator) throws OperationException {
 
         Installer installer = support.doValidate(validator, null); // validates all plugins are correctly downloaded
-        // XXX: use there methods to make sure updates are signed and trusted
+        // XXX: use these methods to make sure updates are signed and trusted
         // installSupport.isSigned(installer, <an update element>);
         // installSupport.isTrusted(installer, <an update element>);
         return installer;

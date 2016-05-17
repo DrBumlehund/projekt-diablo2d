@@ -5,7 +5,6 @@
  */
 package com.se.sem4.group2.weapon;
 
-import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
@@ -15,12 +14,13 @@ import com.se.sem4.group2.common.data.SpellType;
 import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
-import java.awt.geom.Ellipse2D;
 import java.util.Collection;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 import static com.se.sem4.group2.common.data.EntityType.SPELL;
+import com.se.sem4.group2.common.data.GameEvent;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,7 +51,7 @@ public class WeaponProcessor implements IEntityProcessingService {
                 if (value.getType() == PLAYER) {
                     player = value;
                     activeSpell = player.getActiveSpell();
-                    fireSpell(world, player);
+                    fireSpell(world, player, metaData);
                 }
             }
         }
@@ -60,11 +60,8 @@ public class WeaponProcessor implements IEntityProcessingService {
 
             // Removes the bullet if certain conditions is met.
             if (entity.getLifeTime() < entity.getLifeTimer() || entity.isColided() || entity.isDead()) {
+                // TODO: propperly dispose Entity in Weapon.
                 world.remove(entity.getId());
-                for (IColliderService coliderService : getColliderServices()) {
-                    coliderService.stop(entity);
-                }
-
             }
 
             float x = entity.getX();
@@ -83,131 +80,71 @@ public class WeaponProcessor implements IEntityProcessingService {
 
     }
 
-//    private void loadSounds(IAssetAudioService soundManager) {
-//        soundManager.load("com/se/sem4/group2/weapon/fireball1.wav", "Sound");
-//        soundManager.load("com/se/sem4/group2/weapon/fireball2.wav", "Sound");
-//        soundManager.load("com/se/sem4/group2/weapon/fireball3.wav", "Sound");
-//
-//        soundManager.load("com/se/sem4/group2/weapon/icebolt1.wav", "Sound");
-//        soundManager.load("com/se/sem4/group2/weapon/icebolt2.wav", "Sound");
-//        soundManager.load("com/se/sem4/group2/weapon/icebolt3.wav", "Sound");
-//
-//        soundManager.load("com/se/sem4/group2/weapon/chargedbolt1.wav", "Sound");
-//        soundManager.load("com/se/sem4/group2/weapon/chargedbolt2.wav", "Sound");
-//        soundManager.load("com/se/sem4/group2/weapon/chargedbolt3.wav", "Sound");
-//    }
-//
-//    private void loadTextures(IAssetTextureService textureManager) {
-//        textureManager.load("com/se/sem4/group2/weapon/fireball.png", "Texture");
-//        textureManager.load("com/se/sem4/group2/weapon/icebolt.png", "Texture");
-//        textureManager.load("com/se/sem4/group2/weapon/chargedbolt.png", "Texture");
-//
-//    }
-//    private void randomSoundPlayer(IAssetAudioService soundManager, SpellType activeSpell) {
-//
-//        Random rng = new Random();
-//        int rnd = rng.nextInt(3);
-//        String path;
-//
-//        switch (activeSpell) {
-//            default:
-//                switch (rnd) {
-//                    case 0:
-//                        path = "com/se/sem4/group2/weapon/fireball1.wav";
-//                        break;
-//                    case 1:
-//                        path = "com/se/sem4/group2/weapon/fireball2.wav";
-//                        break;
-//                    default:
-//                        path = "com/se/sem4/group2/weapon/fireball3.wav";
-//                        break;
-//                }
-//                break;
-//            case ICEBOLT:
-//                switch (rnd) {
-//                    case 0:
-//                        path = "com/se/sem4/group2/weapon/icebolt1.wav";
-//                        break;
-//                    case 1:
-//                        path = "com/se/sem4/group2/weapon/icebolt2.wav";
-//                        break;
-//                    default:
-//                        path = "com/se/sem4/group2/weapon/icebolt3.wav";
-//                        break;
-//                }
-//                break;
-//            case CHARGEDBOLT:
-//                switch (rnd) {
-//                    case 0:
-//                        path = "com/se/sem4/group2/weapon/chargedbolt1.wav";
-//                        break;
-//                    case 1:
-//                        path = "com/se/sem4/group2/weapon/chargedbolt2.wav";
-//                        break;
-//                    default:
-//                        path = "com/se/sem4/group2/weapon/chargedbolt3.wav";
-//                        break;
-//                }
-//                break;
-//        }
-//        soundManager.playSound(path);
-//    }
-    
-    public void fireSpell(Map<String, Entity> world, Entity player) {
+    String soundPath = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Weapon.jar!/assets/sounds/");
+    String[] fireballSounds = {
+        soundPath + "fireball1.wav",
+        soundPath + "fireball2.wav",
+        soundPath + "fireball3.wav"
+    };
+    String[] iceboltSounds = {
+        soundPath + "icebolt1.wav",
+        soundPath + "icebolt2.wav",
+        soundPath + "icebolt3.wav"
+    };
+    String[] chargedboltSounds = {
+        soundPath + "chargedbolt1.wav",
+        soundPath + "chargedbolt2.wav",
+        soundPath + "chargedbolt3.wav"
+    };
+
+    public void fireSpell(Map<String, Entity> world, Entity player, MetaData metaData) {
         Entity spell = new Entity();
         spell.setType(SPELL);
         spell.setName("Fireball");
         spell.setRadius(RADIUS);
         spell.setRadians(player.getRadians());
-        spell.setTexturePath("com/se/sem4/group2/weapon/fireball.png");
 
         float offset = player.getRadius() + 2 + RADIUS;
         spell.setX((float) (player.getX() + Math.cos(player.getRadians()) * offset));
         spell.setY((float) (player.getY() + Math.sin(player.getRadians()) * offset));
 
-        
-
         String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Weapon.jar!/assets/images/");
         switch (player.getActiveSpell()) {
             default:
-                // default fires a fireball... (no break;)
+            // default fires a fireball... (no break;)
             case FIREBALL:
                 path += "fireball.png";
                 spell.setMaxSpeed(350);
                 spell.setMaxDamage(250);
                 spell.setMinDamage(150);
+                spell.setSoundPaths(fireballSounds);
+                metaData.getGameEvents().add(GameEvent.FIREBALL_SHOT);
                 break;
             case ICEBOLT:
                 path += "icebolt.png";
                 spell.setMaxSpeed(450);
                 spell.setMaxDamage(150);
                 spell.setMinDamage(75);
+                spell.setSoundPaths(iceboltSounds);
+                metaData.getGameEvents().add(GameEvent.ICEBOLT_SHOT);
                 break;
             case CHARGEDBOLT:
                 path += "chargedbolt.png";
                 spell.setMaxSpeed((float) (player.getMaxSpeed() * Math.random() + player.getMaxSpeed()));
                 spell.setMaxDamage(1100);
                 spell.setMinDamage(70);
+                spell.setSoundPaths(chargedboltSounds);
+                metaData.getGameEvents().add(GameEvent.CHARGEDBOLT_SHOT);
                 break;
         }
-        
+
         spell.setDx((float) (Math.cos(player.getRadians()) * spell.getMaxSpeed()));
         spell.setDy((float) (Math.sin(player.getRadians()) * spell.getMaxSpeed()));
-        
+
         spell.setMaxHealth(1); // spells needs to die in first hit.
         spell.setTexturePath(path);
         spell.setLifeTime(2);
         spell.setLifeTimer(0);
         world.put(spell.getId(), spell);
-
-//        for (IColliderService colliderService : getColliderServices()) {
-//            Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, RADIUS * 2, RADIUS * 2);
-//            Collider collider = new Collider(shape, spell);
-//            colliderService.start(spell, collider);
-//        }
-    }
-
-    private List<IColliderService> getColliderServices() {
-        return SPILocator.locateAll(IColliderService.class);
     }
 }

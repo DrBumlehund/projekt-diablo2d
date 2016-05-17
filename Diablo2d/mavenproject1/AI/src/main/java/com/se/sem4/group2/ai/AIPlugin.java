@@ -22,6 +22,7 @@ public class AIPlugin implements IGamePluginService {
     public void start(MetaData metaData, Map<String, Entity> world) {
         // TODO: start a new thread and slowly process the entities in "world".
         // TODO: add worldmap as a parameter on this start method
+        //          XXX: Worldmap ligger nu i MetaData.
     }
 
     @Override

@@ -32,7 +32,7 @@ public class ColliderPluginService implements IGamePluginService {
     public void stop(MetaData metaData) {
         if (world != null) {
             for (Entity e : world.values()) {
-                ColliderHandler.getInstance().RemoveCollider(e.getId());
+                ColliderHandler.getInstance().removeCollider(e.getId());
             }
         }
     }

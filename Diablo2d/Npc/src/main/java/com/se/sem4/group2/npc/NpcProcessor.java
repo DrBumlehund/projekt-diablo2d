@@ -32,8 +32,8 @@ public class NpcProcessor implements IEntityProcessingService {
                 //removes dead npc's
                 if (entity.isDead()) {
                     world.remove(entity.getId());
-                    getColliderService().stop(entity);
                 }
+                
                 float x = entity.getX();
                 float y = entity.getY();
                 float dt = metaData.getDelta();
@@ -96,10 +96,6 @@ public class NpcProcessor implements IEntityProcessingService {
                 }
             }
         }
-    }
-
-    private IColliderService getColliderService() {
-        return SPILocator.locateFirst(IColliderService.class);
     }
 
     private float calcDist(Entity me, Entity other) {

@@ -35,90 +35,79 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class PlayerProcessor implements IEntityProcessingService {
 
-
     @Override
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
-        float x = entity.getX();
-        float y = entity.getY();
-        float dt = metaData.getDelta();
-        float dx = entity.getDx();
-        float dy = entity.getDy();
-        float maxSpeed = entity.getMaxSpeed();
-        float acceleration = entity.getAcceleration();
-        float deacceleration = entity.getDeacceleration();
-        float radians = entity.getRadians();
-        Point mousePos = metaData.getMousePos();
-        
+        if (entity.getType().equals(PLAYER)) {
+            
+            float x = entity.getX();
+            float y = entity.getY();
+            float dt = metaData.getDelta();
+            float dx = entity.getDx();
+            float dy = entity.getDy();
+            float maxSpeed = entity.getMaxSpeed();
+            float acceleration = entity.getAcceleration();
+            float deacceleration = entity.getDeacceleration();
+            float radians = entity.getRadians();
+            Point mousePos = metaData.getMousePos();
 
-        if (entity instanceof Entity) {
-            if (entity.getType().equals(PLAYER)) {
-
-                // Removes player if the entity is dead.
-                if (entity.isDead()) {
-                    world.remove(entity.getId());
-                    getColliderService().stop(entity);
-                }
-
-                //angle
-                double theta = Math.atan2(metaData.getDisplayHeight() / 2 - mousePos.y, metaData.getDisplayWidth() / 2 - mousePos.x);
-                theta += Math.PI;
-                radians = (float) theta;
-
-                //movement
-                dx = 0;
-                dy = 0;
-                if (metaData.getKeys().isDown(RIGHT)) {
-                    dx += maxSpeed * dt;
-                }
-                if (metaData.getKeys().isDown(UP)) {
-                    dy += maxSpeed * dt;
-                }
-                if (metaData.getKeys().isDown(DOWN)) {
-                    dy -= maxSpeed * dt;
-                }
-                if (metaData.getKeys().isDown(LEFT)) {
-                    dx -= maxSpeed * dt;
-                }
-
-                // changing activeSpell
-                if (metaData.getKeys().isDown(NUM_1)) {
-                    entity.setActiveSpell(SpellType.FIREBALL);
-                }
-                if (metaData.getKeys().isDown(NUM_2)) {
-                    entity.setActiveSpell(SpellType.ICEBOLT);
-                }
-                if (metaData.getKeys().isDown(NUM_3)) {
-                    entity.setActiveSpell(SpellType.CHARGEDBOLT);
-                }
-
-                //deacceleration
-                float vec = (float) Math.sqrt(dx * dx + dy * dy);
-
-                // normalize velocity
-                if (vec > 0) {
-                    dx *= Math.abs(dx / vec);
-                    dy *= Math.abs(dy / vec);
-                }
-
-                //set position
-                x += dx;
-                y += dy;
-
-                
-
-                // Update entity
-                entity.setPos(x, y);
-                entity.setDx(dx);
-                entity.setDy(dy);
-                entity.setRadians(radians);
-
-                
+            // Removes player if the entity is dead.
+            if (entity.isDead()) {
+                world.remove(entity.getId());
             }
-        }
 
+            //angle
+            double theta = Math.atan2(metaData.getDisplayHeight() / 2 - mousePos.y, metaData.getDisplayWidth() / 2 - mousePos.x);
+            theta += Math.PI;
+            radians = (float) theta;
+
+            //movement
+            dx = 0;
+            dy = 0;
+            if (metaData.getKeys().isDown(RIGHT)) {
+                dx += maxSpeed * dt;
+            }
+            if (metaData.getKeys().isDown(UP)) {
+                dy += maxSpeed * dt;
+            }
+            if (metaData.getKeys().isDown(DOWN)) {
+                dy -= maxSpeed * dt;
+            }
+            if (metaData.getKeys().isDown(LEFT)) {
+                dx -= maxSpeed * dt;
+            }
+
+            // changing activeSpell
+            if (metaData.getKeys().isDown(NUM_1)) {
+                entity.setActiveSpell(SpellType.FIREBALL);
+            }
+            if (metaData.getKeys().isDown(NUM_2)) {
+                entity.setActiveSpell(SpellType.ICEBOLT);
+            }
+            if (metaData.getKeys().isDown(NUM_3)) {
+                entity.setActiveSpell(SpellType.CHARGEDBOLT);
+            }
+
+            //deacceleration
+            float vec = (float) Math.sqrt(dx * dx + dy * dy);
+
+            // normalize velocity
+            if (vec > 0) {
+                dx *= Math.abs(dx / vec);
+                dy *= Math.abs(dy / vec);
+            }
+
+            //set position
+            x += dx;
+            y += dy;
+
+            // Update entity
+            entity.setPos(x, y);
+            entity.setDx(dx);
+            entity.setDy(dy);
+            entity.setRadians(radians);
+
+        }
     }
-    private IColliderService getColliderService() {
-        return SPILocator.locateFirst(IColliderService.class);
-    }
+
 
 }
