@@ -5,9 +5,6 @@
  */
 package com.se.sem4.group2.common.data;
 
-import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IColliderService;
-import com.se.sem4.group2.common.services.IGamePluginService;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Area;

@@ -22,8 +22,6 @@ import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import static com.se.sem4.group2.common.data.GameKeys.*;
 import com.se.sem4.group2.common.data.SpellType;
-import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IColliderService;
 import java.awt.Point;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;

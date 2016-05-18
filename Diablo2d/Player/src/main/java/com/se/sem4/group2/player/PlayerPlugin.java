@@ -21,12 +21,9 @@ import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.SpellType;
-import com.se.sem4.group2.common.data.util.SPILocator;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
-import com.se.sem4.group2.common.services.IColliderService;
 import java.io.File;
-import java.util.List;
 
 /**
  *

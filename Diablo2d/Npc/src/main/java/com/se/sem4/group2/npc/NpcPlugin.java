@@ -6,14 +6,10 @@
 package com.se.sem4.group2.npc;
 
 import com.se.sem4.group2.common.data.Entity;
-import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
 import com.se.sem4.group2.common.data.MetaData;
-import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IGamePluginService;
-import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +23,13 @@ import org.openide.util.lookup.ServiceProvider;
  *
  * @author Thomas
  */
-@ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
+@ServiceProvider(service = IGamePluginService.class)
 public class NpcPlugin implements IGamePluginService {
 
     private Random random;
-    private long spawnDelay = 20000;
+    private final long spawnDelay = 20000;
     private Map<String, Entity> world;
-    private List<Entity> npcs = new ArrayList<Entity>();
+    private final List<Entity> npcs = new ArrayList<>();
     private MetaData metaData;
 
     @Override
@@ -96,10 +92,9 @@ public class NpcPlugin implements IGamePluginService {
 
     @Override
     public void stop(MetaData metaData) {
-        for (Entity entity : npcs) {
-            if (world.containsKey(entity.getId())) {
-                // TODO: TEST IF THIS WORKS (stop: npc)
-
+        for (Entity entity : world.values()) {
+            if (entity.getType() == NPC) {
+                System.out.println("[" + entity.getId() + "    REMOVED]");
                 world.remove(entity.getId());
             }
         }
