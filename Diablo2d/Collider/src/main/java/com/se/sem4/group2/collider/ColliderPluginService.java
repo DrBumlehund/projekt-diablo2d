@@ -3,30 +3,38 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.se.sem4.group2.ai;
+package com.se.sem4.group2.collider;
 
+import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
+import java.awt.geom.Ellipse2D;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author lhrbo
+ * @author Simon
  */
 @ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
-public class AIPlugin implements IGamePluginService {
+public class ColliderPluginService implements IGamePluginService {
+
+    private Map<String, Entity> world;
 
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
-        // TODO: start a new thread and slowly process the entities in "world".
-        // TODO: add worldmap as a parameter on this start method
-        //          XXX: Worldmap ligger nu i MetaData.
+        this.world = world;
+        ColliderHandler.getInstance().addCollidersToEntities(world);
     }
 
     @Override
     public void stop(MetaData metaData) {
+        if (world != null) {
+            for (Entity e : world.values()) {
+                ColliderHandler.getInstance().removeCollider(e.getId());
+            }
+        }
     }
-    
+
 }

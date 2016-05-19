@@ -78,6 +78,7 @@
         <module>Collider</module>
         <module>mavenproject1/AI</module>
         <module>Weapon</module>
+        <module>SilentUpdate</module>
     </modules>
 
     <properties>

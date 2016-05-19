@@ -18,160 +18,126 @@ package com.se.sem4.group2.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 //import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
-import static com.se.sem4.group2.common.data.EntityType.NPC;
-import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
-import com.se.sem4.group2.common.data.util.SPILocator;
 import com.se.sem4.group2.common.services.IAIProcessingService;
-import com.se.sem4.group2.common.services.IColliderProcessingService;
-import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
-import com.se.sem4.group2.common.services.IMapPluginService;
 import com.se.sem4.group2.common.services.IMapProcessingService;
-import com.se.sem4.group2.managers.AudioProcessor;
-import com.se.sem4.group2.managers.GameControllerInputProcessor;
 import com.se.sem4.group2.managers.GameInputProcessor;
-import com.se.sem4.group2.managers.TextureProcessor;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import static javafx.scene.text.Font.font;
-import static javafx.scene.text.Font.font;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
 import org.openide.util.LookupListener;
 import static com.se.sem4.group2.common.data.EntityType.SPELL;
-import static javafx.scene.text.Font.font;
-import static javafx.scene.text.Font.font;
+import com.se.sem4.group2.common.data.GameEvent;
+import com.se.sem4.group2.managers.JarFileResolver;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Game implements ApplicationListener {
 
     private OrthographicCamera cam;
-
     private ShapeRenderer sr;
-
-    private IGamePluginService playerPlugin;
-    private IMapPluginService mapPlugin;
-    private IEntityProcessingService playerProcessor;
-
-    private final MetaData metaData = new MetaData();
-    private final List<IEntityProcessingService> entityProcessors = new ArrayList<>();
-    private Map<String, Entity> world = new ConcurrentHashMap<>();
-    private WorldMap worldMap;
     private SpriteBatch batch;
-    private List<IGamePluginService> gamePlugins;
     private final Lookup lookup = Lookup.getDefault();
-    private final AudioProcessor aP = new AudioProcessor();
-    private final TextureProcessor tP = new TextureProcessor();
-    
+    private final MetaData metaData = new MetaData();
+    private Map<String, Entity> world = new ConcurrentHashMap<>();
+    private List<IGamePluginService> gamePlugins = new CopyOnWriteArrayList<>();
+    Lookup.Result<IGamePluginService> result;
+    Random rng = new Random();
+
+    // Assetmanager stuff:
+    private final JarFileResolver jfr = new JarFileResolver();
+    private final AssetManager am = new AssetManager(jfr);
 
     @Override
     public void create() {
-
-        aP.load("com/se/sem4/group2/core/centipede.mp3", "Music");
-        aP.load("com/se/sem4/group2/core/tristram.mp3", "Music");
-
-        //aP.playMusic("com/se/sem4/group2/core/tristram.mp3");
         metaData.setDisplayWidth(Gdx.graphics.getWidth());
         metaData.setDisplayHeight(Gdx.graphics.getHeight());
 
         cam = new OrthographicCamera(metaData.getDisplayWidth(), metaData.getDisplayHeight());
+        cam.translate(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
         cam.update();
 
         sr = new ShapeRenderer();
         batch = new SpriteBatch();
 
-        Gdx.input.setInputProcessor(
-                new GameInputProcessor(metaData)
-        );
-//        //TODO: FIX CONTROLLER LISTENER ... 
-//        Controllers.addListener(
-//                new GameControllerInputProcessor(metaData)
-//        );
-
-        Lookup.Result<IGamePluginService> result = lookup.lookupResult(IGamePluginService.class);
+        Gdx.input.setInputProcessor(new GameInputProcessor(metaData));
+        
+        result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
-        gamePlugins = new ArrayList<>(result.allInstances());
         result.allItems();
-
-        // Lookup all Game Plugins using ServiceLoader
-        for (IGamePluginService iGamePlugin : getPluginServices()) {
-            iGamePlugin.start(metaData, world, tP);
-        }
-
-        for (IMapPluginService iMapPlugin : getMapPluginServices()) {
-            worldMap = iMapPlugin.start(metaData, tP);
-        }
-
     }
 
     @Override
     public void render() {
-
         // clear screen to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        batch.setProjectionMatrix(cam.combined);
+        sr.setProjectionMatrix(cam.combined);
 
         metaData.setDelta(Gdx.graphics.getDeltaTime());
-        sr.setProjectionMatrix(cam.combined);
-        batch.setProjectionMatrix(cam.combined);
-        metaData.setCamFloatArray(cam.combined.getValues());
-
-        update();
-
-        draw();
-
         metaData.getKeys().update();
+        
+        update();
+        draw();
+        playSounds();
     }
 
     private void update() {
-
         // Process entities
         for (IEntityProcessingService entityProcessorService : getEntityProcessingServices()) {
-            for (Entity e : world.values()) {
-                entityProcessorService.process(metaData, world, e, tP, aP);
-                if (e.getType() == EntityType.PLAYER) {
-                    cam.position.set(new Vector3((float) e.getX(), (float) e.getY(), 1f));
-                    cam.update();
-                }
+//            System.out.println(entityProcessorService.getClass());
+            for (Entity entity : world.values()) {
+                entityProcessorService.process(metaData, world, entity);
             }
         }
 
         for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
-            mapProcesser.process(cam.position.x, cam.position.y, worldMap);
-        }
-
-        for (IColliderProcessingService colliderProcessingService : getColliderProcessingServices()) {
-            colliderProcessingService.process();
+//            System.out.println(mapProcesser.getClass());
+            mapProcesser.process(cam.position.x, cam.position.y, metaData.getWorldMap());
         }
 
         for (IAIProcessingService service : getAIProcessingServices()) {
+//            System.out.println(service.getClass());
             for (Entity e : world.values()) {
-                service.process(metaData, world, worldMap);
+                service.process(metaData, world, metaData.getWorldMap());
             }
         }
 
     }
 
     private void draw() {
+        //batch.setProjectionMatrix(cam.combined);
+        drawMap();
+        drawEntities();
+    }
 
-        if (worldMap != null) {
+    private void drawMap() {
+        if (metaData.getWorldMap() != null) {
+            WorldMap worldMap = metaData.getWorldMap();
+
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
             int yMax = worldMap.getyMax();
@@ -180,11 +146,15 @@ public class Game implements ApplicationListener {
             for (int x = xMin; x < xMax + 1; x++) {
                 for (int y = yMin; y < yMax + 1; y++) {
                     Tile tile = worldMap.getTile(x, y);
-                    Texture texture = tP.textures.get(tile.getSource());
-                    // TODO: No idea why texture is sometimes null
+                    if (tile == null) {
+                        return;
+                    }
+                    loadTexture(tile.getSource());
+
+                    Texture texture = am.get(tile.getSource(), Texture.class);
                     if (texture == null) {
                         System.out.println("Error: Texture was null while attempting to draw map: " + tile.getSource());
-                        tP.load(tile.getSource(), "Texture");
+                        loadTexture(tile.getSource());
                         continue;
                     }
                     batch.begin();
@@ -193,38 +163,42 @@ public class Game implements ApplicationListener {
 
                 }
             }
-        }
 
+            if (worldMap.getMap().isEmpty()) {
+                System.out.println("MAP EMPTY!");
+                metaData.setWorldMap(null);
+            }
+        }
+    }
+
+    private void drawEntities() {
         for (Entity entity : world.values()) {
 
-            float[] shapeX = entity.getShapeX();
-            float[] shapeY = entity.getShapeY();
-
-            sr.begin(ShapeRenderer.ShapeType.Filled);
-            if (entity.getType() == PLAYER) {
-                //tP.render(entity.getSpritePath(), entity.getDx() + (metaData.getDisplayWidth() / 2), entity.getDy() + (metaData.getDisplayHeight() / 2), entity.getRadians());
-                tP.render(entity.getSpritePath(), entity, metaData);
-                //sr.setColor(Color.WHITE);
-            } else if (entity.getType() == NPC) {
-                sr.setColor(Color.RED);
-                sr.circle(entity.getX(), entity.getY(), entity.getRadius());
-            } else {
-//                sr.setColor(Color.BLACK);
-                tP.render(entity.getSpritePath(), entity, metaData);
-//                sr.circle(entity.getX(), entity.getY(), entity.getRadius());
+            if (entity.getType() == EntityType.PLAYER) {
+                cam.position.set(new Vector3((float) entity.getX(), (float) entity.getY(), 1f));
             }
+            cam.update();
 
-            sr.end();
+            loadTexture(entity.getTexturePath());
 
+            batch.setProjectionMatrix(cam.combined);
+            batch.begin();
+            //System.out.println(path);
+            Texture tex = am.get(entity.getTexturePath(), Texture.class);
+            Sprite sprite = new Sprite(tex);
+            sprite.setSize((int) entity.getRadius() * 2, (int) entity.getRadius() * 2);
+
+            sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+            sprite.rotate((float) (entity.getRadians() * (180 / Math.PI)));
+
+            sprite.setCenter(entity.getX(), entity.getY());
+
+            sprite.draw(batch);
+
+            batch.end();
+
+            // Health bars.
             if (entity.getType() != SPELL) {
-                if (entity.getType() == NPC) {
-                    sr.begin(ShapeRenderer.ShapeType.Line);
-                    sr.setColor(Color.BLACK);
-                    sr.line(shapeX[0], shapeY[0], shapeX[1], shapeY[1]);
-                    sr.end();
-                }
-
-                // Health bars.
                 sr.begin(ShapeRenderer.ShapeType.Filled);
                 float width = 25f/* entity.getMaxHealth() * 0.07f*/;
                 float height = 2f;
@@ -245,6 +219,47 @@ public class Game implements ApplicationListener {
         }
     }
 
+    private void playSounds() {
+        List<GameEvent> soundEvents = metaData.getGameEvents();
+        if (!soundEvents.isEmpty()) {
+            for (Entity entity : world.values()) {
+                if (!entity.getSoundPaths().isEmpty()) {
+                    for (GameEvent ge : soundEvents) {
+                        int index = rng.nextInt(entity.getSoundPaths().size());
+                        String path = entity.getSoundPaths().get(index);
+                        loadSound(path);
+
+                        Sound sound = am.get(path, Sound.class);
+                        sound.play();
+
+                        soundEvents.remove(ge);
+                    }
+                }
+            }
+        }
+    }
+
+    private void loadTexture(String path) {
+        if (!am.isLoaded(path)) {
+            am.load(path, Texture.class);
+            am.finishLoading();
+        }
+    }
+
+    private void loadSound(String path) {
+        if (!am.isLoaded(path)) {
+            am.load(path, Sound.class);
+            am.finishLoading();
+        }
+    }
+
+    private void loadMusic(String path) {
+        if (!am.isLoaded(path)) {
+            am.load(path, Music.class);
+            am.finishLoading();
+        }
+    }
+
     @Override
     public void resize(int width, int height) {
         metaData.setDisplayWidth(width);
@@ -261,46 +276,43 @@ public class Game implements ApplicationListener {
 
     @Override
     public void dispose() {
-//        centipede.dispose();
-    }
-
-    private Collection<? extends IGamePluginService> getPluginServices() {
-        return SPILocator.locateAll(IGamePluginService.class);
-    }
-
-    private Collection<? extends IMapPluginService> getMapPluginServices() {
-        return SPILocator.locateAll(IMapPluginService.class);
+        // Disposes all assets.
+        am.dispose();
     }
 
     private Collection<? extends IEntityProcessingService> getEntityProcessingServices() {
-        return SPILocator.locateAll(IEntityProcessingService.class);
-    }
-
-    private Collection<? extends IColliderService> getColliderServices() {
-        return SPILocator.locateAll(IColliderService.class);
+        return lookup.lookupAll(IEntityProcessingService.class);
     }
 
     private Collection<? extends IMapProcessingService> getMapProcessingServices() {
-        return SPILocator.locateAll(IMapProcessingService.class);
+        return lookup.lookupAll(IMapProcessingService.class);
     }
 
-    private Collection<? extends IColliderProcessingService> getColliderProcessingServices() {
-        return SPILocator.locateAll(IColliderProcessingService.class);
+    private Collection<? extends IAIProcessingService> getAIProcessingServices() {
+        return lookup.lookupAll(IAIProcessingService.class);
     }
 
     private final LookupListener lookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {
-            for (IGamePluginService updatedGamePlugin : lookup.lookupAll(IGamePluginService.class)) {
-                if (!gamePlugins.contains(updatedGamePlugin)) {
-                    updatedGamePlugin.start(metaData, world, tP);
-                    gamePlugins.add(updatedGamePlugin);
+
+            Collection<? extends IGamePluginService> updated = result.allInstances();
+
+            for (IGamePluginService us : updated) {
+                // Newly installed modules
+                if (!gamePlugins.contains(us)) {
+                    us.start(metaData, world);
+                    gamePlugins.add(us);
+                }
+            }
+
+            // Stop and remove module
+            for (IGamePluginService gs : gamePlugins) {
+                if (!updated.contains(gs)) {
+                    gs.stop(metaData);
+                    gamePlugins.remove(gs);
                 }
             }
         }
     };
-
-    private Iterable<IAIProcessingService> getAIProcessingServices() {
-        return SPILocator.locateAll(IAIProcessingService.class);
-    }
 }

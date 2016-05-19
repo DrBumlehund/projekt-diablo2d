@@ -8,18 +8,11 @@ package com.se.sem4.group2.npc;
 import com.se.sem4.group2.common.data.Entity;
 import com.se.sem4.group2.common.data.EntityType;
 import static com.se.sem4.group2.common.data.EntityType.NPC;
-import static com.se.sem4.group2.common.data.EntityType.PLAYER;
 import com.se.sem4.group2.common.data.MetaData;
-import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
-import com.se.sem4.group2.common.services.IColliderService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
-import com.se.sem4.group2.common.services.IGamePluginService;
 import java.awt.Point;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -32,15 +25,15 @@ public class NpcProcessor implements IEntityProcessingService {
     private int divisor = 64;
 
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager, IAssetAudioService soundManager) {
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
         if (entity instanceof Entity) {
             if (entity.getType().equals(NPC)) {
 
                 //removes dead npc's
                 if (entity.isDead()) {
                     world.remove(entity.getId());
-                    getColliderService().stop(entity);
                 }
+                
                 float x = entity.getX();
                 float y = entity.getY();
                 float dt = metaData.getDelta();
@@ -101,32 +94,10 @@ public class NpcProcessor implements IEntityProcessingService {
 
                         // Update entity
                         entity.setRadians(theta);
-                        updateShape(entity);
                     }
                 }
             }
         }
-    }
-
-    private void updateShape(Entity entity) {
-        float[] shapex = entity.getShapeX();
-        float[] shapey = entity.getShapeY();
-        float x = entity.getX();
-        float y = entity.getY();
-        float radians = entity.getRadians();
-
-        shapex[0] = (float) (x);
-        shapey[0] = (float) (y);
-
-        shapex[1] = (float) (x + Math.cos(radians) * entity.getRadius());
-        shapey[1] = (float) (y + Math.sin(radians) * entity.getRadius());
-
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
-    }
-
-    private IColliderService getColliderService() {
-        return SPILocator.locateFirst(IColliderService.class);
     }
 
     private float calcDist(Entity me, Entity other) {

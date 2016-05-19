@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.se.sem4.group2.ai;
+package com.se.sem4.group2.weapon;
 
 import com.se.sem4.group2.common.data.Entity;
+import com.se.sem4.group2.common.data.EntityType;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import java.util.Map;
@@ -13,20 +14,25 @@ import org.openide.util.lookup.ServiceProvider;
 
 /**
  *
- * @author lhrbo
+ * @author thomaslemqvist
  */
-@ServiceProvider(service = com.se.sem4.group2.common.services.IGamePluginService.class)
-public class AIPlugin implements IGamePluginService {
+@ServiceProvider(service = IGamePluginService.class)
+public class WeaponPlugin implements IGamePluginService {
+
+    private Map<String, Entity> world;
 
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
-        // TODO: start a new thread and slowly process the entities in "world".
-        // TODO: add worldmap as a parameter on this start method
-        //          XXX: Worldmap ligger nu i MetaData.
+        this.world = world;
     }
 
     @Override
     public void stop(MetaData metaData) {
+        for (Entity ent : world.values()) {
+            if (ent.getType() == EntityType.SPELL) {
+                world.remove(ent.getId());
+            }
+        }
     }
-    
+
 }

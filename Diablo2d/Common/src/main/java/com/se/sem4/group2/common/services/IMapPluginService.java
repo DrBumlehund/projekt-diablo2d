@@ -18,10 +18,6 @@ package com.se.sem4.group2.common.services;
 
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.WorldMap;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
-import java.io.File;
-import java.net.URL;
-import java.util.Map;
 
 /**
  *
@@ -29,7 +25,7 @@ import java.util.Map;
  */
 public interface IMapPluginService {
     
-    public WorldMap start(MetaData metaData, IAssetTextureService assetManager);
+    public WorldMap start(MetaData metaData);
     
     public void stop(MetaData metaData);
 }
