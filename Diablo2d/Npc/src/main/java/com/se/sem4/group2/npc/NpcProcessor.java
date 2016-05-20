@@ -68,11 +68,9 @@ public class NpcProcessor implements IEntityProcessingService {
 
                         if (path.size() > 0) {
                             Point target = path.get(0);
-                            target.x = target.x * 64;
-                            target.y = target.y * 64;
-
-                            float direction = (float) Math.atan2(y - target.getY(), x - target.getX());
-                            direction += Math.PI;
+                            //target = new Point(64,64);
+                            float direction = (float) Math.atan2(target.getY() - y , target.getX() - x);
+                            direction += Math.PI * 2;
 
                             dx = maxSpeed * (float) Math.cos(direction) * dt;
                             dy = maxSpeed * (float) Math.sin(direction) * dt;
@@ -80,18 +78,9 @@ public class NpcProcessor implements IEntityProcessingService {
                             //set position
                             x += dx;
                             y += dy;
-
-                            /*
-                if ((int)(x*100) == (int)(target.x*100)) {
-                    if ((int)(y*100) == (int)(target.y*100)) {
-                        path.remove(0);
-                    }
-                }
-                             */
-                            if ((int) x == target.x && (int) y == target.y) {
+                            
+                            if (almostEqual(x, target.x, 30) && almostEqual(y, target.y, 30)) {
                                 path.remove(0);
-//                                path.remove(1);
-//                                path.remove(2);
                             }
 
                             entity.setPos(x, y);
@@ -132,5 +121,8 @@ public class NpcProcessor implements IEntityProcessingService {
     private float calcDist(Entity me, Entity other) {
         return (float) Math.sqrt(Math.pow((other.getX() - me.getX()), 2) + Math.pow((other.getY() - me.getY()), 2));
     }
-
+    
+    public static boolean almostEqual(double a, double b, double eps){
+        return Math.abs(a-b)<eps;
+    }
 }
