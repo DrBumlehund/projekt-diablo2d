@@ -80,7 +80,16 @@ public class NpcPlugin implements IGamePluginService {
         n.setMaxDamage(10);   // but they don't do a lot og damage.
         n.setMinDamage(5);
 
-        String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Npc.jar!/assets/images/snowman.png");
+        String path;
+
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            path = (new File("").getAbsolutePath() + "/diablo2d/modules/com-se-sem4-group2-Npc.jar!/assets/images/snowman.png");
+            path = path.substring(2);
+            path = path.replaceAll("\\\\", "/");
+
+        } else {
+            path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Npc.jar!/assets/images/snowman.png");
+        }
 
         n.setTexturePath(path);
         //n.setHostile(true);

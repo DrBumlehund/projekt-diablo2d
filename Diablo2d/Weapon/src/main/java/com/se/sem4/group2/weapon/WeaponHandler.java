@@ -20,24 +20,34 @@ public class WeaponHandler {
 
     private static final int SPELL_RADIUS = 10;
 
-    String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Weapon.jar!/assets/");
+    String path;
 
-    String[] fireballSounds = {
-        path + "sounds/fireball1.wav",
-        path + "sounds/fireball2.wav",
-        path + "sounds/fireball3.wav"};
-
-    String[] iceboltSounds = {
-        path + "sounds/icebolt1.wav",
-        path + "sounds/icebolt2.wav",
-        path + "sounds/icebolt3.wav"};
-
-    String[] chargedboltSounds = {
-        path + "sounds/chargedbolt1.wav",
-        path + "sounds/chargedbolt2.wav",
-        path + "sounds/chargedbolt3.wav"};
+    String[] fireballSounds;
+    String[] iceboltSounds;
+    String[] chargedboltSounds;
 
     private WeaponHandler() {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            path = (new File("").getAbsolutePath() + "/diablo2d/modules/com-se-sem4-group2-Weapon.jar!/assets/");
+            path = path.substring(2);
+            path = path.replaceAll("\\\\", "/");
+        } else {
+            path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Weapon.jar!/assets/");
+        }
+        fireballSounds = new String[]{
+            path + "sounds/fireball1.wav",
+            path + "sounds/fireball2.wav",
+            path + "sounds/fireball3.wav"};
+
+        iceboltSounds = new String[]{
+            path + "sounds/icebolt1.wav",
+            path + "sounds/icebolt2.wav",
+            path + "sounds/icebolt3.wav"};
+
+        chargedboltSounds = new String[]{
+            path + "sounds/chargedbolt1.wav",
+            path + "sounds/chargedbolt2.wav",
+            path + "sounds/chargedbolt3.wav"};
     }
 
     public static WeaponHandler getInstance() {
