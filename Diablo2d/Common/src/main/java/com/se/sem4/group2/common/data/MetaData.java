@@ -17,6 +17,8 @@
 package com.se.sem4.group2.common.data;
 
 import java.awt.Point;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -24,20 +26,14 @@ import java.awt.Point;
  */
 public class MetaData {
 
+    private WorldMap worldMap;
     private float delta;
     private int displayWidth;
     private int displayHeight;
     private final GameKeys keys = new GameKeys();
     private Point mousePos = new Point();
-    private float[] camFloatArray = new float[16];
-
-    public float[] getCamFloatArray() {
-        return camFloatArray;
-    }
-
-    public void setCamFloatArray(float[] camFloatArray) {
-        this.camFloatArray = camFloatArray;
-    }
+    private List<GameEvent> gameEvents = new CopyOnWriteArrayList<>();
+    
 
     public Point getMousePos() {
         return mousePos;
@@ -75,4 +71,15 @@ public class MetaData {
         return delta;
     }
 
+    public WorldMap getWorldMap() {
+        return worldMap;
+    }
+
+    public void setWorldMap(WorldMap worldMap) {
+        this.worldMap = worldMap;
+    }
+
+    public List<GameEvent> getGameEvents() {
+        return gameEvents;
+    }
 }

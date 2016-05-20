@@ -1,5 +1,5 @@
-/* 
- * Copyright (C) 2016 Casper Beese Nielsen, Jakob Tøttrup, Jesper Bager Rasmussen, Oliver Vestergaard, Simon Hjortshøj Larsen & Thomas August Lemqvist
+/*
+ * Copyright (C) 2016 thomaslemqvist
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,13 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.se.sem4.group2.common.data;
+package com.se.sem4.group2.managers;
+
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.files.FileHandle;
 
 /**
  *
- * @author ThomasLemqvist
+ * @author thomaslemqvist
  */
-public class Chunk {
-    //indeholder tiles
-    
+public class JarFileResolver implements FileHandleResolver {
+
+    @Override
+    public FileHandle resolve(String fileName) {
+        
+        return new JarFileHandleStream(fileName);
+    }
+
 }

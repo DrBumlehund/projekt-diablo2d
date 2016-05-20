@@ -19,6 +19,7 @@ public class MapProcessor implements IMapProcessingService {
     float lastX = 0;
     float lastY = 0;
     boolean first = true;
+    MapHandler instance = MapHandler.getInstance();
 
     @Override
     public void process(float x, float y, WorldMap worldMap) {
@@ -28,39 +29,39 @@ public class MapProcessor implements IMapProcessingService {
             first = false;
         }
 
-        int def = worldMap.DEFAULT_SIZE;
+        int defaultTileSize = WorldMap.DEFAULT_TILE_SIZE;
         float dist = calculateDistance(x, y);
-        if (dist > def) {
+        if (dist > defaultTileSize) {
             //System.out.println("Processing");
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
             int yMax = worldMap.getyMax();
             int yMin = worldMap.getyMin();
-            if (x > lastX + def) {
+            if (x > lastX + defaultTileSize) {
                 int tmpX = xMax + 1; //refactor
                 for (int tmpY = yMin; tmpY < yMax + 1; tmpY++) {
-                    worldMap.addTile(tmpX, tmpY);
+                    instance.addTile(tmpX, tmpY);
                 }
-                lastX += def;
-            } else if (x < lastX - def) {
+                lastX += defaultTileSize;
+            } else if (x < lastX - defaultTileSize) {
                 int tmpX = xMin - 1; //refactor
                 for (int tmpY = yMin; tmpY < yMax + 1; tmpY++) {
-                    worldMap.addTile(tmpX, tmpY);
+                    instance.addTile(tmpX, tmpY);
                 }
-                lastX -= def;
+                lastX -= defaultTileSize;
             }
-            if (y > lastY + def) {
+            if (y > lastY + defaultTileSize) {
                 int tmpY = yMax + 1;
                 for (int tmpX : worldMap.getMap().keySet()) {
-                    worldMap.addTile(tmpX, tmpY);
+                    instance.addTile(tmpX, tmpY);
                 }
-                lastY += def;
-            } else if (y < lastY - def) {
+                lastY += defaultTileSize;
+            } else if (y < lastY - defaultTileSize) {
                 int tmpY = yMin - 1;
                 for (int tmpX : worldMap.getMap().keySet()) {
-                    worldMap.addTile(tmpX, tmpY);
+                    instance.addTile(tmpX, tmpY);
                 }
-                lastY -= def;
+                lastY -= defaultTileSize;
             }
         }
     }

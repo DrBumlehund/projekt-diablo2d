@@ -22,10 +22,6 @@ import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import static com.se.sem4.group2.common.data.GameKeys.*;
 import com.se.sem4.group2.common.data.SpellType;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetAudioService;
-import com.se.sem4.group2.common.services.IAssetServices.IAssetTextureService;
-import com.se.sem4.group2.common.data.util.SPILocator;
-import com.se.sem4.group2.common.services.IColliderService;
 import java.awt.Point;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
@@ -37,111 +33,79 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service = com.se.sem4.group2.common.services.IEntityProcessingService.class)
 public class PlayerProcessor implements IEntityProcessingService {
 
-    private IAssetTextureService assetManager;
-
     @Override
-    public void process(MetaData metaData, Map<String, Entity> world, Entity entity, IAssetTextureService assetManager, IAssetAudioService soundManager) {
-        float x = entity.getX();
-        float y = entity.getY();
-        float dt = metaData.getDelta();
-        float dx = entity.getDx();
-        float dy = entity.getDy();
-        float maxSpeed = entity.getMaxSpeed();
-        float acceleration = entity.getAcceleration();
-        float deacceleration = entity.getDeacceleration();
-        float radians = entity.getRadians();
-        Point mousePos = metaData.getMousePos();
-        this.assetManager = assetManager;
+    public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
+        if (entity.getType().equals(PLAYER)) {
+            
+            float x = entity.getX();
+            float y = entity.getY();
+            float dt = metaData.getDelta();
+            float dx = entity.getDx();
+            float dy = entity.getDy();
+            float maxSpeed = entity.getMaxSpeed();
+            float acceleration = entity.getAcceleration();
+            float deacceleration = entity.getDeacceleration();
+            float radians = entity.getRadians();
+            Point mousePos = metaData.getMousePos();
 
-        if (entity instanceof Entity) {
-            if (entity.getType().equals(PLAYER)) {
-
-                // Removes player if the entity is dead.
-                if (entity.isDead()) {
-                    world.remove(entity.getId());
-                    getColliderService().stop(entity);
-                }
-
-                //angle
-                double theta = Math.atan2(metaData.getDisplayHeight() / 2 - mousePos.y, metaData.getDisplayWidth() / 2 - mousePos.x);
-                theta += Math.PI;
-                radians = (float) theta;
-
-                //movement
-                dx = 0;
-                dy = 0;
-                if (metaData.getKeys().isDown(RIGHT)) {
-                    dx += maxSpeed * dt;
-                }
-                if (metaData.getKeys().isDown(UP)) {
-                    dy += maxSpeed * dt;
-                }
-                if (metaData.getKeys().isDown(DOWN)) {
-                    dy -= maxSpeed * dt;
-                }
-                if (metaData.getKeys().isDown(LEFT)) {
-                    dx -= maxSpeed * dt;
-                }
-
-                // changing activeSpell
-                if (metaData.getKeys().isDown(NUM_1)) {
-                    entity.setActiveSpell(SpellType.FIREBALL);
-                }
-                if (metaData.getKeys().isDown(NUM_2)) {
-                    entity.setActiveSpell(SpellType.ICEBOLT);
-                }
-                if (metaData.getKeys().isDown(NUM_3)) {
-                    entity.setActiveSpell(SpellType.CHARGEDBOLT);
-                }
-
-                //deacceleration
-                float vec = (float) Math.sqrt(dx * dx + dy * dy);
-
-                // normalize velocity
-                if (vec > 0) {
-                    dx *= Math.abs(dx / vec);
-                    dy *= Math.abs(dy / vec);
-                }
-
-                //set position
-                x += dx;
-                y += dy;
-
-                assetManager.render(entity.getSpritePath(), entity, metaData);
-
-                // Update entity
-                entity.setPos(x, y);
-                entity.setDx(dx);
-                entity.setDy(dy);
-                entity.setRadians(radians);
-
-                updateShape(entity);
+            // Removes player if the entity is dead.
+            if (entity.isDead()) {
+                world.remove(entity.getId());
             }
+
+            //angle
+            double theta = Math.atan2(metaData.getDisplayHeight() / 2 - mousePos.y, metaData.getDisplayWidth() / 2 - mousePos.x);
+            theta += Math.PI;
+            radians = (float) theta;
+
+            //movement
+            dx = 0;
+            dy = 0;
+            if (metaData.getKeys().isDown(RIGHT)) {
+                dx += maxSpeed * dt;
+            }
+            if (metaData.getKeys().isDown(UP)) {
+                dy += maxSpeed * dt;
+            }
+            if (metaData.getKeys().isDown(DOWN)) {
+                dy -= maxSpeed * dt;
+            }
+            if (metaData.getKeys().isDown(LEFT)) {
+                dx -= maxSpeed * dt;
+            }
+
+            // changing activeSpell
+            if (metaData.getKeys().isDown(NUM_1)) {
+                entity.setActiveSpell(SpellType.FIREBALL);
+            }
+            if (metaData.getKeys().isDown(NUM_2)) {
+                entity.setActiveSpell(SpellType.ICEBOLT);
+            }
+            if (metaData.getKeys().isDown(NUM_3)) {
+                entity.setActiveSpell(SpellType.CHARGEDBOLT);
+            }
+
+            //deacceleration
+            float vec = (float) Math.sqrt(dx * dx + dy * dy);
+
+            // normalize velocity
+            if (vec > 0) {
+                dx *= Math.abs(dx / vec);
+                dy *= Math.abs(dy / vec);
+            }
+
+            //set position
+            x += dx;
+            y += dy;
+
+            // Update entity
+            entity.setPos(x, y);
+            entity.setDx(dx);
+            entity.setDy(dy);
+            entity.setRadians(radians);
+
         }
-
     }
 
-    private void updateShape(Entity entity) {
-
-        float[] shapex = entity.getShapeX();
-        float[] shapey = entity.getShapeY();
-        float x = entity.getX();
-        float y = entity.getY();
-        float radians = entity.getRadians();
-
-        shapex[0] = (float) (x);
-        shapey[0] = (float) (y);
-
-        shapex[1] = (float) (x + Math.cos(radians) * entity.getRadius());
-        shapey[1] = (float) (y + Math.sin(radians) * entity.getRadius());
-
-        entity.setShapeX(shapex);
-        entity.setShapeY(shapey);
-
-    }
-
-    private IColliderService getColliderService() {
-        return SPILocator.locateFirst(IColliderService.class);
-    }
 
 }
