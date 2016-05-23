@@ -85,6 +85,10 @@ public class Game implements ApplicationListener {
         result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
         result.allItems();
+        
+        for (IGamePluginService igps: lookup.lookupAll(IGamePluginService.class)){
+            igps.start(metaData, world);
+        }
     }
 
     @Override

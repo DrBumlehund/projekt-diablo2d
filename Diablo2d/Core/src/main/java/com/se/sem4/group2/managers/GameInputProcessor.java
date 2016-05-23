@@ -59,7 +59,7 @@ public class GameInputProcessor extends InputAdapter {
         if (k == Input.Keys.ESCAPE) {
             metaData.getKeys().setKey(GameKeys.ESCAPE, true);
         }
-        if (k == Input.Keys.SPACE || k == Input.Buttons.LEFT) {
+        if (k == Input.Keys.SPACE) {
             metaData.getKeys().setKey(GameKeys.SPACE, true);
         }
         if (k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
@@ -97,7 +97,7 @@ public class GameInputProcessor extends InputAdapter {
         if (k == Input.Keys.ESCAPE) {
             metaData.getKeys().setKey(GameKeys.ESCAPE, false);
         }
-        if (k == Input.Keys.SPACE || k == Input.Buttons.LEFT) {
+        if (k == Input.Keys.SPACE) {
             metaData.getKeys().setKey(GameKeys.SPACE, false);
         }
         if (k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
