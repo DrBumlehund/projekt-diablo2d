@@ -18,7 +18,6 @@ package com.se.sem4.group2.common.services;
 
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.WorldMap;
-import java.util.Map;
 
 /**
  *

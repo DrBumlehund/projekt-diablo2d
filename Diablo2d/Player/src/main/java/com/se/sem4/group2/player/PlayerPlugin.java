@@ -16,20 +16,14 @@
  */
 package com.se.sem4.group2.player;
 
-import com.se.sem4.group2.common.data.Collider;
 import com.se.sem4.group2.common.data.Entity;
-import com.se.sem4.group2.common.data.Character;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import static com.se.sem4.group2.common.data.EntityType.PLAYER;
-import com.se.sem4.group2.common.data.util.SPILocator;
-import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.util.Collection;
+import com.se.sem4.group2.common.data.SpellType;
 import java.util.Map;
 import org.openide.util.lookup.ServiceProvider;
-import com.se.sem4.group2.common.services.IColliderService;
+import java.io.File;
 
 /**
  *
@@ -41,9 +35,6 @@ public class PlayerPlugin implements IGamePluginService {
     private Map<String, Entity> world;
     private Entity player;
 
-    public PlayerPlugin() {
-    }
-
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
         this.world = world;
@@ -52,36 +43,42 @@ public class PlayerPlugin implements IGamePluginService {
     }
 
     private Entity createPlayer(MetaData metaData) {
-        Character newPlayer = new Character();
+        Entity newPlayer = new Entity();
 
         newPlayer.setType(PLAYER);
         newPlayer.setPos(metaData.getDisplayWidth() / 2, metaData.getDisplayHeight() / 2);
-        newPlayer.setRadians((float) Math.PI / 2);
-        newPlayer.setMaxSpeed(3);
+        newPlayer.setRadians(0f);
+        newPlayer.setMaxSpeed(200f);
         newPlayer.setAcceleration(50f);
         newPlayer.setDeacceleration(1.3f);
         newPlayer.setName("Player");
-        
-        newPlayer.setShapeX(new float[2]);
-        newPlayer.setShapeY(new float[2]);
-        newPlayer.setRadius(10f);
-        
-        //Ellipse2D shape = new java.awt.geom.Ellipse2D.Float(0, 0, 5, 5);
-        //Collider collider = new Collider(shape, newPlayer);
-        //getColliderService().start(player, collider);
-        
+        newPlayer.setRadius(16f);
+
+        newPlayer.setMaxDamage(-1);
+        newPlayer.setMinDamage(-1);
+        newPlayer.setMaxHealth(100);
+
+        newPlayer.setActiveSpell(SpellType.FIREBALL);
+        String path;
+
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            path = (new File("").getAbsolutePath() + "/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
+            path = path.substring(2);
+            path = path.replaceAll("\\\\", "/");
+        } else {
+            path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
+        }
         //Set Sprite, Weapon, Color
-        
+        newPlayer.setTexturePath(path);
         return newPlayer;
     }
 
     @Override
     public void stop(MetaData metaData) {
-        world.remove(player.getId());
+        if (world != null) {
+            world.remove(player.getId());
+        } else {
+            System.out.println("World is null in PlayerPlugin");
+        }
     }
-
-    private IColliderService getColliderService() {
-        return SPILocator.locateFirst(IColliderService.class);
-    }
-
 }

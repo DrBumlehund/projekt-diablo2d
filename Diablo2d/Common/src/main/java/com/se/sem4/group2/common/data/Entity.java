@@ -17,6 +17,11 @@
 package com.se.sem4.group2.common.data;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -24,30 +29,42 @@ import java.awt.Color;
  */
 public class Entity extends Transform {
 
-    //TODO: Tilføj sprite/billede/form...
+
     private float dx;
     private float dy;
     private float radians;
     private float maxSpeed;
     private float acceleration;
     private float deacceleration;
-    // TODO: Don't use shapex and shapey
-    private float[] shapeX;
-    private float[] shapeY;
     private float radius;
-    private EntityType type;
     private Color color;
+    private String texturePath;
     private float lifeTime;
     private float lifeTimer;
+    private SpellType activeSpell;
+    private List<String> soundPaths = new CopyOnWriteArrayList<>();
+
+    private List<Point> path = new CopyOnWriteArrayList<>();
+
+    public String getTexturePath() {
+        return texturePath;
+    }
+
+    public void setTexturePath(String texturePath) {
+        this.texturePath = texturePath;
+    }
 
     public float getLifeTimer() {
         return lifeTimer;
     }
 
-    public void setLifeTimer(float lifeTimer) {
-        this.lifeTimer = lifeTimer;
+    public List<Point> getPath() {
+        return path;
     }
-    
+
+    public void setPath(List<Point> path) {
+        this.path = path;
+    }
 
     public float getLifeTime() {
         return lifeTime;
@@ -56,7 +73,10 @@ public class Entity extends Transform {
     public void setLifeTime(float lifeTime) {
         this.lifeTime = lifeTime;
     }
-    
+
+    public void setLifeTimer(float lifeTimer) {
+        this.lifeTimer = lifeTimer;
+    }
 
     public Color getColor() {
         return color;
@@ -90,22 +110,6 @@ public class Entity extends Transform {
         this.radius = radius;
     }
 
-    public float[] getShapeX() {
-        return shapeX;
-    }
-
-    public void setShapeX(float[] shapeX) {
-        this.shapeX = shapeX;
-    }
-
-    public float[] getShapeY() {
-        return shapeY;
-    }
-
-    public void setShapeY(float[] shapeY) {
-        this.shapeY = shapeY;
-    }
-    
     public float getDx() {
         return dx;
     }
@@ -139,14 +143,6 @@ public class Entity extends Transform {
         this.maxSpeed = speed;
     }
 
-    public EntityType getType() {
-        return type;
-    }
-
-    public void setType(EntityType type) {
-        this.type = type;
-    }
-
     public void setPos(float x, float y) {
         this.x = x;
         this.y = y;
@@ -156,5 +152,22 @@ public class Entity extends Transform {
         //ved ikke om det er nødvendigt ... men wth ... :D
         this.dx = dx;
         this.dy = dy;
+    }
+
+    public SpellType getActiveSpell() {
+        return activeSpell;
+    }
+
+    public void setActiveSpell(SpellType activeSpell) {
+        this.activeSpell = activeSpell;
+    }
+
+    public List<String> getSoundPaths() {
+        return soundPaths;
+    }
+
+    public void setSoundPaths(String[] soundPaths) {
+        this.soundPaths = new ArrayList<>();
+        this.soundPaths.addAll(Arrays.asList(soundPaths));
     }
 }

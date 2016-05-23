@@ -33,8 +33,6 @@ public class GameInputProcessor extends InputAdapter {
         this.metaData = metaData;
     }
 
-    // ============= MOVE SYSTEM ================ // 
-    // UNIMPLEMENTED//
     @Override
     public boolean mouseMoved(int x, int y) {
         metaData.setMousePos(x, (metaData.getDisplayHeight() - y));
@@ -67,6 +65,15 @@ public class GameInputProcessor extends InputAdapter {
         if (k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
             metaData.getKeys().setKey(GameKeys.SHIFT, true);
         }
+        if (k == Input.Keys.NUM_1) {
+            metaData.getKeys().setKey(GameKeys.NUM_1, true);
+        }
+        if (k == Input.Keys.NUM_2) {
+            metaData.getKeys().setKey(GameKeys.NUM_2, true);
+        }
+        if (k == Input.Keys.NUM_3) {
+            metaData.getKeys().setKey(GameKeys.NUM_3, true);
+        }
         return true;
     }
 
@@ -95,6 +102,15 @@ public class GameInputProcessor extends InputAdapter {
         }
         if (k == Input.Keys.SHIFT_LEFT || k == Input.Keys.SHIFT_RIGHT) {
             metaData.getKeys().setKey(GameKeys.SHIFT, false);
+        }
+        if (k == Input.Keys.NUM_1) {
+            metaData.getKeys().setKey(GameKeys.NUM_1, false);
+        }
+        if (k == Input.Keys.NUM_2) {
+            metaData.getKeys().setKey(GameKeys.NUM_2, false);
+        }
+        if (k == Input.Keys.NUM_3) {
+            metaData.getKeys().setKey(GameKeys.NUM_3, false);
         }
         return true;
     }
