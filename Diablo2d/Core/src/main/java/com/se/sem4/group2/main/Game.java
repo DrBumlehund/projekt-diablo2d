@@ -35,7 +35,6 @@ import com.se.sem4.group2.common.data.EntityType;
 import com.se.sem4.group2.common.data.MetaData;
 import com.se.sem4.group2.common.data.Tile;
 import com.se.sem4.group2.common.data.WorldMap;
-import com.se.sem4.group2.common.services.IAIProcessingService;
 import com.se.sem4.group2.common.services.IEntityProcessingService;
 import com.se.sem4.group2.common.services.IGamePluginService;
 import com.se.sem4.group2.common.services.IMapProcessingService;
@@ -86,6 +85,10 @@ public class Game implements ApplicationListener {
         result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
         result.allItems();
+        
+        for (IGamePluginService igps: lookup.lookupAll(IGamePluginService.class)){
+            igps.start(metaData, world);
+        }
     }
 
     @Override
@@ -117,13 +120,6 @@ public class Game implements ApplicationListener {
         for (IMapProcessingService mapProcesser : getMapProcessingServices()) {
 //            System.out.println(mapProcesser.getClass());
             mapProcesser.process(cam.position.x, cam.position.y, metaData.getWorldMap());
-        }
-
-        for (IAIProcessingService service : getAIProcessingServices()) {
-//            System.out.println(service.getClass());
-            for (Entity e : world.values()) {
-                service.process(metaData, world, metaData.getWorldMap());
-            }
         }
 
     }
@@ -287,11 +283,7 @@ public class Game implements ApplicationListener {
     private Collection<? extends IMapProcessingService> getMapProcessingServices() {
         return lookup.lookupAll(IMapProcessingService.class);
     }
-
-    private Collection<? extends IAIProcessingService> getAIProcessingServices() {
-        return lookup.lookupAll(IAIProcessingService.class);
-    }
-
+    
     private final LookupListener lookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {

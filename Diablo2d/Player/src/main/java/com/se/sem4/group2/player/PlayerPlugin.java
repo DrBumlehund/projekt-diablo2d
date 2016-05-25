@@ -59,10 +59,16 @@ public class PlayerPlugin implements IGamePluginService {
         newPlayer.setMaxHealth(100);
 
         newPlayer.setActiveSpell(SpellType.FIREBALL);
+        String path;
 
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            path = (new File("").getAbsolutePath() + "/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
+            path = path.substring(2);
+            path = path.replaceAll("\\\\", "/");
+        } else {
+            path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
+        }
         //Set Sprite, Weapon, Color
-        String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Player.jar!/assets/images/Wizard.png");
-
         newPlayer.setTexturePath(path);
         return newPlayer;
     }

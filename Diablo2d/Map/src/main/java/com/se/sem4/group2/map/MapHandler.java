@@ -23,10 +23,27 @@ public class MapHandler {
     private WorldMap worldMap;
     Random rng;
     OpenSimplexNoise noise;
+    String path;
+    private Tile[] tileTypes;
 
     private MapHandler() {
         rng = new Random();
         setNoiseSeed(rng.nextLong());
+
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            path = (new File("").getAbsolutePath() + "/diablo2d/modules/com-se-sem4-group2-Map.jar!/assets/images/");
+            path = path.substring(2);
+            path = path.replaceAll("\\\\", "/");
+        } else {
+            path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Map.jar!/assets/images/");
+        }
+        tileTypes = new Tile[]{
+            new Tile(path + "dirt.png", 1f),
+            new Tile(path + "water.png", 0.4f),
+            new Tile(path + "grass.png", 1.4f),
+            new Tile(path + "grass1.png", 1.4f),
+            new Tile(path + "grass2.png", 1.4f)
+        };
     }
 
     private void setNoiseSeed(long seed) {
@@ -41,16 +58,6 @@ public class MapHandler {
 
         private static final MapHandler INSTANCE = new MapHandler();
     }
-
-    String path = (new File("").getAbsolutePath() + "/target/diablo2d/diablo2d/modules/com-se-sem4-group2-Map.jar!/assets/images/");
-
-    private final Tile[] tileTypes = new Tile[]{
-        new Tile(path + "dirt.png", 1f),
-        new Tile(path + "water.png", 0.4f),
-        new Tile(path + "grass.png", 1.4f),
-        new Tile(path + "grass1.png", 1.4f),
-        new Tile(path + "grass2.png", 1.4f)
-    };
 
     protected void initialize(MetaData metaData) {
         this.metaData = metaData;
@@ -80,10 +87,12 @@ public class MapHandler {
         int yMin = worldMap.getyMin();
         if (x < xMin) {
             worldMap.setxMin(x);
+            worldMap.getWorldMap().get(xMax).clear();
             worldMap.getWorldMap().remove(xMax);
             worldMap.setxMax(xMax - 1);
         } else if (x > xMax) {
             worldMap.setxMax(x);
+            worldMap.getWorldMap().get(xMin).clear();
             worldMap.getWorldMap().remove(xMin);
             worldMap.setxMin(xMin + 1);
         }

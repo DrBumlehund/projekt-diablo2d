@@ -18,6 +18,7 @@ package com.se.sem4.group2.managers;
 
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
+import java.io.File;
 
 /**
  *
@@ -27,7 +28,10 @@ public class JarFileResolver implements FileHandleResolver {
 
     @Override
     public FileHandle resolve(String fileName) {
-        
+//        if (System.getProperty("os.name").startsWith("Windows")) {
+//            fileName = fileName.replaceAll("/", "\\");
+//        }
+
         return new JarFileHandleStream(fileName);
     }
 
