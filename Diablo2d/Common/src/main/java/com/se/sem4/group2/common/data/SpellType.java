@@ -10,7 +10,19 @@ package com.se.sem4.group2.common.data;
  * @author thomaslemqvist
  */
 public enum SpellType {
+
+    /**
+     *
+     */
     FIREBALL,
+
+    /**
+     *
+     */
     ICEBOLT,
+
+    /**
+     *
+     */
     CHARGEDBOLT;
 }

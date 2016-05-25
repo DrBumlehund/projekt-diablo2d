@@ -14,23 +14,44 @@ public class Tile {
     private float speedModifier = 1f;
     private byte[] imageBytes = null;
 
+    /**
+     *
+     * @param source
+     * @param speedModifier
+     */
     public Tile(String source, float speedModifier) {
         this.source = source;
         this.speedModifier = speedModifier;
     }
     
+    /**
+     *
+     * @param imageBytes
+     */
     public void injectSource (byte[] imageBytes) {
         this.imageBytes = imageBytes;
     }
 
+    /**
+     *
+     * @return
+     */
     public byte[] getImage() {
         return imageBytes;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getSource() {
         return source;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getSpeedModifier() {
         return speedModifier;
     }

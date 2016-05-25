@@ -2,20 +2,21 @@ package com.se.sem4.group2.diablo2d;
 
 import java.util.logging.Level;
 import junit.framework.Test;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import org.netbeans.junit.NbModuleSuite;
 import org.netbeans.junit.NbTestCase;
 
 public class ApplicationTest extends NbTestCase {
 
     public static Test suite() {
-        return null;
-//                NbModuleSuite.createConfiguration(ApplicationTest.class).
-//                gui(false).
-//                failOnMessage(Level.WARNING). // works at least in RELEASE71
-//                failOnException(Level.INFO).
-//                enableClasspathModules(false). 
-//                clusters(".*").
-//                suite(); // RELEASE71+, else use NbModuleSuite.create(NbModuleSuite.createConfiguration(...))
+        return NbModuleSuite.createConfiguration(ApplicationTest.class).
+                gui(false).
+                failOnMessage(Level.WARNING). // works at least in RELEASE71
+                failOnException(Level.INFO).
+                enableClasspathModules(false).
+                clusters(".*").
+                suite(); // RELEASE71+, else use NbModuleSuite.create(NbModuleSuite.createConfiguration(...))
     }
 
     public ApplicationTest(String n) {
@@ -28,6 +29,8 @@ public class ApplicationTest extends NbTestCase {
         new ActionNoBlock("Help|About", null).performMenu();
         new NbDialogOperator("About").closeByButton();
          */
+//        Result rs = JUnitCore.runClasses(new Class<?>[] {UserstoryTesting.class, ServiceProviderTest.class});
+//        System.out.println(rs);
     }
 
 }

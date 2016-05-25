@@ -40,12 +40,12 @@ public class PlayerProcessor implements IEntityProcessingService {
             float x = entity.getX();
             float y = entity.getY();
             float dt = metaData.getDelta();
-            float dx = entity.getDx();
-            float dy = entity.getDy();
+            float dx;
+            float dy;
             float maxSpeed = entity.getMaxSpeed();
-            float acceleration = entity.getAcceleration();
-            float deacceleration = entity.getDeacceleration();
-            float radians = entity.getRadians();
+//            float acceleration = entity.getAcceleration();
+//            float deacceleration = entity.getDeacceleration();
+            float radians;
             Point mousePos = metaData.getMousePos();
 
             // Removes player if the entity is dead.

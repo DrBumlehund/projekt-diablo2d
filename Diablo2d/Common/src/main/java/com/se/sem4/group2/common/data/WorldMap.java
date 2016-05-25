@@ -25,8 +25,15 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class WorldMap {
 
+    /**
+     *
+     */
     public static final double FEATURE_SIZE = 12;
 
+    /**
+     *
+     * @return
+     */
     public ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Tile>> getWorldMap() {
         return worldMap;
     }
@@ -34,12 +41,35 @@ public class WorldMap {
     private final ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Tile>> worldMap;
 
     //private final Random random;
+
+    /**
+     *
+     */
     public static long DEFAULT_SEED = 0;
+
+    /**
+     *
+     */
     public final static int DEFAULT_TILE_SIZE = 64;
+
+    /**
+     *
+     */
     public static final int DEFAULT_BUFFERZONE = 3;
+
+    /**
+     *
+     */
     public static final int TILE_SIZE = 64;
 
+    /**
+     *
+     */
     public static final float MIN_DIRT = 0.4f;
+
+    /**
+     *
+     */
     public static final float MAX_WATER = -0.4f;
 
     private int xMin;
@@ -47,6 +77,11 @@ public class WorldMap {
     private int xMax;
     private int yMax;
 
+    /**
+     *
+     * @param width
+     * @param height
+     */
     public WorldMap(int width, int height) {
         this.worldMap = new ConcurrentHashMap<>();
         //random = new Random(seed);
@@ -57,6 +92,12 @@ public class WorldMap {
         this.yMax = height / DEFAULT_TILE_SIZE + DEFAULT_BUFFERZONE;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public Tile getTile(int x, int y) {
         if (x >= xMin && x <= xMax && y >= yMin && y <= yMax) {
             ConcurrentHashMap<Integer, Tile> yAxis = worldMap.get(x);
@@ -65,6 +106,12 @@ public class WorldMap {
         return null;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public Tile getTileByPosition(int x, int y) {
         x = x / TILE_SIZE;
         y = y / TILE_SIZE;
@@ -72,42 +119,81 @@ public class WorldMap {
         return getTile(x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public ConcurrentHashMap<Integer, ConcurrentHashMap<Integer, Tile>> getMap() {
         return worldMap;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getxMin() {
         return xMin;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getyMin() {
         return yMin;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getxMax() {
         return xMax;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getyMax() {
         return yMax;
     }
 
+    /**
+     *
+     * @param xMin
+     */
     public void setxMin(int xMin) {
         this.xMin = xMin;
     }
 
+    /**
+     *
+     * @param yMin
+     */
     public void setyMin(int yMin) {
         this.yMin = yMin;
     }
 
+    /**
+     *
+     * @param xMax
+     */
     public void setxMax(int xMax) {
         this.xMax = xMax;
     }
 
+    /**
+     *
+     * @param yMax
+     */
     public void setyMax(int yMax) {
         this.yMax = yMax;
     }
 
+    /**
+     *
+     */
     public void clearMap() {
         int tmp = xMax;
         xMax = xMin;

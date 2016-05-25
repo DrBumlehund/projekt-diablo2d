@@ -20,24 +20,16 @@ import org.openide.util.lookup.ServiceProvider;
 public class MapPlugin implements IGamePluginService {
 
     private final MapHandler instance = MapHandler.getInstance();
-//
-//    @Override
-//    public WorldMap start(MetaData metaData) {
-//        instance = MapHandler.getInstance();
-//        instance.initialize(metaData);
-//        instance.setWorldMap(worldMap);
-//        worldMap = instance.createMap();
-//        return worldMap;
-//    }
-
-    @Override
-    public void stop(MetaData metaData) {
-        metaData.getWorldMap().clearMap();
-    }
 
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
         instance.initialize(metaData);
         metaData.setWorldMap(instance.createMap());
     }
+
+    @Override
+    public void stop(MetaData metaData) {
+        metaData.getWorldMap().clearMap();
+    }
+
 }
