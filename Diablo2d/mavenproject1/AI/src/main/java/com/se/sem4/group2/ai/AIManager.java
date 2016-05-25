@@ -29,7 +29,7 @@ public class AIManager implements Runnable {
     private Point boundsY = new Point(0,0);
     private static final int TILE_SIZE = 64;
     // Pathfinding will apply to a DIVISOR precison of TILE_SIZE
-    private static final int DIVISOR = 2; 
+    private static final int DIVISOR = 8; 
     private Map<String, Entity> world;
 
         
