@@ -28,12 +28,10 @@ public class WeaponProcessor implements IEntityProcessingService {
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
 
         // TODO: make a better system, to allow both enemies and players to do fire spells?.
-        if (metaData.getKeys().isDown(GameKeys.SPACE) && System.currentTimeMillis() - timeStamp > 200) {
-            timeStamp = System.currentTimeMillis();
-            for (Entity ent : world.values()) {
-                if (ent.getType() == PLAYER) {
-                    WeaponHandler.getInstance().fireSpell(world, ent, metaData);
-                }
+        if (entity.getType() == PLAYER) {
+            if (metaData.getKeys().isDown(GameKeys.SPACE) && System.currentTimeMillis() - timeStamp > 200) {
+                timeStamp = System.currentTimeMillis();                
+                WeaponHandler.getInstance().fireSpell(world, entity, metaData);
             }
         }
 

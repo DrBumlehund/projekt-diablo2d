@@ -17,6 +17,7 @@
 package com.se.sem4.group2.common.data;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -109,12 +110,9 @@ public class WorldMap {
     }
 
     public void clearMap() {
-        int tmp = xMax;
-        xMax = xMin;
-        xMin = tmp;
-        tmp = yMax;
-        yMax = yMin;
-        yMin = tmp;
+        for(Map yCord: worldMap.values()){
+            yCord.clear();
+        }
         worldMap.clear();
     }
 
