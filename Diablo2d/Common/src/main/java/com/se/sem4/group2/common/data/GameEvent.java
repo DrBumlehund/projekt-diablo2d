@@ -10,5 +10,19 @@ package com.se.sem4.group2.common.data;
  * @author thomaslemqvist
  */
 public enum GameEvent {
-    FIREBALL_SHOT, ICEBOLT_SHOT, CHARGEDBOLT_SHOT;
+
+    /**
+     *
+     */
+    FIREBALL_SHOT,
+
+    /**
+     *
+     */
+    ICEBOLT_SHOT,
+
+    /**
+     *
+     */
+    CHARGEDBOLT_SHOT;
 }

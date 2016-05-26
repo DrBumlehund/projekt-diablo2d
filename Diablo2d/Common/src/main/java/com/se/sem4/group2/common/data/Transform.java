@@ -17,48 +17,123 @@ import java.util.UUID;
 //TODO: remove shit above...
 public class Transform {
 
+    /**
+     *
+     */
     protected float x;
+
+    /**
+     *
+     */
     protected float y;
+
+    /**
+     *
+     */
     protected final UUID id = UUID.randomUUID();
+
+    /**
+     *
+     */
     protected String name;
+
+    /**
+     *
+     */
     protected boolean colided;
     // XXX: skal dette flyttes til Entity?, hvis det skal skal vi gøre op 
     //      om transform er nødvendig...
+
+    /**
+     *
+     */
     protected boolean dead;
+
+    /**
+     *
+     */
     protected int maxHealth;
+
+    /**
+     *
+     */
     protected int health;
+
+    /**
+     *
+     */
     protected int minDamage;
+
+    /**
+     *
+     */
     protected int maxDamage;
     // XXX: skal evt. flyttes tilbage til Entity...
     //      har flyttet ned for at kunne tilgå den i colideren, så npc'er
     //      ikke dræber hinanden. /thomas
+
+    /**
+     *
+     */
     protected EntityType type;
+
+    /**
+     *
+     */
     protected boolean initialized;
 
+    /**
+     *
+     * @return
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     *
+     * @param x
+     */
     public void setX(float x) {
         this.x = x;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getY() {
         return y;
     }
 
+    /**
+     *
+     * @param y
+     */
     public void setY(float y) {
         this.y = y;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getId() {
         return this.id.toString();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
@@ -68,34 +143,66 @@ public class Transform {
         return "Transform with id: " + id + " named: " + name;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isColided() {
         return colided;
     }
 
+    /**
+     *
+     * @param colided
+     */
     public void setColided(boolean colided) {
         this.colided = colided;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMinDamage() {
         return minDamage;
     }
 
+    /**
+     *
+     * @param minDamage
+     */
     public void setMinDamage(int minDamage) {
         this.minDamage = minDamage;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMaxDamage() {
         return maxDamage;
     }
 
+    /**
+     *
+     * @param maxDamage
+     */
     public void setMaxDamage(int maxDamage) {
         this.maxDamage = maxDamage;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getMaxHealth() {
         return maxHealth;
     }
 
+    /**
+     *
+     * @param maxHealth
+     */
     public void setMaxHealth(int maxHealth) {
         if (!initialized) {             // makes sure that maxhealth and 
             this.maxHealth = maxHealth; // health is only set once.
@@ -104,10 +211,18 @@ public class Transform {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public int getHealth() {
         return health;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isDead() {
         return dead;
     }
@@ -151,10 +266,18 @@ public class Transform {
         return 0f;
     }
 
+    /**
+     *
+     * @return
+     */
     public EntityType getType() {
         return type;
     }
 
+    /**
+     *
+     * @param type
+     */
     public void setType(EntityType type) {
         this.type = type;
     }
