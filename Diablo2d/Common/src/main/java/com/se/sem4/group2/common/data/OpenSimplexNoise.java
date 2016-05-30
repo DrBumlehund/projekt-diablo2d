@@ -16,6 +16,10 @@
 
 package com.se.sem4.group2.common.data;
  
+/**
+ *
+ * @author casperbeese
+ */
 public class OpenSimplexNoise {
 
 	private static final double STRETCH_CONSTANT_2D = -0.211324865405187;    //(1/Math.sqrt(2+1)-1)/2;
@@ -34,11 +38,18 @@ public class OpenSimplexNoise {
 	private short[] perm;
 	private short[] permGradIndex3D;
 	
-	public OpenSimplexNoise() {
+    /**
+     *
+     */
+    public OpenSimplexNoise() {
 		this(DEFAULT_SEED);
 	}
 	
-	public OpenSimplexNoise(short[] perm) {
+    /**
+     *
+     * @param perm
+     */
+    public OpenSimplexNoise(short[] perm) {
 		this.perm = perm;
 		permGradIndex3D = new short[256];
 		
@@ -51,6 +62,11 @@ public class OpenSimplexNoise {
 	//Initializes the class using a permutation array generated from a 64-bit seed.
 	//Generates a proper permutation (i.e. doesn't merely perform N successive pair swaps on a base array)
 	//Uses a simple 64-bit LCG.
+
+    /**
+     *
+     * @param seed
+     */
 	public OpenSimplexNoise(long seed) {
 		perm = new short[256];
 		permGradIndex3D = new short[256];
@@ -72,6 +88,13 @@ public class OpenSimplexNoise {
 	}
 	
 	//2D OpenSimplex Noise.
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
 	public double eval(double x, double y) {
 	
 		//Place input coordinates onto grid.
@@ -187,6 +210,14 @@ public class OpenSimplexNoise {
 	}
 	
 	//3D OpenSimplex Noise.
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @return
+     */
 	public double eval(double x, double y, double z) {
 	
 		//Place input coordinates on simplectic honeycomb.
@@ -748,6 +779,15 @@ public class OpenSimplexNoise {
 	}
 	
 	//4D OpenSimplex Noise.
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     * @param w
+     * @return
+     */
 	public double eval(double x, double y, double z, double w) {
 	
 		//Place input coordinates on simplectic honeycomb.

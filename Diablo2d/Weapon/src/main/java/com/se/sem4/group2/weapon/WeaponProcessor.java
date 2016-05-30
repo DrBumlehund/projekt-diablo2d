@@ -43,17 +43,6 @@ public class WeaponProcessor implements IEntityProcessingService {
                 world.remove(entity.getId());
             }
 
-            float x = entity.getX();
-            float y = entity.getY();
-            float dt = metaData.getDelta();
-            float dx = entity.getDx();
-            float dy = entity.getDy();
-
-            x += dx * dt;
-            y += dy * dt;
-
-            entity.setPos(x, y);
-
             entity.setLifeTimer(entity.getLifeTimer() + metaData.getDelta());
         }
     }

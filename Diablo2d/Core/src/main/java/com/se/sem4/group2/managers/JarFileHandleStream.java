@@ -31,17 +31,17 @@ import java.util.logging.Logger;
 public class JarFileHandleStream extends FileHandleStream {
 
     private JarFile jarFile = null;
-    private String jarRelResDir;
+    private String jarSubDir;
 
     public JarFileHandleStream(String path) {
         super(path);
         try {
             String[] args = path.split("!");
-            jarRelResDir = args[1].substring(1);
+            jarSubDir = args[1].substring(1);
 
             String jarFilePath = args[0];
             jarFile = new JarFile(jarFilePath);
-            System.out.println("JAR path= " + jarFile + " Asset path= " + jarRelResDir);
+            System.out.println("JAR path= " + jarFile + " Asset path= " + jarSubDir);
         } catch (IOException ex) {
             Logger.getLogger(JarFileHandleStream.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -52,7 +52,7 @@ public class JarFileHandleStream extends FileHandleStream {
 
         InputStream is = null;
         try {
-            is = jarFile.getInputStream(jarFile.getEntry(jarRelResDir));
+            is = jarFile.getInputStream(jarFile.getEntry(jarSubDir));
         } catch (IOException ex) {
             Logger.getLogger(JarFileHandleStream.class.getName()).log(Level.SEVERE, null, ex);
         }

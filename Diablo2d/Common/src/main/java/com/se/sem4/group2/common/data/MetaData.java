@@ -34,51 +34,99 @@ public class MetaData {
     private Point mousePos = new Point();
     private List<GameEvent> gameEvents = new CopyOnWriteArrayList<>();
     
-
+    /**
+     *
+     * @return
+     */
     public Point getMousePos() {
         return mousePos;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     */
     public void setMousePos(int x, int y) {
         this.mousePos = new Point(x, y);
     }
 
+    /**
+     *
+     * @return
+     */
     public GameKeys getKeys() {
         return keys;
     }
 
+    /**
+     *
+     * @param width
+     */
     public void setDisplayWidth(int width) {
         this.displayWidth = width;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDisplayWidth() {
         return displayWidth;
     }
 
+    /**
+     *
+     * @param height
+     */
     public void setDisplayHeight(int height) {
         this.displayHeight = height;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getDisplayHeight() {
         return displayHeight;
     }
 
+    /**
+     *
+     * @param delta
+     */
     public void setDelta(float delta) {
         this.delta = delta;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getDelta() {
         return delta;
     }
 
+    /**
+     *
+     * @return
+     */
     public WorldMap getWorldMap() {
         return worldMap;
     }
 
+    /**
+     *
+     * @param worldMap
+     */
     public void setWorldMap(WorldMap worldMap) {
         this.worldMap = worldMap;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<GameEvent> getGameEvents() {
         return gameEvents;
     }

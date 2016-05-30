@@ -22,8 +22,19 @@ package com.se.sem4.group2.common.data;
  */
 public enum EntityType {
 
+    /**
+     *
+     */
     PLAYER,
+
+    /**
+     *
+     */
     SPELL,
+
+    /**
+     *
+     */
     NPC;
 
 }

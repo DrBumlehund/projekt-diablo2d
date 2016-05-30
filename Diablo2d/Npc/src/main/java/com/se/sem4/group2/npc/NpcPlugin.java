@@ -31,13 +31,14 @@ public class NpcPlugin implements IGamePluginService {
     private Map<String, Entity> world;
     private final List<Entity> npcs = new ArrayList<>();
     private MetaData metaData;
+    private Timer timer;
 
     @Override
     public void start(MetaData metaData, Map<String, Entity> world) {
         random = new Random();
         this.metaData = metaData;
         this.world = world;
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -101,6 +102,9 @@ public class NpcPlugin implements IGamePluginService {
 
     @Override
     public void stop(MetaData metaData) {
+        timer.cancel();
+        timer.purge();
+        timer = null;
         for (Entity entity : world.values()) {
             if (entity.getType() == NPC) {
                 System.out.println("[" + entity.getId() + "    REMOVED]");

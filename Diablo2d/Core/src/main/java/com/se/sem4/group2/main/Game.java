@@ -81,14 +81,15 @@ public class Game implements ApplicationListener {
         batch = new SpriteBatch();
 
         Gdx.input.setInputProcessor(new GameInputProcessor(metaData));
-        
+
         result = lookup.lookupResult(IGamePluginService.class);
         result.addLookupListener(lookupListener);
         result.allItems();
-        
-        for (IGamePluginService igps: lookup.lookupAll(IGamePluginService.class)){
+
+        for (IGamePluginService igps : lookup.lookupAll(IGamePluginService.class)) {
             igps.start(metaData, world);
-        }
+            gamePlugins.add(igps);
+        }       
     }
 
     @Override
@@ -96,13 +97,13 @@ public class Game implements ApplicationListener {
         // clear screen to black
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        
+
         batch.setProjectionMatrix(cam.combined);
         sr.setProjectionMatrix(cam.combined);
 
         metaData.setDelta(Gdx.graphics.getDeltaTime());
         metaData.getKeys().update();
-        
+
         update();
         draw();
         playSounds();
@@ -131,8 +132,15 @@ public class Game implements ApplicationListener {
     }
 
     private void drawMap() {
-        if (metaData.getWorldMap() != null) {
-            WorldMap worldMap = metaData.getWorldMap();
+        WorldMap worldMap = metaData.getWorldMap();
+
+        if (worldMap != null) {
+
+            if (worldMap.getMap().isEmpty()) {
+                System.out.println("MAP EMPTY!");
+                metaData.setWorldMap(null);
+                return;
+            } 
 
             int xMax = worldMap.getxMax();
             int xMin = worldMap.getxMin();
@@ -160,10 +168,6 @@ public class Game implements ApplicationListener {
                 }
             }
 
-            if (worldMap.getMap().isEmpty()) {
-                System.out.println("MAP EMPTY!");
-                metaData.setWorldMap(null);
-            }
         }
     }
 
@@ -283,7 +287,7 @@ public class Game implements ApplicationListener {
     private Collection<? extends IMapProcessingService> getMapProcessingServices() {
         return lookup.lookupAll(IMapProcessingService.class);
     }
-    
+
     private final LookupListener lookupListener = new LookupListener() {
         @Override
         public void resultChanged(LookupEvent le) {

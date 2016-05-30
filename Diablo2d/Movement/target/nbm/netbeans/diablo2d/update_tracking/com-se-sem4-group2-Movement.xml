@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><module codename="com.se.sem4.group2.Movement">
+    <module_version install_time="1464617683728" last="true" origin="installer" specification_version="1.0">
+        <file crc="2485840724" name="config/Modules/com-se-sem4-group2-Movement.xml"/>
+        <file crc="2357576699" name="modules/com-se-sem4-group2-Movement.jar"/>
+    </module_version>
+</module>

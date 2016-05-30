@@ -87,10 +87,12 @@ public class MapHandler {
         int yMin = worldMap.getyMin();
         if (x < xMin) {
             worldMap.setxMin(x);
+            worldMap.getWorldMap().get(xMax).clear();
             worldMap.getWorldMap().remove(xMax);
             worldMap.setxMax(xMax - 1);
         } else if (x > xMax) {
             worldMap.setxMax(x);
+            worldMap.getWorldMap().get(xMin).clear();
             worldMap.getWorldMap().remove(xMin);
             worldMap.setxMin(xMin + 1);
         }
@@ -123,7 +125,7 @@ public class MapHandler {
             noiseTile = tileTypes[0];
         } else if (value <= WorldMap.MAX_WATER) { // WATER
             noiseTile = tileTypes[1];
-        } else { // GRASS
+        } else { // RANDOM TYPE OF GRASS
             int rnd = rng.nextInt(3);
             switch (rnd) {
                 case 0:
