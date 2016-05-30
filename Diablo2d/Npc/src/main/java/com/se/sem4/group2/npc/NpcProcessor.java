@@ -36,7 +36,6 @@ public class NpcProcessor implements IEntityProcessingService {
                 
                 float x = entity.getX();
                 float y = entity.getY();
-                float dt = metaData.getDelta();
                 float dx = entity.getDx();
                 float dy = entity.getDy();
                 float maxSpeed = entity.getMaxSpeed();
@@ -65,18 +64,15 @@ public class NpcProcessor implements IEntityProcessingService {
                             float direction = (float) Math.atan2(target.getY() - y , target.getX() - x);
                             direction += Math.PI * 2;
 
-                            dx = maxSpeed * (float) Math.cos(direction) * dt;
-                            dy = maxSpeed * (float) Math.sin(direction) * dt;
+                            dx = maxSpeed * (float) Math.cos(direction);
+                            dy = maxSpeed * (float) Math.sin(direction);
 
-                            //set position
-                            x += dx;
-                            y += dy;
                             
                             if (almostEqual(x, target.x, 30) && almostEqual(y, target.y, 30)) {
                                 path.remove(0);
                             }
 
-                            entity.setPos(x, y);
+             
                             entity.setDx(dx);
                             entity.setDy(dy);
                         }

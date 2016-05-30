@@ -37,15 +37,10 @@ public class PlayerProcessor implements IEntityProcessingService {
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
         if (entity.getType().equals(PLAYER)) {
             
-            float x = entity.getX();
-            float y = entity.getY();
-            float dt = metaData.getDelta();
-            float dx;
-            float dy;
+            float dx = entity.getDx();
+            float dy = entity.getDy();
             float maxSpeed = entity.getMaxSpeed();
-//            float acceleration = entity.getAcceleration();
-//            float deacceleration = entity.getDeacceleration();
-            float radians;
+            float radians = entity.getRadians();
             Point mousePos = metaData.getMousePos();
 
             // Removes player if the entity is dead.
@@ -62,16 +57,16 @@ public class PlayerProcessor implements IEntityProcessingService {
             dx = 0;
             dy = 0;
             if (metaData.getKeys().isDown(RIGHT)) {
-                dx += maxSpeed * dt;
+                dx += maxSpeed;
             }
             if (metaData.getKeys().isDown(UP)) {
-                dy += maxSpeed * dt;
+                dy += maxSpeed;
             }
             if (metaData.getKeys().isDown(DOWN)) {
-                dy -= maxSpeed * dt;
+                dy -= maxSpeed;
             }
             if (metaData.getKeys().isDown(LEFT)) {
-                dx -= maxSpeed * dt;
+                dx -= maxSpeed;
             }
 
             // changing activeSpell
@@ -94,12 +89,7 @@ public class PlayerProcessor implements IEntityProcessingService {
                 dy *= Math.abs(dy / vec);
             }
 
-            //set position
-            x += dx;
-            y += dy;
-
             // Update entity
-            entity.setPos(x, y);
             entity.setDx(dx);
             entity.setDy(dy);
             entity.setRadians(radians);

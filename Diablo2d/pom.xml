@@ -75,10 +75,11 @@
         <module>Player</module>
         <module>Npc</module>
         <module>Collider</module>
-        <module>mavenproject1/AI</module>
+        <module>AI</module>
         <module>Weapon</module>
         <module>SilentUpdate</module>
-  </modules>
+        <module>Movement</module>
+    </modules>
 
     <properties>
         <netbeans.version>RELEASE81</netbeans.version>

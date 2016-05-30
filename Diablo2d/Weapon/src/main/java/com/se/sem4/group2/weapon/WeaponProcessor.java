@@ -28,10 +28,12 @@ public class WeaponProcessor implements IEntityProcessingService {
     public void process(MetaData metaData, Map<String, Entity> world, Entity entity) {
 
         // TODO: make a better system, to allow both enemies and players to do fire spells?.
-        if (entity.getType() == PLAYER) {
-            if (metaData.getKeys().isDown(GameKeys.SPACE) && System.currentTimeMillis() - timeStamp > 200) {
-                timeStamp = System.currentTimeMillis();                
-                WeaponHandler.getInstance().fireSpell(world, entity, metaData);
+        if (metaData.getKeys().isDown(GameKeys.SPACE) && System.currentTimeMillis() - timeStamp > 200) {
+            timeStamp = System.currentTimeMillis();
+            for (Entity ent : world.values()) {
+                if (ent.getType() == PLAYER) {
+                    WeaponHandler.getInstance().fireSpell(world, ent, metaData);
+                }
             }
         }
 
@@ -40,17 +42,6 @@ public class WeaponProcessor implements IEntityProcessingService {
             if (entity.getLifeTime() < entity.getLifeTimer() || entity.isColided() || entity.isDead()) {
                 world.remove(entity.getId());
             }
-
-            float x = entity.getX();
-            float y = entity.getY();
-            float dt = metaData.getDelta();
-            float dx = entity.getDx();
-            float dy = entity.getDy();
-
-            x += dx * dt;
-            y += dy * dt;
-
-            entity.setPos(x, y);
 
             entity.setLifeTimer(entity.getLifeTimer() + metaData.getDelta());
         }

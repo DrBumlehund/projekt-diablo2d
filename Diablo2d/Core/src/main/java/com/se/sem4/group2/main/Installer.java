@@ -28,24 +28,18 @@ import org.openide.modules.ModuleInstall;
  */
 public class Installer extends ModuleInstall {
 
-    private final int N_GUI_THREADS = 8;
-
-    ExecutorService guiPool = Executors.newFixedThreadPool(N_GUI_THREADS);
-
     @Override
     public void restored() {
-        guiPool.execute(() -> {
-            LwjglApplicationConfiguration cfg
-                    = new LwjglApplicationConfiguration();
-            cfg.title = "Diablo ii-D";
-            cfg.width = 800;
-            cfg.height = 600;
-            cfg.useGL30 = false;
-            cfg.resizable = false;
-            cfg.foregroundFPS = 0;
-            cfg.vSyncEnabled = false;
+        LwjglApplicationConfiguration cfg
+                = new LwjglApplicationConfiguration();
+        cfg.title = "Diablo ii-D";
+        cfg.width = 800;
+        cfg.height = 600;
+        cfg.useGL30 = false;
+        cfg.resizable = false;
+        cfg.foregroundFPS = 0; // Removes fps limit
+        cfg.vSyncEnabled = false;
 
-            new LwjglApplication(new Game(), cfg);
-        });
+        new LwjglApplication(new Game(), cfg);
     }
 }
